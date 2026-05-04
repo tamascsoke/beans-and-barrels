@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bean &amp; Barrel — Hamarosan</title>
+  <meta name="description" content="Bean & Barrel — Kávé és Sör. Hamarosan érkezünk." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=League+Spartan:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="stage">
+    <div class="brand">
+      <h1 class="brand__title">BEAN &amp; BARREL</h1>
+      <svg class="brand__stroke" viewBox="0 0 520 22" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <filter id="chalk-disp" x="-4%" y="-80%" width="108%" height="260%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.82 0.48" numOctaves="4" seed="9" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="chalk-grain" x="-4%" y="-80%" width="108%" height="260%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.95 0.6" numOctaves="3" seed="17" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+        <path filter="url(#chalk-disp)"
+              d="M 5 10 C 35 8, 80 12, 130 9 S 200 12, 260 9 S 340 12, 400 9 S 465 11, 515 10
+                 L 515 14 C 465 15, 400 13, 340 15 S 260 13, 200 15 S 130 13, 80 15 S 35 12, 5 13 Z"
+              fill="rgba(255,255,255,0.88)"/>
+        <path filter="url(#chalk-disp)"
+              d="M 18 10 C 70 8, 150 12, 230 9 S 340 11, 440 9 L 440 13 C 340 14, 230 13, 150 14 S 70 12, 18 13 Z"
+              fill="rgba(255,255,255,0.28)"/>
+        <path filter="url(#chalk-grain)"
+              d="M 10 11 C 90 9, 200 13, 310 10 S 440 13, 510 11 L 510 13 C 440 15, 310 13, 200 15 S 90 13, 10 13 Z"
+              fill="rgba(255,255,255,0.18)"/>
+      </svg>
+      <p class="brand__sub">KÁVÉ ÉS SÖR</p>
+    </div>
+
+    <section class="coming">
+      <p class="coming__label">HAMAROSAN<span class="coming__dots"> ...</span></p>
+      <p class="coming__hint">Rendezvényekért keress: <a class="coming__email" href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></p>
+    </section>
+
+    <footer class="social" aria-label="Közösségi média">
+      <a class="social__link" href="#" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a class="social__link" href="#" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v8h4v-8h3l1-4h-4V9c0-.6.4-1 1-1z" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </footer>
+  </main>
+</body>
+</html>
