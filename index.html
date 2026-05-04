@@ -15,27 +15,32 @@
   <main class="stage">
     <div class="brand">
       <h1 class="brand__title">BEAN &amp; BARREL</h1>
-      <svg class="brand__stroke" viewBox="0 0 520 22" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <svg class="brand__stroke" viewBox="0 0 520 26" preserveAspectRatio="none" aria-hidden="true">
         <defs>
-          <filter id="chalk-disp" x="-4%" y="-80%" width="108%" height="260%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.82 0.48" numOctaves="4" seed="9" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+          <filter id="chalk-disp" x="-4%" y="-100%" width="108%" height="300%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.78 0.42" numOctaves="5" seed="9" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
           </filter>
-          <filter id="chalk-grain" x="-4%" y="-80%" width="108%" height="260%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.95 0.6" numOctaves="3" seed="17" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+          <filter id="chalk-grain" x="-4%" y="-100%" width="108%" height="300%">
+            <feTurbulence type="fractalNoise" baseFrequency="1.1 0.7" numOctaves="3" seed="23" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
           </filter>
         </defs>
+        <!-- thick base chalk band -->
         <path filter="url(#chalk-disp)"
-              d="M 5 10 C 35 8, 80 12, 130 9 S 200 12, 260 9 S 340 12, 400 9 S 465 11, 515 10
-                 L 515 14 C 465 15, 400 13, 340 15 S 260 13, 200 15 S 130 13, 80 15 S 35 12, 5 13 Z"
-              fill="rgba(255,255,255,0.88)"/>
+              d="M 4 11 C 40 8, 90 14, 150 10 S 240 14, 310 10 S 400 14, 470 10 S 510 12, 516 11
+                 L 516 17 C 510 18, 470 16, 400 18 S 310 15, 240 18 S 150 15, 90 18 S 40 15, 4 16 Z"
+              fill="rgba(255,255,255,0.92)"/>
+        <!-- mid depth layer -->
         <path filter="url(#chalk-disp)"
-              d="M 18 10 C 70 8, 150 12, 230 9 S 340 11, 440 9 L 440 13 C 340 14, 230 13, 150 14 S 70 12, 18 13 Z"
-              fill="rgba(255,255,255,0.28)"/>
+              d="M 20 11 C 80 9, 180 14, 270 10 S 390 14, 480 11
+                 L 480 16 C 390 18, 270 15, 180 17 S 80 14, 20 16 Z"
+              fill="rgba(255,255,255,0.32)"/>
+        <!-- chalk dust scatter -->
         <path filter="url(#chalk-grain)"
-              d="M 10 11 C 90 9, 200 13, 310 10 S 440 13, 510 11 L 510 13 C 440 15, 310 13, 200 15 S 90 13, 10 13 Z"
-              fill="rgba(255,255,255,0.18)"/>
+              d="M 8 12 C 100 9, 230 15, 350 11 S 470 15, 512 12
+                 L 512 15 C 470 17, 350 14, 230 17 S 100 14, 8 15 Z"
+              fill="rgba(255,255,255,0.22)"/>
       </svg>
       <p class="brand__sub">KÁVÉ ÉS SÖR</p>
     </div>

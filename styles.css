@@ -40,7 +40,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* golden ratio: content center ~38.2% from top → padding pushes it to that focal point */
+  /* golden ratio: content center ~38.2% from top */
   padding-top: clamp(60px, 18vh, 180px);
   padding-bottom: clamp(32px, 5vw, 56px);
   padding-left: clamp(24px, 6vw, 64px);
@@ -51,40 +51,40 @@ body {
 
 /* ── Logo block ── */
 .brand {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  max-width: 900px;
-  width: 100%;
+  align-items: stretch;
+  gap: 8px;
 }
 
 .brand__title {
   font-family: var(--f-logo);
   font-weight: 400;
-  font-size: clamp(2.4rem, 7.5vw, 6rem);
-  letter-spacing: 0.12em;
+  font-size: clamp(2.6rem, 8vw, 6.5rem);
+  letter-spacing: 0.05em;
   line-height: 1;
   white-space: nowrap;
   text-transform: uppercase;
+  padding-left: 0.05em;
 }
 
+/* chalk stroke fills exactly the brand container width */
 .brand__stroke {
-  width: clamp(220px, 58%, 540px);
-  height: 18px;
+  width: 100%;
+  height: 20px;
   display: block;
-  margin-top: 2px;
   overflow: visible;
 }
 
 .brand__sub {
   font-family: var(--f-sub);
   font-weight: 700;
-  font-size: clamp(0.75rem, 1.3vw, 1.05rem);
+  font-size: clamp(0.72rem, 1.2vw, 1rem);
   letter-spacing: 0.5em;
   padding-left: 0.5em;
   color: var(--ink-soft);
   text-transform: uppercase;
+  text-align: center;
 }
 
 /* ── Coming soon block ── */
@@ -112,6 +112,15 @@ body {
   letter-spacing: 0.1em;
 }
 
+.coming__hint {
+  font-family: var(--f-body);
+  font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+  color: var(--ink-soft);
+  letter-spacing: 0.2em;
+  max-width: 44ch;
+  text-transform: uppercase;
+}
+
 .coming__email {
   color: var(--ink);
   text-decoration: underline;
@@ -122,39 +131,9 @@ body {
 .coming__email:hover {
   color: var(--accent);
 }
-  font-family: var(--f-body);
-  font-size: clamp(0.78rem, 1.1vw, 0.95rem);
-  color: var(--ink-soft);
-  letter-spacing: 0.2em;
-  max-width: 44ch;
-  text-transform: uppercase;
-}
-
-/* ── Social icons ── */
-.social {
-  display: flex;
-  gap: 22px;
-  padding-top: 16px;
-}
-
-.social__link {
-  color: var(--ink);
-  opacity: 0.8;
-  transition: opacity 160ms ease, color 160ms ease, transform 160ms ease;
-  display: inline-flex;
-  padding: 8px;
-}
-
-.social__link:hover,
-.social__link:focus-visible {
-  color: var(--accent);
-  opacity: 1;
-  transform: translateY(-2px);
-  outline: none;
-}
 
 @media (max-width: 480px) {
-  .brand__title   { letter-spacing: 0.06em; }
+  .brand__title   { letter-spacing: 0.03em; }
   .brand__sub     { letter-spacing: 0.35em; }
   .coming__label  { letter-spacing: 0.25em; }
 }
