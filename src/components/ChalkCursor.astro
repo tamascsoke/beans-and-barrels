@@ -8,10 +8,10 @@
     pointer-events: none;
     z-index: 9999;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.55);
-    filter: blur(0.8px);
+    background: rgba(255, 255, 255, 0.65);
+    filter: blur(1.5px);
     transform: translate(-50%, -50%);
-    animation: chalk-dot-fade 0.9s ease-out forwards;
+    animation: chalk-dot-fade 1.1s ease-out forwards;
   }
   @keyframes chalk-dot-fade {
     0%   { opacity: 1;   transform: translate(-50%, -50%) scale(1); }
@@ -27,11 +27,11 @@
 
     document.addEventListener("mousemove", (e) => {
       frame++;
-      if (frame % 4 !== 0) return; // every 4th event — much sparser
+      if (frame % 2 !== 0) return; // every 2nd event
 
       const dx = e.clientX - lastX;
       const dy = e.clientY - lastY;
-      if (dx * dx + dy * dy < 400) return; // min 20px movement
+      if (dx * dx + dy * dy < 100) return; // min 10px movement
 
       lastX = e.clientX;
       lastY = e.clientY;
@@ -41,14 +41,14 @@
       dot.style.left = e.clientX + "px";
       dot.style.top  = e.clientY + "px";
 
-      const w = 2.5 + Math.random() * 3;
+      const w = 5 + Math.random() * 7;
       dot.style.width  = w + "px";
-      dot.style.height = (w * (0.5 + Math.random() * 0.3)) + "px";
-      dot.style.rotate = ((Math.random() - 0.5) * 50) + "deg";
-      dot.style.opacity = (0.22 + Math.random() * 0.28).toString();
+      dot.style.height = (w * (0.5 + Math.random() * 0.4)) + "px";
+      dot.style.rotate = ((Math.random() - 0.5) * 60) + "deg";
+      dot.style.opacity = (0.35 + Math.random() * 0.35).toString();
 
       document.body.appendChild(dot);
-      setTimeout(() => dot.remove(), 920);
+      setTimeout(() => dot.remove(), 1120);
     });
   }
 </script>
