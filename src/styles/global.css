@@ -106,7 +106,7 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 }
 
 .section {
-  padding-block: clamp(60px, 10vw, 120px);
+  padding-block: clamp(40px, 6vw, 80px);
 }
 
 /* ── Buttons ── */
