@@ -1,0 +1,23 @@
+---
+// Reusable chalk hand-drawn divider line.
+// Animates in via IntersectionObserver (set up in Layout.astro).
+---
+
+<div class="chalk-divider" aria-hidden="true">
+  <svg viewBox="0 0 800 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <filter id="chalk-line-rough">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035 0.4"
+        numOctaves="4" seed="12" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise"
+        scale="3.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <path
+      d="M 8 11 Q 150 7 300 11 T 500 11 T 700 9 T 792 11"
+      stroke="rgba(255,255,255,0.45)"
+      stroke-width="2.2"
+      fill="none"
+      stroke-linecap="round"
+      filter="url(#chalk-line-rough)"
+    />
+  </svg>
+</div>

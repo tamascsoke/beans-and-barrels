@@ -1,0 +1,60 @@
+---
+// Only on pointer devices — skip mobile touch screens
+---
+
+<div id="chalk-trail" aria-hidden="true"></div>
+
+<style is:global>
+  .chalk-dot {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.72);
+    filter: blur(1.2px);
+    transform: translate(-50%, -50%);
+    animation: chalk-dot-fade 0.7s ease-out forwards;
+  }
+  @keyframes chalk-dot-fade {
+    0%   { opacity: 1;   transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.2); }
+  }
+</style>
+
+<script>
+  // Only init once — cursor is global, survives page swaps
+  if (!document.body.dataset.chalkCursorInit && window.matchMedia("(pointer:fine)").matches) {
+    document.body.dataset.chalkCursorInit = "1";
+
+    let lastX = 0, lastY = 0, frame = 0;
+
+    document.addEventListener("mousemove", (e) => {
+      frame++;
+      if (frame % 2 !== 0) return; // every 2nd event
+
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      if (dx * dx + dy * dy < 64) return; // min 8px movement
+
+      lastX = e.clientX;
+      lastY = e.clientY;
+
+      const dot = document.createElement("div");
+      dot.className = "chalk-dot";
+      dot.style.left   = e.clientX + "px";
+      dot.style.top    = e.clientY + "px";
+
+      // random size + slight angle variation for chalk feel
+      const w = 4 + Math.random() * 5;
+      const h = w * (0.45 + Math.random() * 0.35);
+      const rot = (Math.random() - 0.5) * 40;
+      dot.style.width  = w + "px";
+      dot.style.height = h + "px";
+      dot.style.rotate = rot + "deg";
+      dot.style.opacity = (0.35 + Math.random() * 0.45).toString();
+
+      document.body.appendChild(dot);
+      setTimeout(() => dot.remove(), 720);
+    });
+  }
+</script>

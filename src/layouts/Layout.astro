@@ -2,7 +2,7 @@
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import SideTab from "../components/SideTab.astro";
-import TuktukProgress from "../components/TuktukProgress.astro";
+import ChalkCursor from "../components/ChalkCursor.astro";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
@@ -40,7 +40,7 @@ const {
       <slot />
     </main>
     <SideTab />
-    <TuktukProgress />
+    <ChalkCursor />
     <Footer />
   </body>
 </html>
@@ -48,20 +48,24 @@ const {
 <script>
   function initObservers() {
     // chalk underline draw-in
-    const chalkEls = document.querySelectorAll<HTMLElement>(".chalk-underline");
     const chalkIO = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("is-drawn");
-          chalkIO.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add("is-drawn"); chalkIO.unobserve(e.target); }
       }),
       { threshold: 0.35 },
     );
-    chalkEls.forEach((el) => chalkIO.observe(el));
+    document.querySelectorAll(".chalk-underline").forEach((el) => chalkIO.observe(el));
+
+    // chalk divider draw-in
+    const dividerIO = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-drawn"); dividerIO.unobserve(e.target); }
+      }),
+      { threshold: 0.5 },
+    );
+    document.querySelectorAll(".chalk-divider").forEach((el) => dividerIO.observe(el));
 
     // section reveal
-    const revealEls = document.querySelectorAll<HTMLElement>(".reveal");
     const revealIO = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -73,7 +77,50 @@ const {
       }),
       { threshold: 0.15 },
     );
-    revealEls.forEach((el) => revealIO.observe(el));
+    document.querySelectorAll(".reveal").forEach((el) => revealIO.observe(el));
+
+    // typewriter
+    document.querySelectorAll<HTMLElement>("[data-typewriter]").forEach((el) => {
+      if (el.dataset.twDone) return;
+      el.dataset.twDone = "1";
+      const text = el.textContent ?? "";
+      el.textContent = "";
+      const cursor = document.createElement("span");
+      cursor.className = "tw-cursor";
+      el.appendChild(cursor);
+      let i = 0;
+      const twIO = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        twIO.disconnect();
+        function type() {
+          if (i < text.length) {
+            cursor.before(text[i++]);
+            setTimeout(type, 26 + Math.random() * 18);
+          } else {
+            cursor.classList.add("tw-done");
+          }
+        }
+        type();
+      }, { threshold: 0.6 });
+      twIO.observe(el);
+    });
+
+    // magnetic buttons — re-query on each swap
+    document.querySelectorAll<HTMLElement>(".btn").forEach((btn) => {
+      btn.addEventListener("mousemove", (e) => {
+        const r  = btn.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width  / 2)) * 0.28;
+        const dy = (e.clientY - (r.top  + r.height / 2)) * 0.28 - 2;
+        btn.style.transform = `translate(${dx}px,${dy}px)`;
+        btn.style.boxShadow = btn.classList.contains("btn--ghost")
+          ? "none"
+          : `0 12px 34px rgba(240,138,28,0.4)`;
+      });
+      btn.addEventListener("mouseleave", () => {
+        btn.style.transform = "";
+        btn.style.boxShadow = "";
+      });
+    });
   }
 
   initObservers();
@@ -90,10 +137,55 @@ const {
     from { opacity: 0; filter: blur(8px) brightness(1.5); }
     to   { opacity: 1; filter: blur(0)   brightness(1); }
   }
-  ::view-transition-old(root) {
-    animation: 300ms ease-in  forwards chalk-out;
+  ::view-transition-old(root) { animation: 300ms ease-in  forwards chalk-out; }
+  ::view-transition-new(root) { animation: 380ms 180ms ease-out both chalk-in; }
+
+  /* ── Typewriter cursor ── */
+  .tw-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.9em;
+    background: var(--accent);
+    margin-left: 3px;
+    vertical-align: text-bottom;
+    animation: tw-blink 0.75s step-end infinite;
   }
-  ::view-transition-new(root) {
-    animation: 380ms 180ms ease-out both chalk-in;
+  .tw-cursor.tw-done { opacity: 0; animation: none; }
+  @keyframes tw-blink { 50% { opacity: 0; } }
+
+  /* ── Chalk section divider ── */
+  .chalk-divider {
+    width: 100%;
+    padding: 0 var(--gutter);
+    margin-block: clamp(24px, 4vw, 48px);
+    pointer-events: none;
+  }
+  .chalk-divider svg { width: 100%; height: 22px; display: block; overflow: visible; }
+  .chalk-divider path {
+    stroke-dasharray: 900;
+    stroke-dashoffset: 900;
+    transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1);
+  }
+  .chalk-divider.is-drawn path { stroke-dashoffset: 0; }
+
+  /* ── Coffee ring hover ── */
+  .coffee-ring { position: relative; }
+  .coffee-ring::after {
+    content: "";
+    position: absolute;
+    bottom: 14px; right: 14px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, transparent 34%, rgba(140,80,20,0.18) 35%, rgba(140,80,20,0.10) 44%, transparent 45%),
+      radial-gradient(circle at 38% 36%, rgba(255,255,255,0.06) 0%, transparent 55%);
+    opacity: 0;
+    transform: scale(0.6) rotate(-15deg);
+    transition: opacity 380ms var(--ease), transform 380ms var(--ease);
+    pointer-events: none;
+  }
+  .coffee-ring:hover::after {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
 </style>
