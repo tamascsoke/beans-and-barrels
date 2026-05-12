@@ -212,10 +212,29 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     padding: 12px 0;
     border-bottom: 1px solid rgba(255,255,255,0.07);
     transition: color 150ms var(--ease), gap 200ms var(--ease);
+    position: relative;
   }
   .nav__link:last-child { border-bottom: none; }
   .nav__link.is-active { color: var(--accent); }
   .nav__link:hover { color: var(--accent); gap: 18px; }
+
+  /* orange chalk scratch underline on hover/active */
+  .nav__link::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 8px;
+    height: 10px;
+    background: var(--accent);
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.5' numOctaves='4' seed='9'/><feDisplacementMap in='SourceGraphic' scale='5'/></filter><path d='M2 6 Q 40 3 80 6 T 160 6 T 198 6 L 198 9 Q 160 12 80 9 T 2 9 Z' fill='white' filter='url(%23r)'/></svg>") center/100% 100% no-repeat;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.5' numOctaves='4' seed='9'/><feDisplacementMap in='SourceGraphic' scale='5'/></filter><path d='M2 6 Q 40 3 80 6 T 160 6 T 198 6 L 198 9 Q 160 12 80 9 T 2 9 Z' fill='white' filter='url(%23r)'/></svg>") center/100% 100% no-repeat;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 340ms cubic-bezier(.22,1,.36,1);
+    pointer-events: none;
+  }
+  .nav__link:hover::after,
+  .nav__link.is-active::after { transform: scaleX(1); }
 
   /* small chalk-style index number */
   .nav__link-num {

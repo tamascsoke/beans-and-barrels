@@ -3,6 +3,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import SideTab from "../components/SideTab.astro";
 import ChalkCursor from "../components/ChalkCursor.astro";
+import ScrollExtras from "../components/ScrollExtras.astro";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
@@ -40,12 +41,35 @@ const {
       <slot />
     </main>
     <SideTab />
+    <ScrollExtras />
     <ChalkCursor />
     <Footer />
   </body>
 </html>
 
 <script>
+  /* ── Global one-time inits (survive page swaps via astro:after-swap) ── */
+
+  // Parallax — single global listener, queries [data-parallax] each frame
+  if (!document.body.dataset.parallaxInit && window.matchMedia("(pointer:fine)").matches) {
+    document.body.dataset.parallaxInit = "1";
+    let ticking = false;
+    document.addEventListener("mousemove", (e) => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const xPct = e.clientX / window.innerWidth  - 0.5;
+        const yPct = e.clientY / window.innerHeight - 0.5;
+        document.querySelectorAll<HTMLElement>("[data-parallax]").forEach((el) => {
+          const d = parseFloat(el.dataset.parallax ?? "1");
+          el.style.transform = `translate(${xPct * d * -22}px, ${yPct * d * -10}px)`;
+        });
+        ticking = false;
+      });
+    });
+  }
+
+  /* ── Per-page inits (re-run after each navigation) ── */
   function initObservers() {
     // chalk underline draw-in
     const chalkIO = new IntersectionObserver(
@@ -56,7 +80,6 @@ const {
     );
     document.querySelectorAll(".chalk-underline").forEach((el) => chalkIO.observe(el));
 
-    // chalk divider draw-in — removed, dividers not in use
     // section reveal
     const revealIO = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
@@ -85,19 +108,15 @@ const {
         if (!entry.isIntersecting) return;
         twIO.disconnect();
         function type() {
-          if (i < text.length) {
-            cursor.before(text[i++]);
-            setTimeout(type, 26 + Math.random() * 18);
-          } else {
-            cursor.classList.add("tw-done");
-          }
+          if (i < text.length) { cursor.before(text[i++]); setTimeout(type, 26 + Math.random() * 18); }
+          else cursor.classList.add("tw-done");
         }
         type();
       }, { threshold: 0.6 });
       twIO.observe(el);
     });
 
-    // magnetic buttons — re-query on each swap
+    // magnetic buttons
     document.querySelectorAll<HTMLElement>(".btn").forEach((btn) => {
       btn.addEventListener("mousemove", (e) => {
         const r  = btn.getBoundingClientRect();
@@ -111,6 +130,41 @@ const {
       btn.addEventListener("mouseleave", () => {
         btn.style.transform = "";
         btn.style.boxShadow = "";
+      });
+    });
+
+    // text scramble on chalk-underline spans
+    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#@&%—·";
+    document.querySelectorAll<HTMLElement>(".chalk-underline").forEach((el) => {
+      if (el.dataset.scrambleInit) return;
+      el.dataset.scrambleInit = "1";
+      const original = el.textContent ?? "";
+      let timer: ReturnType<typeof setInterval> | null = null;
+
+      el.addEventListener("mouseenter", () => {
+        if (!el.classList.contains("is-drawn")) return;
+        let progress = 0;
+        clearInterval(timer!);
+        timer = setInterval(() => {
+          el.textContent = original
+            .split("")
+            .map((c, idx) => {
+              if (/[\s&—–]/.test(c)) return c;
+              if (idx < progress) return original[idx];
+              return CHARS[Math.floor(Math.random() * CHARS.length)];
+            })
+            .join("");
+          progress += 0.55;
+          if (progress >= original.length) {
+            clearInterval(timer!);
+            el.textContent = original;
+          }
+        }, 32);
+      });
+
+      el.addEventListener("mouseleave", () => {
+        clearInterval(timer!);
+        el.textContent = original;
       });
     });
   }
@@ -135,8 +189,7 @@ const {
   /* ── Typewriter cursor ── */
   .tw-cursor {
     display: inline-block;
-    width: 2px;
-    height: 0.9em;
+    width: 2px; height: 0.9em;
     background: var(--accent);
     margin-left: 3px;
     vertical-align: text-bottom;
@@ -144,4 +197,10 @@ const {
   }
   .tw-cursor.tw-done { opacity: 0; animation: none; }
   @keyframes tw-blink { 50% { opacity: 0; } }
+
+  /* ── Parallax elements: smooth follow ── */
+  [data-parallax] {
+    transition: transform 120ms ease-out;
+    will-change: transform;
+  }
 </style>

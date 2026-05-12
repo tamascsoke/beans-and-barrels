@@ -1,0 +1,99 @@
+---
+// Orange left-edge scroll bar + section counter bottom-right
+---
+
+<div class="scroll-sidebar" aria-hidden="true">
+  <div class="scroll-sidebar__fill" id="scrollFill"></div>
+</div>
+
+<div class="scroll-counter" id="scrollCounter" aria-hidden="true">
+  <span id="scrollCurrent">01</span>
+  <span class="scroll-counter__sep">/</span>
+  <span id="scrollTotal">01</span>
+</div>
+
+<style>
+  .scroll-sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: rgba(240, 138, 28, 0.1);
+    z-index: 30;
+    pointer-events: none;
+  }
+  .scroll-sidebar__fill {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 0%;
+    background: linear-gradient(to bottom, var(--accent), rgba(240,138,28,0.6));
+    border-radius: 0 0 2px 2px;
+    box-shadow: 1px 0 10px rgba(240,138,28,0.35);
+  }
+
+  .scroll-counter {
+    position: fixed;
+    right: 20px;
+    bottom: 22px;
+    z-index: 30;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    font-family: var(--f-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 500ms;
+  }
+  .scroll-counter.is-visible { opacity: 1; }
+
+  #scrollCurrent {
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .scroll-counter__sep { opacity: 0.35; }
+
+  @media (max-width: 640px) { .scroll-counter { display: none; } }
+</style>
+
+<script>
+  function initScrollExtras() {
+    const fill      = document.getElementById("scrollFill");
+    const counter   = document.getElementById("scrollCounter");
+    const currentEl = document.getElementById("scrollCurrent");
+    const totalEl   = document.getElementById("scrollTotal");
+
+    function updateBar() {
+      if (!fill) return;
+      const total = document.body.scrollHeight - window.innerHeight;
+      fill.style.height = (total > 0 ? Math.min(window.scrollY / total, 1) : 0) * 100 + "%";
+    }
+
+    window.addEventListener("scroll", updateBar, { passive: true });
+    updateBar();
+
+    if (!counter || !currentEl || !totalEl) return;
+    const sections = Array.from(document.querySelectorAll("main section"));
+    if (sections.length < 2) { return; }
+
+    totalEl.textContent  = String(sections.length).padStart(2, "0");
+    currentEl.textContent = "01";
+    counter.classList.add("is-visible");
+
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const idx = sections.indexOf(e.target as HTMLElement);
+          if (idx !== -1) currentEl.textContent = String(idx + 1).padStart(2, "0");
+        }
+      }),
+      { threshold: 0.4 },
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+
+  initScrollExtras();
+  document.addEventListener("astro:after-swap", initScrollExtras);
+</script>
