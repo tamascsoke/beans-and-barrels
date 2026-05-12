@@ -56,15 +56,7 @@ const {
     );
     document.querySelectorAll(".chalk-underline").forEach((el) => chalkIO.observe(el));
 
-    // chalk divider draw-in
-    const dividerIO = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("is-drawn"); dividerIO.unobserve(e.target); }
-      }),
-      { threshold: 0.5 },
-    );
-    document.querySelectorAll(".chalk-divider").forEach((el) => dividerIO.observe(el));
-
+    // chalk divider draw-in — removed, dividers not in use
     // section reveal
     const revealIO = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
@@ -152,40 +144,4 @@ const {
   }
   .tw-cursor.tw-done { opacity: 0; animation: none; }
   @keyframes tw-blink { 50% { opacity: 0; } }
-
-  /* ── Chalk section divider ── */
-  .chalk-divider {
-    width: 100%;
-    padding: 0 var(--gutter);
-    margin-block: clamp(24px, 4vw, 48px);
-    pointer-events: none;
-  }
-  .chalk-divider svg { width: 100%; height: 22px; display: block; overflow: visible; }
-  .chalk-divider path {
-    stroke-dasharray: 900;
-    stroke-dashoffset: 900;
-    transition: stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1);
-  }
-  .chalk-divider.is-drawn path { stroke-dashoffset: 0; }
-
-  /* ── Coffee ring hover ── */
-  .coffee-ring { position: relative; }
-  .coffee-ring::after {
-    content: "";
-    position: absolute;
-    bottom: 14px; right: 14px;
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle, transparent 34%, rgba(140,80,20,0.18) 35%, rgba(140,80,20,0.10) 44%, transparent 45%),
-      radial-gradient(circle at 38% 36%, rgba(255,255,255,0.06) 0%, transparent 55%);
-    opacity: 0;
-    transform: scale(0.6) rotate(-15deg);
-    transition: opacity 380ms var(--ease), transform 380ms var(--ease);
-    pointer-events: none;
-  }
-  .coffee-ring:hover::after {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
 </style>

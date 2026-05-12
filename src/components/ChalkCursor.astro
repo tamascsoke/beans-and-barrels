@@ -1,8 +1,6 @@
 ---
-// Only on pointer devices — skip mobile touch screens
+// Subtle chalk dust trail — desktop pointer devices only
 ---
-
-<div id="chalk-trail" aria-hidden="true"></div>
 
 <style is:global>
   .chalk-dot {
@@ -10,19 +8,18 @@
     pointer-events: none;
     z-index: 9999;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.72);
-    filter: blur(1.2px);
+    background: rgba(255, 255, 255, 0.55);
+    filter: blur(0.8px);
     transform: translate(-50%, -50%);
-    animation: chalk-dot-fade 0.7s ease-out forwards;
+    animation: chalk-dot-fade 0.9s ease-out forwards;
   }
   @keyframes chalk-dot-fade {
     0%   { opacity: 1;   transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.2); }
+    100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.1); }
   }
 </style>
 
 <script>
-  // Only init once — cursor is global, survives page swaps
   if (!document.body.dataset.chalkCursorInit && window.matchMedia("(pointer:fine)").matches) {
     document.body.dataset.chalkCursorInit = "1";
 
@@ -30,31 +27,28 @@
 
     document.addEventListener("mousemove", (e) => {
       frame++;
-      if (frame % 2 !== 0) return; // every 2nd event
+      if (frame % 4 !== 0) return; // every 4th event — much sparser
 
       const dx = e.clientX - lastX;
       const dy = e.clientY - lastY;
-      if (dx * dx + dy * dy < 64) return; // min 8px movement
+      if (dx * dx + dy * dy < 400) return; // min 20px movement
 
       lastX = e.clientX;
       lastY = e.clientY;
 
       const dot = document.createElement("div");
       dot.className = "chalk-dot";
-      dot.style.left   = e.clientX + "px";
-      dot.style.top    = e.clientY + "px";
+      dot.style.left = e.clientX + "px";
+      dot.style.top  = e.clientY + "px";
 
-      // random size + slight angle variation for chalk feel
-      const w = 4 + Math.random() * 5;
-      const h = w * (0.45 + Math.random() * 0.35);
-      const rot = (Math.random() - 0.5) * 40;
+      const w = 2.5 + Math.random() * 3;
       dot.style.width  = w + "px";
-      dot.style.height = h + "px";
-      dot.style.rotate = rot + "deg";
-      dot.style.opacity = (0.35 + Math.random() * 0.45).toString();
+      dot.style.height = (w * (0.5 + Math.random() * 0.3)) + "px";
+      dot.style.rotate = ((Math.random() - 0.5) * 50) + "deg";
+      dot.style.opacity = (0.22 + Math.random() * 0.28).toString();
 
       document.body.appendChild(dot);
-      setTimeout(() => dot.remove(), 720);
+      setTimeout(() => dot.remove(), 920);
     });
   }
 </script>
