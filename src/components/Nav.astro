@@ -10,10 +10,11 @@ const links = [
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 
+<!-- drawer is a sibling of header to avoid backdrop-filter containing-block bug -->
 <header class="nav">
   <div class="nav__inner container">
     <a href="/" class="nav__logo" aria-label="Bean & Barrel főoldal">
-      <img src="/logo.png" alt="Bean & Barrel" width="72" height="72" />
+      <img src="/logo.png" alt="Bean & Barrel" />
     </a>
     <a href="/" class="nav__brand">BEAN &amp; BARREL</a>
     <button
@@ -26,34 +27,42 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
       <span></span><span></span><span></span>
     </button>
   </div>
-
-  <nav id="nav-drawer" class="nav__drawer" aria-hidden="true">
-    <ul>
-      {
-        links.map((l) => (
-          <li>
-            <a
-              href={l.href}
-              class:list={["nav__link", { "is-active": path === l.href }]}
-            >
-              {l.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
 </header>
 
+<nav id="nav-drawer" class="nav__drawer" aria-hidden="true">
+  <ul>
+    {
+      links.map((l) => (
+        <li>
+          <a
+            href={l.href}
+            class:list={["nav__link", { "is-active": path === l.href }]}
+          >
+            {l.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
 <style>
+  /* backdrop-filter lives on ::before so it doesn't create a containing-block
+     for the fixed-positioned drawer (CSS spec §9.3.1 / Chrome behaviour) */
   .nav {
     position: sticky;
     top: 0;
     z-index: 50;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: rgba(54, 53, 53, 0.92);
     backdrop-filter: saturate(140%) blur(8px);
     -webkit-backdrop-filter: saturate(140%) blur(8px);
-    border-bottom: 1px solid var(--line);
+    z-index: -1;
   }
 
   .nav__inner {
@@ -61,29 +70,20 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
   }
 
+  /* Logo: show at natural aspect ratio, no clipping */
   .nav__logo {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: var(--bg);
+    height: calc(var(--nav-h) - 24px);
     flex-shrink: 0;
   }
   .nav__logo img {
-    width: 110%;
-    height: 110%;
-    object-fit: cover;
-    mix-blend-mode: screen;
-  }
-
-  @media (min-width: 720px) {
-    .nav__logo { width: 72px; height: 72px; }
+    height: 100%;
+    width: auto;
+    border-radius: 8px;
   }
 
   .nav__brand {
@@ -104,6 +104,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     justify-content: center;
     gap: 5px;
     border-radius: 8px;
+    flex-shrink: 0;
   }
   .nav__toggle span {
     display: block;
@@ -122,18 +123,22 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     transform: translateY(-7px) rotate(-45deg);
   }
 
+  /* Drawer is outside <header> so backdrop-filter doesn't trap it */
   .nav__drawer {
     position: fixed;
-    inset: var(--nav-h) 0 0 0;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: var(--bg);
     background-image:
       radial-gradient(circle at 20% 15%, rgba(255,255,255,0.04), transparent 60%),
       radial-gradient(circle at 85% 80%, rgba(255,255,255,0.03), transparent 55%);
-    transform: translateY(-12px);
+    transform: translateY(-16px);
     opacity: 0;
     pointer-events: none;
-    transition: transform 240ms var(--ease), opacity 240ms var(--ease);
-    z-index: 49;
+    transition: transform 260ms var(--ease), opacity 260ms var(--ease);
+    z-index: 48;
     overflow-y: auto;
   }
   .nav__drawer[aria-hidden="false"] {
@@ -157,25 +162,15 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     letter-spacing: 0.05em;
     text-transform: uppercase;
     display: inline-block;
-    position: relative;
+    transition: color 150ms var(--ease);
   }
-  .nav__link.is-active {
-    color: var(--accent);
-  }
-  .nav__link:hover {
-    color: var(--accent);
-  }
-
-  @media (min-width: 860px) {
-    .nav__inner {
-      grid-template-columns: auto 1fr auto;
-    }
-  }
+  .nav__link.is-active { color: var(--accent); }
+  .nav__link:hover    { color: var(--accent); }
 </style>
 
 <script>
-  const btn = document.getElementById("navToggle");
-  const drawer = document.getElementById("nav-drawer");
+  const btn    = document.getElementById("navToggle") as HTMLButtonElement | null;
+  const drawer = document.getElementById("nav-drawer") as HTMLElement | null;
   if (btn && drawer) {
     btn.addEventListener("click", () => {
       const open = btn.getAttribute("aria-expanded") === "true";
