@@ -60,7 +60,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       </div>
       <label class="st-field">
         <span class="st-field__lbl">Üzenet</span>
-        <textarea name="message" rows="3" required class="st-input st-input--area"></textarea>
+        <textarea name="message" rows="2" required class="st-input st-input--area"></textarea>
       </label>
       <button type="submit" class="btn sidetab__btn">Küldés</button>
     </form>
@@ -133,44 +133,44 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 22px 14px;
+    padding: 14px 18px;
     border-bottom: 1px solid rgba(255,255,255,0.08);
     flex-shrink: 0;
   }
   .sidetab__brand {
     font-family: var(--f-logo);
-    font-size: 1.05rem;
+    font-size: 1rem;
     letter-spacing: 0.12em;
     color: var(--ink-soft);
   }
   .sidetab__close {
-    width: 32px; height: 32px;
+    width: 28px; height: 28px;
     display: flex; align-items: center; justify-content: center;
     color: var(--ink-soft);
     border-radius: 6px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: color 150ms, background 150ms;
   }
   .sidetab__close:hover { color: var(--ink); background: rgba(255,255,255,0.07); }
 
   /* Contact info */
   .sidetab__info {
-    padding: 18px 22px;
+    padding: 14px 18px;
     display: grid;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
   }
   .sidetab__contact-row {
     display: grid;
-    gap: 3px;
+    gap: 2px;
     transition: color 150ms;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     letter-spacing: 0.04em;
   }
   .sidetab__contact-row:hover { color: var(--accent); }
   .sidetab__lbl {
     font-family: var(--f-sub);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -182,34 +182,34 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   .sidetab__rule {
     height: 1px;
     background: rgba(255,255,255,0.08);
-    margin: 0 22px;
+    margin: 0 18px;
     flex-shrink: 0;
   }
 
   /* Form heading */
   .sidetab__form-head {
     font-family: var(--f-logo);
-    font-size: 1.15rem;
+    font-size: 1rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    padding: 16px 22px 0;
+    padding: 14px 18px 0;
     flex-shrink: 0;
   }
 
   /* Form */
   .sidetab__form {
-    padding: 14px 22px 32px;
+    padding: 10px 18px 24px;
     display: grid;
-    gap: 14px;
+    gap: 10px;
     flex: 1;
   }
 
   /* Field */
-  .st-field { display: grid; gap: 5px; }
+  .st-field { display: grid; gap: 3px; }
   .st-field__lbl {
     font-family: var(--f-sub);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -222,10 +222,10 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     color: var(--ink);
     font: inherit;
     font-family: var(--f-body);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 8px 0;
+    padding: 5px 0;
     width: 100%;
     outline: none;
     transition: border-color 200ms;
@@ -233,7 +233,12 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   .st-input:focus { border-color: var(--accent); }
   .st-input--area { resize: none; }
 
-  .sidetab__btn { margin-top: 4px; }
+  .sidetab__btn {
+    padding: 10px 22px;
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
+    margin-top: 2px;
+  }
 
   @media (max-width: 520px) {
     .sidetab { top: var(--nav-h); }
