@@ -10,7 +10,6 @@ const links = [
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 
-<!-- drawer is a sibling of header to avoid backdrop-filter containing-block bug -->
 <header class="nav">
   <div class="nav__inner container">
     <a href="/" class="nav__logo" aria-label="Bean & Barrel főoldal">
@@ -29,7 +28,12 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   </div>
 </header>
 
+<!-- dim overlay -->
+<div class="nav__overlay" id="navOverlay" aria-hidden="true"></div>
+
+<!-- right-side panel -->
 <nav id="nav-drawer" class="nav__drawer" aria-hidden="true">
+  <button class="nav__close" id="navClose" aria-label="Menü bezárása">✕</button>
   <ul>
     {
       links.map((l) => (
@@ -47,8 +51,6 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 </nav>
 
 <style>
-  /* backdrop-filter lives on ::before so it doesn't create a containing-block
-     for the fixed-positioned drawer (CSS spec §9.3.1 / Chrome behaviour) */
   .nav {
     position: sticky;
     top: 0;
@@ -73,7 +75,6 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     gap: 16px;
   }
 
-  /* Logo: show at natural aspect ratio, no clipping */
   .nav__logo {
     display: inline-flex;
     align-items: center;
@@ -123,67 +124,105 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Drawer is outside <header> so backdrop-filter doesn't trap it */
-  .nav__drawer {
+  /* dim behind the panel */
+  .nav__overlay {
     position: fixed;
-    top: var(--nav-h);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--bg);
-    background-image:
-      radial-gradient(circle at 20% 15%, rgba(255,255,255,0.04), transparent 60%),
-      radial-gradient(circle at 85% 80%, rgba(255,255,255,0.03), transparent 55%);
-    transform: translateY(-16px);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
     opacity: 0;
     pointer-events: none;
-    transition: transform 260ms var(--ease), opacity 260ms var(--ease);
-    z-index: 48;
-    overflow-y: auto;
+    transition: opacity 280ms var(--ease);
+    z-index: 58;
   }
-  .nav__drawer[aria-hidden="false"] {
-    transform: translateY(0);
+  .nav__overlay.is-open {
     opacity: 1;
     pointer-events: auto;
   }
 
+  /* right-side panel */
+  .nav__drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background: var(--bg-2);
+    border-left: 1px solid var(--line);
+    transform: translateX(100%);
+    transition: transform 300ms var(--ease);
+    z-index: 59;
+    overflow-y: auto;
+    padding: 24px 0 40px;
+  }
+  .nav__drawer[aria-hidden="false"] {
+    transform: translateX(0);
+  }
+
+  .nav__close {
+    display: block;
+    margin: 0 24px 24px auto;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 150ms, background 150ms;
+  }
+  .nav__close:hover {
+    color: var(--ink);
+    background: rgba(255,255,255,0.06);
+  }
+
   .nav__drawer ul {
     list-style: none;
-    padding: clamp(40px, 8vw, 80px) var(--gutter);
+    padding: 0 24px;
     display: grid;
-    gap: 14px;
-    max-width: var(--max-w);
-    margin: 0 auto;
+    gap: 4px;
   }
 
   .nav__link {
+    display: block;
     font-family: var(--f-logo);
-    font-size: clamp(2rem, 6vw, 4rem);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    display: inline-block;
-    transition: color 150ms var(--ease);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    transition: color 150ms var(--ease), padding-left 150ms var(--ease);
   }
   .nav__link.is-active { color: var(--accent); }
-  .nav__link:hover    { color: var(--accent); }
+  .nav__link:hover {
+    color: var(--accent);
+    padding-left: 6px;
+  }
 </style>
 
 <script>
-  const btn    = document.getElementById("navToggle") as HTMLButtonElement | null;
-  const drawer = document.getElementById("nav-drawer") as HTMLElement | null;
-  if (btn && drawer) {
-    btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", String(!open));
-      drawer.setAttribute("aria-hidden", String(open));
-      document.body.style.overflow = open ? "" : "hidden";
-    });
-    drawer.querySelectorAll("a").forEach((a) =>
-      a.addEventListener("click", () => {
-        btn.setAttribute("aria-expanded", "false");
-        drawer.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
-      }),
-    );
+  const btn     = document.getElementById("navToggle")  as HTMLButtonElement | null;
+  const drawer  = document.getElementById("nav-drawer") as HTMLElement | null;
+  const overlay = document.getElementById("navOverlay") as HTMLElement | null;
+  const closeBtn = document.getElementById("navClose")  as HTMLButtonElement | null;
+
+  function open() {
+    btn?.setAttribute("aria-expanded", "true");
+    drawer?.setAttribute("aria-hidden", "false");
+    overlay?.classList.add("is-open");
+    document.body.style.overflow = "hidden";
   }
+  function close() {
+    btn?.setAttribute("aria-expanded", "false");
+    drawer?.setAttribute("aria-hidden", "true");
+    overlay?.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  btn?.addEventListener("click", () =>
+    btn.getAttribute("aria-expanded") === "true" ? close() : open()
+  );
+  closeBtn?.addEventListener("click", close);
+  overlay?.addEventListener("click", close);
+  drawer?.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
 </script>
