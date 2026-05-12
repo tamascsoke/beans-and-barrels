@@ -28,26 +28,33 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   </div>
 </header>
 
-<!-- dim overlay -->
-<div class="nav__overlay" id="navOverlay" aria-hidden="true"></div>
+<div class="nav__overlay" id="navOverlay"></div>
 
-<!-- right-side panel -->
 <nav id="nav-drawer" class="nav__drawer" aria-hidden="true">
-  <button class="nav__close" id="navClose" aria-label="Menü bezárása">✕</button>
+  <!-- chalk logo at top of panel -->
+  <div class="nav__panel-head">
+    <img src="/logo.png" alt="" aria-hidden="true" class="nav__panel-logo" />
+    <button class="nav__close" id="navClose" aria-label="Menü bezárása">✕</button>
+  </div>
+
   <ul>
     {
-      links.map((l) => (
-        <li>
+      links.map((l, i) => (
+        <li style={`--i:${i}`}>
           <a
             href={l.href}
             class:list={["nav__link", { "is-active": path === l.href }]}
           >
+            <span class="nav__link-num">0{i + 1}</span>
             {l.label}
           </a>
         </li>
       ))
     }
   </ul>
+
+  <!-- chalk-style decorative label -->
+  <p class="nav__tagline">Kávé és sör — tuktukból</p>
 </nav>
 
 <style>
@@ -81,11 +88,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     height: calc(var(--nav-h) - 24px);
     flex-shrink: 0;
   }
-  .nav__logo img {
-    height: 100%;
-    width: auto;
-    border-radius: 8px;
-  }
+  .nav__logo img { height: 100%; width: auto; border-radius: 8px; }
 
   .nav__brand {
     font-family: var(--f-logo);
@@ -97,8 +100,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   }
 
   .nav__toggle {
-    width: 44px;
-    height: 44px;
+    width: 44px; height: 44px;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -109,102 +111,144 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   }
   .nav__toggle span {
     display: block;
-    width: 22px;
-    height: 2px;
+    width: 22px; height: 2px;
     background: var(--ink);
-    transition: transform 200ms var(--ease), opacity 200ms var(--ease);
+    transition: transform 220ms var(--ease), opacity 220ms var(--ease);
   }
-  .nav__toggle[aria-expanded="true"] span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .nav__toggle[aria-expanded="true"] span:nth-child(2) {
-    opacity: 0;
-  }
-  .nav__toggle[aria-expanded="true"] span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
+  .nav__toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav__toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav__toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  /* dim behind the panel */
+  /* dim overlay */
   .nav__overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 280ms var(--ease);
+    transition: opacity 300ms var(--ease);
     z-index: 58;
   }
-  .nav__overlay.is-open {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .nav__overlay.is-open { opacity: 1; pointer-events: auto; }
 
-  /* right-side panel */
+  /* ── Chalkboard panel ── */
   .nav__drawer {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(320px, 85vw);
-    background: var(--bg-2);
-    border-left: 1px solid var(--line);
+    top: 0; right: 0; bottom: 0;
+    width: min(340px, 88vw);
+    /* dark chalkboard feel with same noise grain as body */
+    background:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+      linear-gradient(160deg, #1e1d1d 0%, #2a2929 100%);
+    background-size: 180px 180px, cover;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    box-shadow: -12px 0 48px rgba(0,0,0,0.6);
     transform: translateX(100%);
-    transition: transform 300ms var(--ease);
+    transition: transform 340ms var(--ease);
     z-index: 59;
     overflow-y: auto;
-    padding: 24px 0 40px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 40px;
   }
-  .nav__drawer[aria-hidden="false"] {
-    transform: translateX(0);
-  }
+  .nav__drawer[aria-hidden="false"] { transform: translateX(0); }
 
-  .nav__close {
-    display: block;
-    margin: 0 24px 24px auto;
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
-    color: var(--ink-soft);
-    border-radius: 8px;
+  /* panel header: logo + close */
+  .nav__panel-head {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 12px;
+  }
+  .nav__panel-logo {
+    height: 56px;
+    width: auto;
+    border-radius: 6px;
+    opacity: 0.85;
+  }
+  .nav__close {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft);
+    border-radius: 8px;
+    font-size: 1rem;
     transition: color 150ms, background 150ms;
   }
-  .nav__close:hover {
-    color: var(--ink);
-    background: rgba(255,255,255,0.06);
+  .nav__close:hover { color: var(--ink); background: rgba(255,255,255,0.07); }
+
+  /* link list */
+  .nav__drawer ul { list-style: none; padding: 8px 20px; flex: 1; }
+
+  .nav__drawer li { overflow: hidden; }
+
+  /* chalk-write-in animation per link */
+  @keyframes chalk-write {
+    from {
+      opacity: 0;
+      transform: translateY(14px) skewX(-2deg);
+      filter: blur(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) skewX(0deg);
+      filter: blur(0);
+    }
   }
 
-  .nav__drawer ul {
-    list-style: none;
-    padding: 0 24px;
-    display: grid;
-    gap: 4px;
+  .nav__drawer[aria-hidden="false"] .nav__link {
+    animation: chalk-write 380ms var(--ease) both;
+    animation-delay: calc(60ms + var(--i) * 65ms);
   }
 
   .nav__link {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
     font-family: var(--f-logo);
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    letter-spacing: 0.05em;
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--line);
-    transition: color 150ms var(--ease), padding-left 150ms var(--ease);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    transition: color 150ms var(--ease), gap 200ms var(--ease);
   }
+  .nav__link:last-child { border-bottom: none; }
   .nav__link.is-active { color: var(--accent); }
-  .nav__link:hover {
-    color: var(--accent);
-    padding-left: 6px;
+  .nav__link:hover { color: var(--accent); gap: 18px; }
+
+  /* small chalk-style index number */
+  .nav__link-num {
+    font-family: var(--f-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    margin-bottom: 2px;
+    transition: color 150ms;
+  }
+  .nav__link:hover .nav__link-num,
+  .nav__link.is-active .nav__link-num { color: var(--accent); }
+
+  /* bottom tagline */
+  .nav__tagline {
+    font-family: var(--f-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 20px 20px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: auto;
   }
 </style>
 
 <script>
-  const btn     = document.getElementById("navToggle")  as HTMLButtonElement | null;
-  const drawer  = document.getElementById("nav-drawer") as HTMLElement | null;
-  const overlay = document.getElementById("navOverlay") as HTMLElement | null;
-  const closeBtn = document.getElementById("navClose")  as HTMLButtonElement | null;
+  const btn      = document.getElementById("navToggle")  as HTMLButtonElement | null;
+  const drawer   = document.getElementById("nav-drawer") as HTMLElement | null;
+  const overlay  = document.getElementById("navOverlay") as HTMLElement | null;
+  const closeBtn = document.getElementById("navClose")   as HTMLButtonElement | null;
 
   function open() {
     btn?.setAttribute("aria-expanded", "true");

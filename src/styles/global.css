@@ -142,7 +142,7 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   box-shadow: none;
 }
 
-/* ── Chalk underline (shared with logo design) ── */
+/* ── Chalk underline — draws in on scroll via .is-drawn ── */
 .chalk-underline {
   display: inline-block;
   position: relative;
@@ -156,11 +156,18 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   bottom: -10px;
   height: 14px;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.0) 60%, transparent 60%),
     linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255,255,255,0.85));
   -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.5' numOctaves='4' seed='9'/><feDisplacementMap in='SourceGraphic' scale='5'/></filter><path d='M2 6 Q 40 3 80 6 T 160 6 T 198 6 L 198 9 Q 160 12 80 9 T 2 9 Z' fill='white' filter='url(%23r)'/></svg>") center/100% 100% no-repeat;
           mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.5' numOctaves='4' seed='9'/><feDisplacementMap in='SourceGraphic' scale='5'/></filter><path d='M2 6 Q 40 3 80 6 T 160 6 T 198 6 L 198 9 Q 160 12 80 9 T 2 9 Z' fill='white' filter='url(%23r)'/></svg>") center/100% 100% no-repeat;
   pointer-events: none;
+  /* draw-in state */
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 700ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.chalk-underline.is-drawn::after {
+  transform: scaleX(1);
 }
 
 /* ── Utility ── */
@@ -192,3 +199,45 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   text-transform: uppercase;
   aspect-ratio: 4 / 3;
 }
+
+/* ── Steam hover — gőz animáció kávé/sör elemeken ── */
+@keyframes steam-rise {
+  0%   { transform: translateY(0)   scaleX(1)    rotate(-3deg); opacity: 0.7; }
+  40%  { transform: translateY(-14px) scaleX(1.15) rotate(3deg);  opacity: 0.5; }
+  100% { transform: translateY(-30px) scaleX(0.7)  rotate(-2deg); opacity: 0;   }
+}
+
+.steam-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.steam-wrap::before,
+.steam-wrap::after {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  width: 6px;
+  height: 12px;
+  background: rgba(255,255,255,0.55);
+  border-radius: 50% 50% 20% 20%;
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(2px);
+}
+.steam-wrap::before { left: 30%; animation: steam-rise 1.4s ease-out infinite; }
+.steam-wrap::after  { left: 58%; animation: steam-rise 1.4s ease-out infinite 0.5s; }
+
+.steam-wrap:hover::before,
+.steam-wrap:hover::after { animation-play-state: running; opacity: 0.7; }
+
+/* Section reveal — fade+slide up on scroll */
+@keyframes section-in {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  animation: section-in 600ms var(--ease) both;
+}
+.reveal.is-visible { animation-play-state: running; }

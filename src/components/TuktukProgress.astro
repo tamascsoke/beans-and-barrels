@@ -1,0 +1,115 @@
+---
+// TuktukProgress.astro — road strip + rolling tuktuk scroll indicator
+---
+
+<div class="tkp" id="tkProgress" aria-hidden="true">
+  <div class="tkp__road">
+    <div class="tkp__fill" id="tkFill"></div>
+    <!-- simple ASCII-style tuktuk drawn purely in CSS -->
+    <div class="tkp__vehicle" id="tkVehicle">
+      <svg viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- body -->
+        <rect x="4" y="8" width="30" height="14" rx="3" fill="#f08a1c"/>
+        <!-- cabin -->
+        <rect x="8" y="4" width="16" height="8" rx="2" fill="#e07a10"/>
+        <!-- window -->
+        <rect x="10" y="6" width="10" height="5" rx="1" fill="rgba(255,255,255,0.35)"/>
+        <!-- cargo back -->
+        <rect x="26" y="10" width="10" height="10" rx="2" fill="#d06a08"/>
+        <!-- wheels -->
+        <circle cx="12" cy="23" r="4" fill="#222"/>
+        <circle cx="12" cy="23" r="1.8" fill="#555"/>
+        <circle cx="34" cy="23" r="4" fill="#222"/>
+        <circle cx="34" cy="23" r="1.8" fill="#555"/>
+        <!-- exhaust smoke dots -->
+        <circle cx="2" cy="14" r="1.5" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="0" cy="11" r="1" fill="rgba(255,255,255,0.15)"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tkp {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    pointer-events: none;
+    padding: 0 var(--gutter);
+    opacity: 0;
+    transition: opacity 400ms;
+  }
+  .tkp.is-visible { opacity: 1; }
+
+  .tkp__road {
+    position: relative;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    margin-bottom: 0;
+    overflow: visible;
+  }
+
+  /* dashed centre line */
+  .tkp__road::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.15) 0 10px,
+      transparent 10px 22px
+    );
+    transform: translateY(-50%);
+  }
+
+  .tkp__fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, rgba(240,138,28,0.6) 100%);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 60ms linear;
+  }
+
+  .tkp__vehicle {
+    position: absolute;
+    top: 50%;
+    /* left is set by JS */
+    left: 0;
+    transform: translate(-50%, -190%);
+    width: 48px;
+    transition: left 60ms linear;
+  }
+  .tkp__vehicle svg { display: block; width: 100%; height: auto; }
+
+  /* wheel spin */
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+  const bar     = document.getElementById("tkProgress");
+  const fill    = document.getElementById("tkFill");
+  const vehicle = document.getElementById("tkVehicle");
+
+  function update() {
+    const scrolled = window.scrollY;
+    const total    = document.body.scrollHeight - window.innerHeight;
+    if (total <= 0) return;
+    const pct = Math.min(scrolled / total, 1);
+
+    fill!.style.transform    = `scaleX(${pct})`;
+    vehicle!.style.left      = `${pct * 100}%`;
+
+    if (pct > 0.01 && pct < 0.999) bar!.classList.add("is-visible");
+    else bar!.classList.remove("is-visible");
+  }
+
+  window.addEventListener("scroll", update, { passive: true });
+  document.addEventListener("astro:after-swap", update);
+</script>
