@@ -1,0 +1,63 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const team = [
+  {
+    name: "Soós Balázs",
+    role: "Alapító — kávé",
+    bio: "A specialty kávés oldal vezetője, a Bean & Barrel pörkölői és baristái mögött álló kéz.",
+  },
+  {
+    name: "Warta Benedek",
+    role: "Alapító — sör",
+    bio: "Magyar kézműves csapok kurátora és a vendéglátás szervezője a tuktuk pultjánál.",
+  },
+  {
+    name: "Váradi Donát",
+    role: "Alapító — közösség",
+    bio: "Rendezvények, kommunikáció és a közösségi élmény gondozója.",
+  },
+];
+---
+
+<Layout title="Rólunk — Bean & Barrel">
+  <section class="section">
+    <div class="container intro">
+      <span class="h-sub">Rólunk</span>
+      <h1 class="h-display"><span class="chalk-underline">Három srác, egy tuktuk</span></h1>
+      <p class="lead">
+        A Bean & Barrel három barát közös története. Hiszünk benne, hogy egy jó kávé és egy hideg sör közelebb hozza
+        az embereket — bárhol legyen is a tuktuk.
+      </p>
+      <div class="intro__photo placeholder-img">Csapatfotó — közös kép</div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container team">
+      {
+        team.map((m) => (
+          <article class="member">
+            <div class="member__photo placeholder-img">Portré — {m.name}</div>
+            <h3 class="h-section"><span class="chalk-underline">{m.name}</span></h3>
+            <span class="h-sub">{m.role}</span>
+            <p class="body-text">{m.bio}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro { display: grid; gap: 18px; max-width: 820px; }
+  .intro__photo { aspect-ratio: 16 / 9; margin-top: 20px; width: 100%; }
+
+  .section--alt { background: var(--bg-2); }
+  .team { display: grid; gap: 36px; grid-template-columns: 1fr; }
+  @media (min-width: 820px) { .team { grid-template-columns: repeat(3, 1fr); } }
+
+  .member { display: grid; gap: 12px; }
+  .member__photo { aspect-ratio: 3 / 4; }
+  .member h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); }
+</style>

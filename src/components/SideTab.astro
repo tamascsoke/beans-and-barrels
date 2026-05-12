@@ -1,0 +1,101 @@
+---
+// Sliding "Elérhetőség" tab that hugs the right edge of the viewport.
+---
+
+<aside class="sidetab" id="sidetab">
+  <button class="sidetab__pull" id="sidetabPull" aria-controls="sidetab" aria-expanded="false">
+    Elérhetőség
+  </button>
+  <div class="sidetab__panel" role="dialog" aria-label="Elérhetőség">
+    <h3 class="h-section">Vegyél fel velünk!</h3>
+    <p class="body-text">Rendezvényekért, franchise-ért, vagy csak egy jó kávéért keress minket bizalommal.</p>
+    <ul class="sidetab__list">
+      <li><span class="h-sub">Telefon</span><a href="tel:+36202469775">+36 20 246 9775</a></li>
+      <li><span class="h-sub">E-mail</span><a href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></li>
+    </ul>
+    <a class="btn" href="/kontakt">Üzenj nekünk</a>
+  </div>
+</aside>
+
+<style>
+  .sidetab {
+    position: fixed;
+    right: 0;
+    top: 38vh;
+    z-index: 40;
+    display: flex;
+    align-items: stretch;
+    transform: translateX(calc(100% - 44px));
+    transition: transform 360ms var(--ease);
+  }
+  .sidetab.is-open {
+    transform: translateX(0);
+  }
+
+  .sidetab__pull {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    padding: 18px 12px;
+    background: var(--accent);
+    color: #1a1919;
+    font-family: var(--f-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border-radius: 10px 0 0 10px;
+    box-shadow: -2px 0 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidetab__panel {
+    width: min(320px, 80vw);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-right: 0;
+    padding: 24px;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .sidetab__panel h3 {
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  }
+
+  .sidetab__list {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+  .sidetab__list li {
+    display: grid;
+    gap: 2px;
+  }
+  .sidetab__list a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 520px) {
+    .sidetab {
+      top: auto;
+      bottom: 12px;
+    }
+  }
+</style>
+
+<script>
+  const tab = document.getElementById("sidetab");
+  const pull = document.getElementById("sidetabPull");
+  if (tab && pull) {
+    pull.addEventListener("click", () => {
+      const open = tab.classList.toggle("is-open");
+      pull.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", (e) => {
+      if (!tab.contains(e.target as Node)) {
+        tab.classList.remove("is-open");
+        pull.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>

@@ -1,0 +1,108 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Kontakt — Bean & Barrel">
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__copy">
+        <span class="h-sub">Kontakt</span>
+        <h1 class="h-display"><span class="chalk-underline">Üzenj nekünk</span></h1>
+        <p class="lead">
+          Rendezvény, franchise, sajtó vagy csak egy kérdés — itt megtalálsz minket.
+        </p>
+        <ul class="contact__list">
+          <li><span class="h-sub">Telefon</span><a href="tel:+36202469775">+36 20 246 9775</a></li>
+          <li><span class="h-sub">E-mail</span><a href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></li>
+        </ul>
+      </div>
+
+      <div class="placeholder-img contact__photo">Kép — tuktuk a városban</div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <h2 class="h-section"><span class="chalk-underline">Írj nekünk</span></h2>
+      <form
+        class="form"
+        action="https://formsubmit.co/info@beanbarrel.coffee"
+        method="POST"
+      >
+        <input type="hidden" name="_subject" value="Üzenet — beanbarrel.coffee" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+
+        <label>
+          <span class="h-sub">Név</span>
+          <input type="text" name="name" required />
+        </label>
+        <label>
+          <span class="h-sub">E-mail</span>
+          <input type="email" name="email" required />
+        </label>
+        <label class="form__full">
+          <span class="h-sub">Téma</span>
+          <select name="topic">
+            <option>Rendezvény</option>
+            <option>Franchise</option>
+            <option>Sajtó</option>
+            <option>Egyéb</option>
+          </select>
+        </label>
+        <label class="form__full">
+          <span class="h-sub">Üzenet</span>
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+        <button type="submit" class="btn form__submit">Küldés</button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: center;
+  }
+  @media (min-width: 820px) { .contact { grid-template-columns: 1fr 1fr; } }
+  .contact__copy { display: grid; gap: 18px; }
+  .contact__photo { aspect-ratio: 4 / 3; }
+  .contact__list { list-style: none; display: grid; gap: 12px; margin-top: 10px; }
+  .contact__list li { display: grid; gap: 2px; }
+  .contact__list a:hover { color: var(--accent); }
+
+  .section--alt { background: var(--bg-2); }
+
+  .form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+    max-width: 720px;
+  }
+  @media (min-width: 640px) { .form { grid-template-columns: 1fr 1fr; } }
+  .form__full { grid-column: 1 / -1; }
+  .form label { display: grid; gap: 6px; }
+  .form input,
+  .form select,
+  .form textarea {
+    font: inherit;
+    font-family: var(--f-body);
+    color: var(--ink);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    letter-spacing: 0.04em;
+  }
+  .form input:focus,
+  .form select:focus,
+  .form textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .form__submit { grid-column: 1 / -1; justify-self: start; }
+</style>

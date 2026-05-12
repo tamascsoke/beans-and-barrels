@@ -1,0 +1,98 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const blocks = [
+  {
+    h: "Mit kapsz a Bean & Barrel franchise-zal?",
+    p: "Kipróbált koncepció, márka, beszállítói hálózat, képzés, marketing-támogatás és a tuktuk maga.",
+  },
+  {
+    h: "Kinek ajánljuk?",
+    p: "Vendéglátás iránt elkötelezett vállalkozóknak, akik mobil, közösségi élményt akarnak építeni.",
+  },
+  {
+    h: "Hogyan indulj el?",
+    p: "Töltsd ki az érdeklődési űrlapot, beszélgetünk, megnézzük a területet, és összerakjuk a tervet.",
+  },
+];
+
+const steps = [
+  { n: "01", t: "Érdeklődés", d: "Küldj egy üzenetet — vagy hívj minket." },
+  { n: "02", t: "Bemutatkozás", d: "Egy beszélgetés, ahol megnézzük, illik-e a Bean & Barrel hozzád." },
+  { n: "03", t: "Terület és terv", d: "Helyszín, ütemezés, befektetési terv és kalkuláció." },
+  { n: "04", t: "Indulás", d: "Képzés, tuktuk átadás, márkanyitás közösen." },
+];
+---
+
+<Layout title="Franchise — Bean & Barrel">
+  <section class="section">
+    <div class="container intro">
+      <span class="h-sub">Franchise</span>
+      <h1 class="h-display"><span class="chalk-underline">Vidd magaddal a tuktukot</span></h1>
+      <p class="lead">
+        Bean & Barrel partner vagyunk a városodban. Egy bevált koncepció, egy kis csapat, sok vendég.
+      </p>
+      <a class="btn" href="/kontakt">Franchise érdekel</a>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container blocks">
+      {
+        blocks.map((b) => (
+          <article class="block">
+            <h2 class="h-section"><span class="chalk-underline">{b.h}</span></h2>
+            <p class="body-text">{b.p}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="h-sub">Folyamat</span>
+      <h2 class="h-display"><span class="chalk-underline">Négy lépés az indulásig</span></h2>
+      <ol class="steps">
+        {
+          steps.map((s) => (
+            <li class="step">
+              <span class="step__n">{s.n}</span>
+              <div>
+                <h3 class="h-section">{s.t}</h3>
+                <p class="body-text">{s.d}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro { display: grid; gap: 18px; max-width: 820px; }
+  .intro .btn { justify-self: start; margin-top: 6px; }
+  .section--alt { background: var(--bg-2); }
+
+  .blocks { display: grid; gap: 32px; grid-template-columns: 1fr; }
+  @media (min-width: 820px) { .blocks { grid-template-columns: repeat(3, 1fr); } }
+  .block h2 { font-size: clamp(1.2rem, 2vw, 1.6rem); margin-bottom: 12px; }
+
+  .steps { list-style: none; display: grid; gap: 22px; margin-top: 24px; counter-reset: step; }
+  .step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .step__n {
+    font-family: var(--f-logo);
+    color: var(--accent);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: 0.04em;
+  }
+  .step h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); margin-bottom: 6px; }
+</style>

@@ -1,0 +1,183 @@
+---
+const links = [
+  { href: "/", label: "Főoldal" },
+  { href: "/rolunk", label: "Rólunk" },
+  { href: "/kinalat", label: "Kínálat" },
+  { href: "/rendezvenyek", label: "Rendezvények" },
+  { href: "/franchise", label: "Franchise" },
+  { href: "/kontakt", label: "Kontakt" },
+];
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a href="/" class="nav__logo" aria-label="Bean & Barrel főoldal">
+      <img src="/logo.png" alt="Bean & Barrel" width="48" height="48" />
+    </a>
+    <a href="/" class="nav__brand">BEAN &amp; BARREL</a>
+    <button
+      class="nav__toggle"
+      aria-controls="nav-drawer"
+      aria-expanded="false"
+      aria-label="Menü megnyitása"
+      id="navToggle"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav id="nav-drawer" class="nav__drawer" aria-hidden="true">
+    <ul>
+      {
+        links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class:list={["nav__link", { "is-active": path === l.href }]}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(54, 53, 53, 0.85);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav__inner {
+    height: var(--nav-h);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .nav__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--bg-2);
+  }
+  .nav__logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: screen;
+  }
+
+  .nav__brand {
+    font-family: var(--f-logo);
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .nav__toggle {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 8px;
+  }
+  .nav__toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--ink);
+    transition: transform 200ms var(--ease), opacity 200ms var(--ease);
+  }
+  .nav__toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav__toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav__toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav__drawer {
+    position: fixed;
+    inset: var(--nav-h) 0 0 0;
+    background: rgba(20, 20, 20, 0.96);
+    transform: translateY(-12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 240ms var(--ease), opacity 240ms var(--ease);
+  }
+  .nav__drawer[aria-hidden="false"] {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__drawer ul {
+    list-style: none;
+    padding: clamp(40px, 8vw, 80px) var(--gutter);
+    display: grid;
+    gap: 14px;
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+
+  .nav__link {
+    font-family: var(--f-logo);
+    font-size: clamp(2rem, 6vw, 4rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+  }
+  .nav__link.is-active {
+    color: var(--accent);
+  }
+  .nav__link:hover {
+    color: var(--accent);
+  }
+
+  @media (min-width: 860px) {
+    .nav__inner {
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+</style>
+
+<script>
+  const btn = document.getElementById("navToggle");
+  const drawer = document.getElementById("nav-drawer");
+  if (btn && drawer) {
+    btn.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      drawer.setAttribute("aria-hidden", String(open));
+      document.body.style.overflow = open ? "" : "hidden";
+    });
+    drawer.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => {
+        btn.setAttribute("aria-expanded", "false");
+        drawer.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }),
+    );
+  }
+</script>

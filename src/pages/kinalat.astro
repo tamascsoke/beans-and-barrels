@@ -1,0 +1,125 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const categories = [
+  {
+    key: "kave",
+    label: "Kávé",
+    sub: "Specialty pörkölés",
+    items: ["Espresso", "Cappuccino", "Flat white", "Filter — V60", "Cold brew"],
+  },
+  {
+    key: "sor",
+    label: "Sör",
+    sub: "Magyar kézműves csapok",
+    items: ["Lager", "IPA", "Stout", "Pils", "Szezonális"],
+  },
+  {
+    key: "snack",
+    label: "Snackek",
+    sub: "Helyi alapanyagok",
+    items: ["Croissant", "Pirított dió", "Sajttál", "Olajbogyó", "Mini fánk"],
+  },
+  {
+    key: "koktel",
+    label: "Koktélok",
+    sub: "Hűs poharak",
+    items: ["Aperol Spritz", "Hugo", "Espresso Martini", "Limonádé", "Hideg gin tonic"],
+  },
+];
+---
+
+<Layout title="Kínálat — Bean & Barrel">
+  <section class="section kinalat-hero">
+    <div class="container">
+      <span class="h-sub">Kínálat</span>
+      <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
+      <p class="lead">Görgess lefelé — a tuktuk megmutatja, mi mindent hoz magával.</p>
+    </div>
+
+    <div class="tuktuk-stage" id="tuktukStage">
+      <div class="tuktuk placeholder-img" id="tuktuk">Tuktuk illusztráció</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container categories">
+      {
+        categories.map((c) => (
+          <article class="cat" id={`cat-${c.key}`}>
+            <div class="cat__art placeholder-img">Kép — {c.label}</div>
+            <div class="cat__copy">
+              <span class="h-sub">{c.sub}</span>
+              <h2 class="h-section"><span class="chalk-underline">{c.label}</span></h2>
+              <ul class="cat__list">
+                {c.items.map((it) => <li>{it}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .kinalat-hero { padding-block: clamp(50px, 8vw, 100px) 0; }
+
+  .tuktuk-stage {
+    position: relative;
+    overflow: hidden;
+    height: clamp(180px, 28vw, 320px);
+    margin-top: 24px;
+  }
+  .tuktuk {
+    position: absolute;
+    left: -40%;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    width: clamp(220px, 42vw, 480px);
+    aspect-ratio: 3 / 2;
+    transition: transform 1.2s var(--ease), left 1.2s var(--ease);
+  }
+  .tuktuk.is-in {
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .categories { display: grid; gap: clamp(40px, 8vw, 90px); }
+  .cat {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(20px, 4vw, 40px);
+    align-items: center;
+  }
+  @media (min-width: 820px) {
+    .cat { grid-template-columns: 1.1fr 1fr; }
+    .cat:nth-child(even) .cat__art { order: 2; }
+  }
+  .cat__art { aspect-ratio: 4 / 3; width: 100%; }
+  .cat__copy { display: grid; gap: 14px; }
+  .cat__list {
+    list-style: none;
+    display: grid;
+    gap: 6px;
+    font-family: var(--f-body);
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .cat__list li::before {
+    content: "—  ";
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  const tuktuk = document.getElementById("tuktuk");
+  const stage = document.getElementById("tuktukStage");
+  if (tuktuk && stage) {
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) tuktuk.classList.add("is-in"); },
+      { threshold: 0.3 },
+    );
+    io.observe(stage);
+  }
+</script>

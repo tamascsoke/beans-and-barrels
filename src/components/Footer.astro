@@ -1,0 +1,107 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__col">
+      <div class="footer__brand">BEAN &amp; BARREL</div>
+      <p class="body-text footer__tag">Kávé és sör — tuktukból, közösségből.</p>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="h-sub">Helyszínek</h4>
+      <ul class="footer__list">
+        <li>Budapest — bejelentés alatt</li>
+        <li>Veszprém — bejelentés alatt</li>
+        <li>Balaton — szezonális</li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="h-sub">Kapcsolat</h4>
+      <ul class="footer__list">
+        <li><a href="tel:+36202469775">+36 20 246 9775</a></li>
+        <li><a href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="h-sub">Kövess minket</h4>
+      <ul class="footer__list footer__social">
+        <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+        <li><a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__bottom container">
+    <span>© {year} Bean &amp; Barrel</span>
+    <a href="/aszf" class="footer__legal">ÁSZF</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: clamp(60px, 10vw, 120px);
+    padding-block: clamp(40px, 6vw, 70px) 24px;
+    border-top: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 720px) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    }
+  }
+
+  .footer__brand {
+    font-family: var(--f-logo);
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .footer__tag {
+    max-width: 28ch;
+  }
+
+  .footer__col h4 {
+    margin-bottom: 14px;
+  }
+
+  .footer__list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .footer__list a:hover {
+    color: var(--accent);
+  }
+
+  .footer__bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .footer__legal:hover {
+    color: var(--accent);
+  }
+</style>
