@@ -23,7 +23,7 @@
 
   --max-w: 1240px;
   --gutter: clamp(20px, 4vw, 56px);
-  --nav-h: 72px;
+  --nav-h: 96px;
 
   --ease: cubic-bezier(.22, 1, .36, 1);
 }

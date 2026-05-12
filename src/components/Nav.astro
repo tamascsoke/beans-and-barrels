@@ -13,7 +13,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 <header class="nav">
   <div class="nav__inner container">
     <a href="/" class="nav__logo" aria-label="Bean & Barrel főoldal">
-      <img src="/logo.png" alt="Bean & Barrel" width="48" height="48" />
+      <img src="/logo.png" alt="Bean & Barrel" width="72" height="72" />
     </a>
     <a href="/" class="nav__brand">BEAN &amp; BARREL</a>
     <button
@@ -50,7 +50,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(54, 53, 53, 0.85);
+    background: rgba(54, 53, 53, 0.92);
     backdrop-filter: saturate(140%) blur(8px);
     -webkit-backdrop-filter: saturate(140%) blur(8px);
     border-bottom: 1px solid var(--line);
@@ -68,25 +68,31 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     overflow: hidden;
-    background: var(--bg-2);
+    background: var(--bg);
+    flex-shrink: 0;
   }
   .nav__logo img {
-    width: 100%;
-    height: 100%;
+    width: 110%;
+    height: 110%;
     object-fit: cover;
     mix-blend-mode: screen;
   }
 
+  @media (min-width: 720px) {
+    .nav__logo { width: 72px; height: 72px; }
+  }
+
   .nav__brand {
     font-family: var(--f-logo);
-    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
     letter-spacing: 0.08em;
     text-align: center;
     text-transform: uppercase;
+    line-height: 1;
   }
 
   .nav__toggle {
@@ -119,11 +125,16 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   .nav__drawer {
     position: fixed;
     inset: var(--nav-h) 0 0 0;
-    background: rgba(20, 20, 20, 0.96);
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,0.04), transparent 60%),
+      radial-gradient(circle at 85% 80%, rgba(255,255,255,0.03), transparent 55%);
     transform: translateY(-12px);
     opacity: 0;
     pointer-events: none;
     transition: transform 240ms var(--ease), opacity 240ms var(--ease);
+    z-index: 49;
+    overflow-y: auto;
   }
   .nav__drawer[aria-hidden="false"] {
     transform: translateY(0);
