@@ -1,0 +1,200 @@
+---
+interface Props {
+  name: string;
+  options: string[];
+  label?: string;
+}
+const { name, options, label } = Astro.props;
+---
+
+<div class="chalk-select" data-chalk-select>
+  <select name={name} class="chalk-select__native" aria-hidden="true" tabindex="-1">
+    {options.map((o) => <option value={o}>{o}</option>)}
+  </select>
+
+  <button
+    type="button"
+    class="chalk-select__trigger"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-label={label ?? name}
+  >
+    <span class="chalk-select__val">{options[0]}</span>
+    <svg class="chalk-select__arrow" width="10" height="7" viewBox="0 0 10 7" aria-hidden="true" fill="none">
+      <path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <ul class="chalk-select__list" role="listbox" aria-label={label ?? name}>
+    {options.map((o, i) => (
+      <li
+        role="option"
+        tabindex="0"
+        aria-selected={i === 0 ? "true" : "false"}
+        data-val={o}
+        style={`--i:${i}`}
+        class:list={[{ "is-selected": i === 0 }]}
+      >
+        <span class="chalk-select__num">0{i + 1}</span>
+        {o}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .chalk-select { position: relative; }
+
+  .chalk-select__native {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .chalk-select__trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    border-bottom: 1.5px solid var(--line);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 200ms, color 200ms;
+  }
+  .chalk-select__trigger:hover { border-color: rgba(244,244,244,0.3); }
+  .chalk-select[data-open] .chalk-select__trigger { border-color: var(--accent); color: var(--accent); }
+
+  .chalk-select__arrow {
+    color: var(--ink-soft);
+    flex-shrink: 0;
+    transition: transform 320ms var(--ease), color 200ms;
+  }
+  .chalk-select[data-open] .chalk-select__arrow { transform: rotate(180deg); color: var(--accent); }
+
+  @keyframes chalk-opt-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .chalk-select__list {
+    list-style: none;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 380ms var(--ease);
+    border-radius: 0 0 8px 8px;
+    background:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+      linear-gradient(160deg, #1e1d1d 0%, #2a2929 100%);
+    background-size: 180px 180px, cover;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: none;
+  }
+  .chalk-select[data-open] .chalk-select__list { max-height: 320px; }
+
+  .chalk-select[data-open] li {
+    animation: chalk-opt-in 280ms var(--ease) both;
+    animation-delay: calc(var(--i) * 50ms);
+  }
+
+  .chalk-select__list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 11px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-family: var(--f-body);
+    font-size: 0.88rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: color 140ms, background 140ms;
+    outline: none;
+  }
+  .chalk-select__list li:last-child { border-bottom: none; }
+  .chalk-select__list li:hover,
+  .chalk-select__list li:focus-visible { color: var(--ink); background: rgba(255,255,255,0.05); }
+  .chalk-select__list li.is-selected { color: var(--accent); }
+  .chalk-select__list li.is-selected .chalk-select__num { color: var(--accent); opacity: 0.5; }
+
+  .chalk-select__num {
+    font-family: var(--f-sub);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  function initChalkSelects() {
+    document.querySelectorAll<HTMLElement>("[data-chalk-select]").forEach((cs) => {
+      if (cs.dataset.csInit) return;
+      cs.dataset.csInit = "1";
+
+      const trigger = cs.querySelector<HTMLButtonElement>(".chalk-select__trigger")!;
+      const valSpan = cs.querySelector<HTMLElement>(".chalk-select__val")!;
+      const native  = cs.querySelector<HTMLSelectElement>(".chalk-select__native")!;
+      const items   = [...cs.querySelectorAll<HTMLElement>('li[role="option"]')];
+
+      const isOpen = () => cs.dataset.open !== undefined;
+      const open   = () => { cs.dataset.open = ""; trigger.setAttribute("aria-expanded", "true"); };
+      const close  = () => { delete cs.dataset.open; trigger.setAttribute("aria-expanded", "false"); };
+
+      function choose(item: HTMLElement) {
+        items.forEach((i) => { i.classList.remove("is-selected"); i.setAttribute("aria-selected", "false"); });
+        item.classList.add("is-selected");
+        item.setAttribute("aria-selected", "true");
+        valSpan.textContent = item.dataset.val ?? "";
+        native.value = item.dataset.val ?? "";
+        close();
+        trigger.focus();
+      }
+
+      trigger.addEventListener("click", () => (isOpen() ? close() : open()));
+      trigger.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); isOpen() ? close() : open(); }
+        if (e.key === "ArrowDown") { e.preventDefault(); open(); items[0]?.focus(); }
+        if (e.key === "Escape") close();
+      });
+
+      items.forEach((item, idx) => {
+        item.addEventListener("click", () => choose(item));
+        item.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(item); }
+          if (e.key === "ArrowDown") { e.preventDefault(); items[(idx + 1) % items.length]?.focus(); }
+          if (e.key === "ArrowUp")   { e.preventDefault(); items[(idx - 1 + items.length) % items.length]?.focus(); }
+          if (e.key === "Escape")    { close(); trigger.focus(); }
+        });
+      });
+    });
+  }
+
+  // Global outside-click handler — registered once, survives page swaps
+  if (!document.body.dataset.csGlobal) {
+    document.body.dataset.csGlobal = "1";
+    document.addEventListener("click", (e) => {
+      document.querySelectorAll<HTMLElement>("[data-chalk-select][data-open]").forEach((cs) => {
+        if (!cs.contains(e.target as Node)) {
+          delete cs.dataset.open;
+          cs.querySelector<HTMLButtonElement>(".chalk-select__trigger")?.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+  }
+
+  initChalkSelects();
+  document.addEventListener("astro:after-swap", initChalkSelects);
+</script>

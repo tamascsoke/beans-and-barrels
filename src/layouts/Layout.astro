@@ -133,40 +133,6 @@ const {
       });
     });
 
-    // text scramble on chalk-underline spans
-    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#@&%—·";
-    document.querySelectorAll<HTMLElement>(".chalk-underline").forEach((el) => {
-      if (el.dataset.scrambleInit) return;
-      el.dataset.scrambleInit = "1";
-      const original = el.textContent ?? "";
-      let timer: ReturnType<typeof setInterval> | null = null;
-
-      el.addEventListener("mouseenter", () => {
-        if (!el.classList.contains("is-drawn")) return;
-        let progress = 0;
-        clearInterval(timer!);
-        timer = setInterval(() => {
-          el.textContent = original
-            .split("")
-            .map((c, idx) => {
-              if (/[\s&—–]/.test(c)) return c;
-              if (idx < progress) return original[idx];
-              return CHARS[Math.floor(Math.random() * CHARS.length)];
-            })
-            .join("");
-          progress += 0.55;
-          if (progress >= original.length) {
-            clearInterval(timer!);
-            el.textContent = original;
-          }
-        }, 32);
-      });
-
-      el.addEventListener("mouseleave", () => {
-        clearInterval(timer!);
-        el.textContent = original;
-      });
-    });
   }
 
   initObservers();

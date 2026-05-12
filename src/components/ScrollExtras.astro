@@ -1,15 +1,9 @@
 ---
-// Orange left-edge scroll bar + section counter bottom-right
+// Orange left-edge scroll progress bar
 ---
 
 <div class="scroll-sidebar" aria-hidden="true">
   <div class="scroll-sidebar__fill" id="scrollFill"></div>
-</div>
-
-<div class="scroll-counter" id="scrollCounter" aria-hidden="true">
-  <span id="scrollCurrent">01</span>
-  <span class="scroll-counter__sep">/</span>
-  <span id="scrollTotal">01</span>
 </div>
 
 <style>
@@ -29,71 +23,20 @@
     border-radius: 0 0 2px 2px;
     box-shadow: 1px 0 10px rgba(240,138,28,0.35);
   }
-
-  .scroll-counter {
-    position: fixed;
-    right: 20px;
-    bottom: 22px;
-    z-index: 30;
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    font-family: var(--f-body);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    color: var(--ink-faint);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 500ms;
-  }
-  .scroll-counter.is-visible { opacity: 1; }
-
-  #scrollCurrent {
-    font-size: 1rem;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .scroll-counter__sep { opacity: 0.35; }
-
-  @media (max-width: 640px) { .scroll-counter { display: none; } }
 </style>
 
 <script>
-  function initScrollExtras() {
-    const fill      = document.getElementById("scrollFill");
-    const counter   = document.getElementById("scrollCounter");
-    const currentEl = document.getElementById("scrollCurrent");
-    const totalEl   = document.getElementById("scrollTotal");
-
-    function updateBar() {
+  function initScrollSidebar() {
+    const fill = document.getElementById("scrollFill");
+    function update() {
       if (!fill) return;
       const total = document.body.scrollHeight - window.innerHeight;
       fill.style.height = (total > 0 ? Math.min(window.scrollY / total, 1) : 0) * 100 + "%";
     }
-
-    window.addEventListener("scroll", updateBar, { passive: true });
-    updateBar();
-
-    if (!counter || !currentEl || !totalEl) return;
-    const sections = Array.from(document.querySelectorAll("main section"));
-    if (sections.length < 2) { return; }
-
-    totalEl.textContent  = String(sections.length).padStart(2, "0");
-    currentEl.textContent = "01";
-    counter.classList.add("is-visible");
-
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) {
-          const idx = sections.indexOf(e.target as HTMLElement);
-          if (idx !== -1) currentEl.textContent = String(idx + 1).padStart(2, "0");
-        }
-      }),
-      { threshold: 0.4 },
-    );
-    sections.forEach((s) => io.observe(s));
+    window.addEventListener("scroll", update, { passive: true });
+    update();
   }
 
-  initScrollExtras();
-  document.addEventListener("astro:after-swap", initScrollExtras);
+  initScrollSidebar();
+  document.addEventListener("astro:after-swap", initScrollSidebar);
 </script>

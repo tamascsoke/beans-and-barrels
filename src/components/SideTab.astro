@@ -1,104 +1,279 @@
 ---
-// Sliding "Elérhetőség" tab that hugs the right edge of the viewport.
+import ChalkSelect from "./ChalkSelect.astro";
+const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 ---
 
+<div class="sidetab-overlay" id="sidetabOverlay"></div>
+
 <aside class="sidetab" id="sidetab">
-  <button class="sidetab__pull" id="sidetabPull" aria-controls="sidetab" aria-expanded="false">
-    Elérhetőség
-  </button>
-  <div class="sidetab__panel" role="dialog" aria-label="Elérhetőség">
-    <h3 class="h-section">Vegyél fel velünk!</h3>
-    <p class="body-text">Rendezvényekért, franchise-ért, vagy csak egy jó kávéért keress minket bizalommal.</p>
-    <ul class="sidetab__list">
-      <li><span class="h-sub">Telefon</span><a href="tel:+36202469775">+36 20 246 9775</a></li>
-      <li><span class="h-sub">E-mail</span><a href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></li>
-    </ul>
-    <a class="btn" href="/kontakt">Üzenj nekünk</a>
+  <button
+    class="sidetab__pull"
+    id="sidetabPull"
+    aria-controls="sidetab-panel"
+    aria-expanded="false"
+    aria-label="Elérhetőség megnyitása"
+  >Elérhetőség</button>
+
+  <div class="sidetab__panel" id="sidetab-panel" role="dialog" aria-label="Elérhetőség">
+    <!-- Header -->
+    <div class="sidetab__head">
+      <span class="sidetab__brand">BEAN &amp; BARREL</span>
+      <button class="sidetab__close" id="sidetabClose" aria-label="Bezárás">✕</button>
+    </div>
+
+    <!-- Contact info -->
+    <div class="sidetab__info">
+      <a href="tel:+36202469775" class="sidetab__contact-row">
+        <span class="sidetab__lbl">Telefon</span>
+        <span>+36 20 246 9775</span>
+      </a>
+      <a href="mailto:info@beanbarrel.coffee" class="sidetab__contact-row">
+        <span class="sidetab__lbl">E-mail</span>
+        <span>info@beanbarrel.coffee</span>
+      </a>
+    </div>
+
+    <div class="sidetab__rule" aria-hidden="true"></div>
+
+    <!-- Mini form -->
+    <p class="sidetab__form-head">Írj nekünk</p>
+    <form
+      class="sidetab__form"
+      action="https://formsubmit.co/info@beanbarrel.coffee"
+      method="POST"
+    >
+      <input type="hidden" name="_subject" value="Üzenet — Bean & Barrel" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+
+      <label class="st-field">
+        <span class="st-field__lbl">Neved</span>
+        <input type="text" name="name" required class="st-input" />
+      </label>
+      <label class="st-field">
+        <span class="st-field__lbl">E-mail</span>
+        <input type="email" name="email" required class="st-input" />
+      </label>
+      <div class="st-field">
+        <span class="st-field__lbl">Téma</span>
+        <ChalkSelect name="topic" options={topics} label="Téma" />
+      </div>
+      <label class="st-field">
+        <span class="st-field__lbl">Üzenet</span>
+        <textarea name="message" rows="3" required class="st-input st-input--area"></textarea>
+      </label>
+      <button type="submit" class="btn sidetab__btn">Küldés</button>
+    </form>
   </div>
 </aside>
 
 <style>
+  /* Dim overlay */
+  .sidetab-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms var(--ease);
+    z-index: 54;
+  }
+  .sidetab-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+  /* Container */
   .sidetab {
     position: fixed;
     right: 0;
-    top: 38vh;
-    z-index: 40;
+    top: var(--nav-h);
+    bottom: 0;
+    z-index: 55;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     transform: translateX(calc(100% - 44px));
     transition: transform 360ms var(--ease);
   }
-  .sidetab.is-open {
-    transform: translateX(0);
-  }
+  .sidetab.is-open { transform: translateX(0); }
 
+  /* Pull tab */
   .sidetab__pull {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    padding: 18px 12px;
+    padding: 20px 12px;
     background: var(--accent);
     color: #1a1919;
     font-family: var(--f-body);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     border-radius: 10px 0 0 10px;
-    box-shadow: -2px 0 16px rgba(0, 0, 0, 0.3);
+    box-shadow: -2px 0 18px rgba(0,0,0,0.4);
+    align-self: center;
+    flex-shrink: 0;
+    transition: filter 200ms;
+  }
+  .sidetab__pull:hover { filter: brightness(1.1); }
+
+  /* Panel — chalkboard */
+  .sidetab__panel {
+    width: min(360px, 88vw);
+    align-self: stretch;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+      linear-gradient(160deg, #1e1d1d 0%, #2a2929 100%);
+    background-size: 180px 180px, cover;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    box-shadow: -12px 0 48px rgba(0,0,0,0.6);
   }
 
-  .sidetab__panel {
-    width: min(320px, 80vw);
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    border-right: 0;
-    padding: 24px;
+  /* Panel header */
+  .sidetab__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+  .sidetab__brand {
+    font-family: var(--f-logo);
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .sidetab__close {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: color 150ms, background 150ms;
+  }
+  .sidetab__close:hover { color: var(--ink); background: rgba(255,255,255,0.07); }
+
+  /* Contact info */
+  .sidetab__info {
+    padding: 18px 22px;
+    display: grid;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .sidetab__contact-row {
+    display: grid;
+    gap: 3px;
+    transition: color 150ms;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+  }
+  .sidetab__contact-row:hover { color: var(--accent); }
+  .sidetab__lbl {
+    font-family: var(--f-sub);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .sidetab__contact-row:hover .sidetab__lbl { color: var(--accent); opacity: 0.6; }
+
+  /* Divider */
+  .sidetab__rule {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 22px;
+    flex-shrink: 0;
+  }
+
+  /* Form heading */
+  .sidetab__form-head {
+    font-family: var(--f-logo);
+    font-size: 1.15rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 16px 22px 0;
+    flex-shrink: 0;
+  }
+
+  /* Form */
+  .sidetab__form {
+    padding: 14px 22px 32px;
     display: grid;
     gap: 14px;
-    align-content: start;
-    border-radius: 10px 0 0 10px;
+    flex: 1;
   }
 
-  .sidetab__panel h3 {
-    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  /* Field */
+  .st-field { display: grid; gap: 5px; }
+  .st-field__lbl {
+    font-family: var(--f-sub);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
   }
+  .st-input {
+    background: none;
+    border: none;
+    border-bottom: 1.5px solid var(--line);
+    color: var(--ink);
+    font: inherit;
+    font-family: var(--f-body);
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 8px 0;
+    width: 100%;
+    outline: none;
+    transition: border-color 200ms;
+  }
+  .st-input:focus { border-color: var(--accent); }
+  .st-input--area { resize: none; }
 
-  .sidetab__list {
-    list-style: none;
-    display: grid;
-    gap: 10px;
-  }
-  .sidetab__list li {
-    display: grid;
-    gap: 2px;
-  }
-  .sidetab__list a:hover {
-    color: var(--accent);
-  }
+  .sidetab__btn { margin-top: 4px; }
 
   @media (max-width: 520px) {
-    .sidetab {
-      top: auto;
-      bottom: 12px;
-    }
+    .sidetab { top: var(--nav-h); }
   }
 </style>
 
 <script>
   function initSideTab() {
-    const tab  = document.getElementById("sidetab");
-    const pull = document.getElementById("sidetabPull");
+    const tab     = document.getElementById("sidetab")     as HTMLElement | null;
+    const pull    = document.getElementById("sidetabPull") as HTMLButtonElement | null;
+    const closeBtn = document.getElementById("sidetabClose") as HTMLButtonElement | null;
+    const overlay = document.getElementById("sidetabOverlay") as HTMLElement | null;
     if (!tab || !pull) return;
 
-    pull.addEventListener("click", () => {
-      const open = tab.classList.toggle("is-open");
-      pull.setAttribute("aria-expanded", String(open));
+    function openTab() {
+      tab.classList.add("is-open");
+      overlay?.classList.add("is-open");
+      pull.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+    function closeTab() {
+      tab.classList.remove("is-open");
+      overlay?.classList.remove("is-open");
+      pull.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    pull.addEventListener("click", () =>
+      tab.classList.contains("is-open") ? closeTab() : openTab()
+    );
+    closeBtn?.addEventListener("click", closeTab);
+    overlay?.addEventListener("click", closeTab);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && tab.classList.contains("is-open")) closeTab();
     });
-    document.addEventListener("click", (e) => {
-      if (!tab.contains(e.target as Node)) {
-        tab.classList.remove("is-open");
-        pull.setAttribute("aria-expanded", "false");
-      }
-    });
+
+    // Close when clicking contact links inside the panel
+    tab.querySelectorAll("a[href^='tel:'], a[href^='mailto:']").forEach((a) =>
+      a.addEventListener("click", closeTab)
+    );
   }
 
   initSideTab();
