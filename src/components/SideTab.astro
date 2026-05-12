@@ -84,9 +84,11 @@
 </style>
 
 <script>
-  const tab = document.getElementById("sidetab");
-  const pull = document.getElementById("sidetabPull");
-  if (tab && pull) {
+  function initSideTab() {
+    const tab  = document.getElementById("sidetab");
+    const pull = document.getElementById("sidetabPull");
+    if (!tab || !pull) return;
+
     pull.addEventListener("click", () => {
       const open = tab.classList.toggle("is-open");
       pull.setAttribute("aria-expanded", String(open));
@@ -98,4 +100,7 @@
       }
     });
   }
+
+  initSideTab();
+  document.addEventListener("astro:after-swap", initSideTab);
 </script>

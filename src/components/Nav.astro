@@ -245,28 +245,34 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 </style>
 
 <script>
-  const btn      = document.getElementById("navToggle")  as HTMLButtonElement | null;
-  const drawer   = document.getElementById("nav-drawer") as HTMLElement | null;
-  const overlay  = document.getElementById("navOverlay") as HTMLElement | null;
-  const closeBtn = document.getElementById("navClose")   as HTMLButtonElement | null;
+  function initNav() {
+    const btn      = document.getElementById("navToggle")  as HTMLButtonElement | null;
+    const drawer   = document.getElementById("nav-drawer") as HTMLElement | null;
+    const overlay  = document.getElementById("navOverlay") as HTMLElement | null;
+    const closeBtn = document.getElementById("navClose")   as HTMLButtonElement | null;
+    if (!btn || !drawer) return;
 
-  function open() {
-    btn?.setAttribute("aria-expanded", "true");
-    drawer?.setAttribute("aria-hidden", "false");
-    overlay?.classList.add("is-open");
-    document.body.style.overflow = "hidden";
-  }
-  function close() {
-    btn?.setAttribute("aria-expanded", "false");
-    drawer?.setAttribute("aria-hidden", "true");
-    overlay?.classList.remove("is-open");
-    document.body.style.overflow = "";
+    function open() {
+      btn.setAttribute("aria-expanded", "true");
+      drawer!.setAttribute("aria-hidden", "false");
+      overlay?.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      btn.setAttribute("aria-expanded", "false");
+      drawer!.setAttribute("aria-hidden", "true");
+      overlay?.classList.remove("is-open");
+      document.body.style.overflow = "";
+    }
+
+    btn.addEventListener("click", () =>
+      btn.getAttribute("aria-expanded") === "true" ? close() : open()
+    );
+    closeBtn?.addEventListener("click", close);
+    overlay?.addEventListener("click", close);
+    drawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
   }
 
-  btn?.addEventListener("click", () =>
-    btn.getAttribute("aria-expanded") === "true" ? close() : open()
-  );
-  closeBtn?.addEventListener("click", close);
-  overlay?.addEventListener("click", close);
-  drawer?.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+  initNav();
+  document.addEventListener("astro:after-swap", initNav);
 </script>
