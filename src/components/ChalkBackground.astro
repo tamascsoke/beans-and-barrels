@@ -1,3 +1,168 @@
 ---
-// ChalkBackground — placeholder (particles removed, doodles handle decoration)
+// ChalkBackground: animated noise texture + continuous chalk stroke drawing
 ---
+
+<svg id="chalkTexture" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <filter id="chalk-breathe-filter" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.74" numOctaves="4" stitchTiles="stitch">
+      <animate
+        attributeName="baseFrequency"
+        values="0.71;0.78;0.71"
+        dur="10s"
+        repeatCount="indefinite"
+        calcMode="spline"
+        keySplines="0.45 0 0.55 1;0.45 0 0.55 1"
+      />
+    </feTurbulence>
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#chalk-breathe-filter)"/>
+</svg>
+
+<canvas id="chalkStrokes" aria-hidden="true"></canvas>
+
+<style is:global>
+  #chalkTexture,
+  #chalkStrokes {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  #chalkTexture {
+    animation: chalk-breathe 10s ease-in-out infinite;
+  }
+  @keyframes chalk-breathe {
+    0%, 100% { opacity: 0.55; }
+    50%       { opacity: 1;    }
+  }
+  #main { position: relative; z-index: 1; }
+</style>
+
+<script>
+  if (!document.body.dataset.chalkBgInit) {
+    document.body.dataset.chalkBgInit = "1";
+
+    const canvas = document.getElementById("chalkStrokes") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+
+    let W = 0, H = 0;
+    const resize = () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+
+    const SAMPLES = 80;
+
+    interface Stroke {
+      pts: { x: number; y: number }[];
+      progress: number;
+      alpha: number;
+      maxAlpha: number;
+      state: "drawing" | "holding" | "fading";
+      holdTimer: number;
+      drawSpeed: number;
+      fadeSpeed: number;
+      width: number;
+    }
+
+    function bezierPt(
+      p0: {x:number;y:number}, p1: {x:number;y:number},
+      p2: {x:number;y:number}, p3: {x:number;y:number}, t: number
+    ) {
+      const u = 1 - t;
+      return {
+        x: u*u*u*p0.x + 3*u*u*t*p1.x + 3*u*t*t*p2.x + t*t*t*p3.x,
+        y: u*u*u*p0.y + 3*u*u*t*p1.y + 3*u*t*t*p2.y + t*t*t*p3.y,
+      };
+    }
+
+    function spawn(): Stroke {
+      const x0 = Math.random() * W;
+      const y0 = Math.random() * H;
+      const len = 100 + Math.random() * 300;
+      const ang = Math.random() * Math.PI * 2;
+      const x3 = x0 + Math.cos(ang) * len;
+      const y3 = y0 + Math.sin(ang) * len;
+      const perp = ang + Math.PI / 2;
+      const bend = (Math.random() - 0.5) * len * 0.55;
+
+      const p0 = { x: x0, y: y0 };
+      const p1 = { x: x0 + Math.cos(ang)*len*0.3 + Math.cos(perp)*bend*0.5, y: y0 + Math.sin(ang)*len*0.3 + Math.sin(perp)*bend*0.5 };
+      const p2 = { x: x3 - Math.cos(ang)*len*0.3 + Math.cos(perp)*bend*0.5, y: y3 - Math.sin(ang)*len*0.3 + Math.sin(perp)*bend*0.5 };
+      const p3 = { x: x3, y: y3 };
+
+      const pts = Array.from({ length: SAMPLES + 1 }, (_, i) => {
+        const pt = bezierPt(p0, p1, p2, p3, i / SAMPLES);
+        return { x: pt.x + (Math.random() - 0.5) * 1.1, y: pt.y + (Math.random() - 0.5) * 1.1 };
+      });
+
+      return {
+        pts,
+        progress: 0,
+        alpha: 0,
+        maxAlpha: 0.025 + Math.random() * 0.04,
+        state: "drawing",
+        holdTimer: 0,
+        drawSpeed: 0.004 + Math.random() * 0.005,
+        fadeSpeed: 0.00018 + Math.random() * 0.00015,
+        width: 0.6 + Math.random() * 1.8,
+      };
+    }
+
+    const strokes: Stroke[] = [];
+    let cooldown = 20;
+    let hidden = false;
+    let rafId: number;
+
+    document.addEventListener("visibilitychange", () => {
+      hidden = document.hidden;
+      if (!hidden) rafId = requestAnimationFrame(tick);
+    });
+
+    function tick() {
+      if (hidden) return;
+      ctx.clearRect(0, 0, W, H);
+
+      if (--cooldown <= 0 && strokes.length < 6) {
+        strokes.push(spawn());
+        cooldown = 45 + Math.random() * 90;
+      }
+
+      for (let i = strokes.length - 1; i >= 0; i--) {
+        const s = strokes[i];
+
+        if (s.state === "drawing") {
+          s.progress = Math.min(1, s.progress + s.drawSpeed);
+          s.alpha = Math.min(s.maxAlpha, s.alpha + s.maxAlpha * 0.07);
+          if (s.progress >= 1) { s.state = "holding"; s.holdTimer = 60 + Math.random() * 120 | 0; }
+        } else if (s.state === "holding") {
+          if (--s.holdTimer <= 0) s.state = "fading";
+        } else {
+          s.alpha -= s.fadeSpeed;
+          if (s.alpha <= 0) { strokes.splice(i, 1); continue; }
+        }
+
+        const upTo = Math.floor(s.progress * s.pts.length);
+        if (upTo < 2) continue;
+
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = s.width;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(s.pts[0].x, s.pts[0].y);
+        for (let j = 1; j < upTo; j++) ctx.lineTo(s.pts[j].x, s.pts[j].y);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+</script>
