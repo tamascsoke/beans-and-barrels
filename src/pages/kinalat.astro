@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ChalkDoodle from "../components/ChalkDoodle.astro";
 
 const categories = [
   {
@@ -40,6 +41,7 @@ const categories = [
     <div class="tuktuk-stage" id="tuktukStage">
       <div class="tuktuk placeholder-img" id="tuktuk">Tuktuk illusztráció</div>
     </div>
+    <ChalkDoodle type="mug" size={200} class="doodle-mug-hero" />
   </section>
 
   <section class="section">
@@ -63,7 +65,12 @@ const categories = [
 </Layout>
 
 <style>
-  .kinalat-hero { padding-block: clamp(50px, 8vw, 100px) 0; }
+  .kinalat-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(50px, 8vw, 100px) 0;
+  }
+  .doodle-mug-hero { top: 10%; right: -30px; }
 
   .tuktuk-stage {
     position: relative;

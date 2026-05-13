@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import HomeCarousel from "../components/HomeCarousel.astro";
+import ChalkDoodle from "../components/ChalkDoodle.astro";
 ---
 
 <Layout title="Bean & Barrel — Kávé és Sör">
@@ -18,11 +19,12 @@ import HomeCarousel from "../components/HomeCarousel.astro";
         <a class="btn btn--ghost" href="/kinalat">Nézd a kínálatot</a>
       </div>
     </div>
+    <ChalkDoodle type="bean" size={260} class="doodle-bean-hero" />
   </section>
 
   <HomeCarousel />
 
-  <section class="section">
+  <section class="section doodle-section">
     <div class="container highlights">
       <article class="highlight">
         <div class="placeholder-img">Kép — Tuktuk</div>
@@ -40,15 +42,31 @@ import HomeCarousel from "../components/HomeCarousel.astro";
         <p class="body-text">Magyar kézműves csapok, koktélok és snackek a tuktuk pultjáról.</p>
       </article>
     </div>
+    <ChalkDoodle type="wheel" size={180} class="doodle-wheel-highlights" />
   </section>
 </Layout>
 
 <style>
-  .hero { padding-block: clamp(50px, 10vw, 120px) clamp(20px, 4vw, 40px); }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(50px, 10vw, 120px) clamp(20px, 4vw, 40px);
+  }
   .hero__inner { display: grid; gap: 18px; max-width: 880px; }
   .hero__title { font-size: clamp(3rem, 9vw, 6.5rem); }
   .hero__lead { max-width: 56ch; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+
+  .doodle-bean-hero {
+    top: 8%;
+    right: -60px;
+  }
+
+  .doodle-section { position: relative; overflow: hidden; }
+  .doodle-wheel-highlights {
+    bottom: -60px;
+    right: -50px;
+  }
 
   .highlights { display: grid; gap: 32px; grid-template-columns: 1fr; }
   @media (min-width: 760px) {

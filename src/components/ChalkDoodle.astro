@@ -1,0 +1,121 @@
+---
+interface Props {
+  type: "wheel" | "bean" | "mug";
+  size?: number;
+  class?: string;
+}
+const { type, size = 200, class: cls = "" } = Astro.props;
+---
+
+{type === "wheel" && (
+  <svg
+    class={`chalk-doodle chalk-doodle--wheel ${cls}`}
+    width={size} height={size}
+    viewBox="0 0 100 100"
+    fill="none" stroke="white" stroke-width="1.6"
+    stroke-linecap="round" aria-hidden="true"
+  >
+    <defs>
+      <filter id="chalk-rough-w">
+        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="0.9" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+    <g filter="url(#chalk-rough-w)">
+      <!-- outer rim -->
+      <path pathLength="1" d="M 6,50 A 44,44 0 1,0 94,50 A 44,44 0 1,0 6,50"/>
+      <!-- 6 spokes -->
+      <path pathLength="1" d="M 60,50 L 94,50 M 55,58.7 L 72,88.1 M 45,58.7 L 28,88.1 M 40,50 L 6,50 M 45,41.3 L 28,11.9 M 55,41.3 L 72,11.9"/>
+      <!-- hub -->
+      <path pathLength="1" d="M 40,50 A 10,10 0 1,0 60,50 A 10,10 0 1,0 40,50"/>
+    </g>
+  </svg>
+)}
+
+{type === "bean" && (
+  <svg
+    class={`chalk-doodle chalk-doodle--bean ${cls}`}
+    width={size} height={size}
+    viewBox="0 0 100 110"
+    fill="none" stroke="white" stroke-width="1.8"
+    stroke-linecap="round" aria-hidden="true"
+  >
+    <defs>
+      <filter id="chalk-rough-b">
+        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="0.9" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+    <g filter="url(#chalk-rough-b)">
+      <!-- outer bean shape -->
+      <path pathLength="1" d="M 50,6 C 22,6 8,28 8,55 C 8,82 22,104 50,104 C 78,104 92,82 92,55 C 92,28 78,6 50,6 Z"/>
+      <!-- centre groove -->
+      <path pathLength="1" d="M 50,10 C 37,28 63,48 50,65 C 37,82 48,98 50,100"/>
+    </g>
+  </svg>
+)}
+
+{type === "mug" && (
+  <svg
+    class={`chalk-doodle chalk-doodle--mug ${cls}`}
+    width={size} height={Math.round(size * 1.1)}
+    viewBox="0 0 100 110"
+    fill="none" stroke="white" stroke-width="1.8"
+    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+  >
+    <defs>
+      <filter id="chalk-rough-m">
+        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="0.9" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+    <g filter="url(#chalk-rough-m)">
+      <!-- mug body -->
+      <path pathLength="1" d="M 18,36 L 70,36 L 64,94 L 24,94 Z"/>
+      <!-- handle -->
+      <path pathLength="1" d="M 70,50 C 96,50 96,80 70,80"/>
+      <!-- foam -->
+      <path pathLength="1" d="M 18,36 C 25,23 32,30 38,21 C 44,12 50,24 57,18 C 64,12 68,27 70,36"/>
+    </g>
+  </svg>
+)}
+
+<style is:global>
+  .chalk-doodle {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.08;
+  }
+
+  .chalk-doodle path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .chalk-doodle.is-drawn path { stroke-dashoffset: 0; }
+
+  /* wheel: rim → spokes → hub */
+  .chalk-doodle--wheel path:nth-child(2) { transition-delay: 800ms; }
+  .chalk-doodle--wheel path:nth-child(3) { transition-delay: 1600ms; }
+
+  /* bean: outline → groove */
+  .chalk-doodle--bean path:nth-child(2) { transition-delay: 1600ms; }
+
+  /* mug: body → handle → foam */
+  .chalk-doodle--mug path:nth-child(2) { transition-delay: 1000ms; }
+  .chalk-doodle--mug path:nth-child(3) { transition-delay: 1800ms; }
+</style>
+
+<script>
+  function initDoodles() {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-drawn"); io.unobserve(e.target); }
+      }),
+      { threshold: 0.15 }
+    );
+    document.querySelectorAll(".chalk-doodle:not(.is-drawn)").forEach((el) => io.observe(el));
+  }
+  initDoodles();
+  document.addEventListener("astro:after-swap", initDoodles);
+</script>

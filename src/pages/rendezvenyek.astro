@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ChalkDoodle from "../components/ChalkDoodle.astro";
 
 const reasons = [
   {
@@ -75,6 +76,7 @@ const events = [
       </div>
       <div class="placeholder-img events__photo">Kép — rendezvény hangulat</div>
     </div>
+    <ChalkDoodle type="wheel" size={220} class="doodle-wheel-events" />
   </section>
 </Layout>
 
@@ -113,4 +115,7 @@ const events = [
   }
   .events__list li::before { content: "—  "; color: var(--accent); }
   .events__photo { aspect-ratio: 4 / 3; }
+
+  section:last-of-type { position: relative; overflow: hidden; }
+  .doodle-wheel-events { bottom: -70px; left: -50px; }
 </style>
