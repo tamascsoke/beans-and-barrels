@@ -1,24 +1,6 @@
 ---
-const slides = [
-  {
-    eyebrow: "Rendezvények",
-    title: "Hozd a tuktukot a buliba",
-    body: "Esküvők, céges napok, fesztiválok — Bean & Barrel a helyszínen készíti a kávét és csapolja a sört.",
-    cta: { href: "/rendezvenyek", label: "Rendezvényt kérek" },
-  },
-  {
-    eyebrow: "Helyszínek",
-    title: "Hol találsz minket?",
-    body: "Budapesttől a Balatonig — kövesd a tuktukot a városban, vagy nézd meg a következő állomásokat.",
-    cta: { href: "/kinalat", label: "Nézd a kínálatot" },
-  },
-  {
-    eyebrow: "Történetek",
-    title: "Mi van a poharak mögött",
-    body: "Cikkek, interjúk és pillanatképek a Bean & Barrel közösségéből.",
-    cta: { href: "/rolunk", label: "Ismerd meg a csapatot" },
-  },
-];
+import { getCarouselSlides } from "../lib/content";
+const slides = getCarouselSlides();
 ---
 
 <section class="carousel" aria-roledescription="carousel">
@@ -27,11 +9,11 @@ const slides = [
       slides.map((s, i) => (
         <article class="carousel__slide" aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
           <div class="carousel__art placeholder-img">{`Kép — ${s.eyebrow.toUpperCase()}`}</div>
-          <div class="carousel__copy">
+          <div class="carousel__copy stagger">
             <span class="h-sub">{s.eyebrow}</span>
             <h2 class="h-display"><span class="chalk-underline">{s.title}</span></h2>
             <p class="lead">{s.body}</p>
-            <a class="btn" href={s.cta.href}>{s.cta.label}</a>
+            <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
           </div>
         </article>
       ))
@@ -40,7 +22,7 @@ const slides = [
 
   <div class="carousel__dots" role="tablist">
     {slides.map((_, i) => (
-      <button class="carousel__dot" data-i={i} aria-label={`Csúsz ${i + 1}`}></button>
+      <button class="carousel__dot" data-i={i} aria-label={`${i + 1}. dia`}></button>
     ))}
   </div>
 </section>
@@ -112,17 +94,48 @@ const slides = [
 </style>
 
 <script>
-  const track = document.getElementById("carouselTrack");
-  const dots = Array.from(document.querySelectorAll(".carousel__dot")) as HTMLButtonElement[];
-  if (track && dots.length) {
+  function initCarousel() {
+    const track = document.getElementById("carouselTrack") as HTMLElement | null;
+    const dots  = Array.from(document.querySelectorAll(".carousel__dot")) as HTMLButtonElement[];
+    if (!track || !dots.length) return;
+
+    const slides = Array.from(track.children) as HTMLElement[];
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const getActive = () => {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bestDist = Infinity;
+      slides.forEach((s, i) => {
+        const dist = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid);
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      });
+      return best;
+    };
+
     const setActive = () => {
-      const i = Math.round(track.scrollLeft / track.clientWidth);
+      const i = getActive();
       dots.forEach((d, idx) => d.classList.toggle("is-active", idx === i));
     };
+
+    const goTo = (i: number) =>
+      track.scrollTo({ left: slides[i].offsetLeft, behavior: "smooth" });
+
+    const next = () => goTo((getActive() + 1) % slides.length);
+
+    const startAuto = () => { stopAuto(); timer = setInterval(next, 4500); };
+    const stopAuto  = () => { if (timer) { clearInterval(timer); timer = null; } };
+
     track.addEventListener("scroll", () => requestAnimationFrame(setActive), { passive: true });
-    dots.forEach((d, i) =>
-      d.addEventListener("click", () => track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" })),
-    );
+    dots.forEach((d, i) => d.addEventListener("click", () => { goTo(i); startAuto(); }));
+    track.addEventListener("mouseenter", stopAuto);
+    track.addEventListener("mouseleave", startAuto);
+    track.addEventListener("touchstart", stopAuto,  { passive: true });
+    track.addEventListener("touchend",   startAuto, { passive: true });
+
     setActive();
+    startAuto();
   }
+
+  initCarousel();
+  document.addEventListener("astro:after-swap", initCarousel);
 </script>

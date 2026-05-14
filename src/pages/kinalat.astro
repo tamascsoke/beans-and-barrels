@@ -1,47 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ChalkDoodle from "../components/ChalkDoodle.astro";
+import { getCategories } from "../lib/content";
 
-const categories = [
-  {
-    key: "kave",
-    label: "Kávé",
-    sub: "Specialty pörkölés",
-    items: ["Espresso", "Cappuccino", "Flat white", "Filter — V60", "Cold brew"],
-  },
-  {
-    key: "sor",
-    label: "Sör",
-    sub: "Magyar kézműves csapok",
-    items: ["Lager", "IPA", "Stout", "Pils", "Szezonális"],
-  },
-  {
-    key: "snack",
-    label: "Snackek",
-    sub: "Helyi alapanyagok",
-    items: ["Croissant", "Pirított dió", "Sajttál", "Olajbogyó", "Mini fánk"],
-  },
-  {
-    key: "koktel",
-    label: "Koktélok",
-    sub: "Hűs poharak",
-    items: ["Aperol Spritz", "Hugo", "Espresso Martini", "Limonádé", "Hideg gin tonic"],
-  },
-];
+const categories = getCategories();
 ---
 
 <Layout title="Kínálat — Bean & Barrel">
   <section class="section kinalat-hero">
-    <div class="container">
-      <span class="h-sub">Kínálat</span>
-      <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
-      <p class="lead">Görgess lefelé — a tuktuk megmutatja, mi mindent hoz magával.</p>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="h-sub">Kínálat</span>
+        <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
+        <p class="lead">Görgess lefelé — a tuktuk megmutatja, mi mindent hoz magával.</p>
+      </div>
+      <div class="placeholder-img hero-img">Kép — tuktuk kínálat</div>
     </div>
 
-    <div class="tuktuk-stage" id="tuktukStage">
-      <div class="tuktuk placeholder-img" id="tuktuk">Tuktuk illusztráció</div>
-    </div>
-    <ChalkDoodle type="mug" size={200} class="doodle-mug-hero" />
   </section>
 
   <section class="section">
@@ -66,31 +40,19 @@ const categories = [
 
 <style>
   .kinalat-hero {
-    position: relative;
-    overflow: hidden;
-    padding-block: clamp(50px, 8vw, 100px) 0;
+    padding-block: clamp(50px, 8vw, 100px);
   }
-  .doodle-mug-hero { top: 10%; right: -30px; }
-
-  .tuktuk-stage {
-    position: relative;
-    overflow: hidden;
-    height: clamp(180px, 28vw, 320px);
-    margin-top: 24px;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: center;
   }
-  .tuktuk {
-    position: absolute;
-    left: -40%;
-    top: 50%;
-    transform: translate(-100%, -50%);
-    width: clamp(220px, 42vw, 480px);
-    aspect-ratio: 3 / 2;
-    transition: transform 1.2s var(--ease), left 1.2s var(--ease);
+  @media (min-width: 820px) {
+    .hero-grid { grid-template-columns: 1fr 1fr; }
   }
-  .tuktuk.is-in {
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+  .hero-copy { display: grid; gap: 18px; }
+  .hero-img { aspect-ratio: 4 / 3; }
 
   .categories { display: grid; gap: clamp(40px, 8vw, 90px); }
   .cat {
@@ -118,15 +80,3 @@ const categories = [
     color: var(--accent);
   }
 </style>
-
-<script>
-  const tuktuk = document.getElementById("tuktuk");
-  const stage = document.getElementById("tuktukStage");
-  if (tuktuk && stage) {
-    const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) tuktuk.classList.add("is-in"); },
-      { threshold: 0.3 },
-    );
-    io.observe(stage);
-  }
-</script>

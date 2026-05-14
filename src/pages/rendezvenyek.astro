@@ -1,34 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ChalkDoodle from "../components/ChalkDoodle.astro";
+import UpcomingEvents from "../components/UpcomingEvents.astro";
+import { getReasons } from "../lib/content";
+import eventTypes from "../content/event-types.json";
 
-const reasons = [
-  {
-    title: "Egyedi élmény",
-    body: "A tuktuk maga az attrakció. Vendégeid megállnak, fotóznak, beszélgetnek — már a kávé előtt.",
-  },
-  {
-    title: "Rugalmas helyszín",
-    body: "Belváros, kerthelyiség, fesztivál, tópart — a tuktuk oda megy, ahol szükség van rá.",
-  },
-  {
-    title: "Kávé és sör egy helyen",
-    body: "A vendégek nem két pult között futkosnak — egy ponton kapnak mindent.",
-  },
-  {
-    title: "Profi csapat",
-    body: "Tapasztalt baristák és bárosok, akik nem csak kiszolgálnak, hanem hangulatot is hoznak.",
-  },
-];
-
-const events = [
-  "Esküvő",
-  "Céges nap",
-  "Fesztivál",
-  "Termékbemutató",
-  "Születésnap",
-  "Kerti party",
-];
+const reasons = getReasons();
+const events = eventTypes.items;
 ---
 
 <Layout title="Rendezvények — Bean & Barrel">
@@ -42,16 +19,24 @@ const events = [
       </p>
       <div class="hero__cta">
         <a class="btn" href="/kontakt">Kérek ajánlatot</a>
-        <a class="btn btn--ghost" href="#miert">Miért minket?</a>
+        <a class="btn btn--ghost" href="#kitelepulesek">Aktuális kitelepülések</a>
       </div>
     </div>
   </section>
 
-  <section class="section section--alt" id="miert">
+  <section class="section section--alt" id="kitelepulesek">
+    <div class="container">
+      <span class="h-sub">Hol találsz minket</span>
+      <h2 class="h-display"><span class="chalk-underline">Aktuális kitelepülések</span></h2>
+      <UpcomingEvents emptyMessage="Nincs jelenleg meghirdetett kitelepülés — kérj egyedi időpontot." />
+    </div>
+  </section>
+
+  <section class="section" id="miert">
     <div class="container">
       <span class="h-sub">Miért minket válassz</span>
       <h2 class="h-display"><span class="chalk-underline">Négy ok, egy tuktuk</span></h2>
-      <div class="reasons">
+      <div class="reasons stagger">
         {
           reasons.map((r, i) => (
             <article class="reason">
@@ -65,18 +50,17 @@ const events = [
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--alt">
     <div class="container events">
       <div>
         <span class="h-sub">Milyen alkalmakra?</span>
         <h2 class="h-section"><span class="chalk-underline">Tipikus rendezvények</span></h2>
-        <ul class="events__list">
+        <ul class="events__list stagger">
           {events.map((e) => <li>{e}</li>)}
         </ul>
       </div>
       <div class="placeholder-img events__photo">Kép — rendezvény hangulat</div>
     </div>
-    <ChalkDoodle type="wheel" size={220} class="doodle-wheel-events" />
   </section>
 </Layout>
 
@@ -93,8 +77,22 @@ const events = [
   }
   @media (min-width: 760px) { .reasons { grid-template-columns: repeat(2, 1fr); } }
 
-  .reason { display: grid; gap: 10px; padding: 24px; border: 1px solid var(--line); border-radius: 12px; }
-  .reason__n { font-family: var(--f-logo); color: var(--accent); font-size: 1.6rem; letter-spacing: 0.06em; }
+  .reason {
+    display: grid;
+    gap: 10px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: rgba(255,255,255,0.015);
+    transition: transform 280ms var(--ease), box-shadow 280ms var(--ease), border-color 280ms var(--ease), background 280ms var(--ease);
+  }
+  .reason:hover {
+    transform: translateY(-4px) scale(1.015);
+    border-color: rgba(240, 138, 28, 0.45);
+    background: rgba(240, 138, 28, 0.04);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+  }
+  .reason__n { font-family: var(--f-logo); color: var(--accent); font-size: 1.6rem; letter-spacing: var(--ls-body); }
   .reason h3 { font-size: clamp(1.2rem, 2.2vw, 1.6rem); }
 
   .events {
@@ -115,7 +113,4 @@ const events = [
   }
   .events__list li::before { content: "—  "; color: var(--accent); }
   .events__photo { aspect-ratio: 4 / 3; }
-
-  section:last-of-type { position: relative; overflow: hidden; }
-  .doodle-wheel-events { bottom: -70px; left: -50px; }
 </style>

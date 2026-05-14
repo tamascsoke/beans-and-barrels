@@ -1,0 +1,131 @@
+# Sveltia CMS configuration
+# Docs: https://github.com/sveltia/sveltia-cms
+# Compatible with Decap (Netlify) CMS schema.
+
+backend:
+  name: github
+  repo: tamascsoke/beans-and-barrels
+  branch: v2
+  base_url: https://sveltia-cms-auth.beanbarrel.workers.dev # placeholder; or use https://github.com OAuth via Sveltia's hosted proxy
+  auth_endpoint: api/auth
+
+# Sveltia also supports a local proxy for `npx @sveltia/cms-proxy-server`
+# during local dev. For now we configure GitHub backend only.
+
+publish_mode: simple
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://www.beanbarrel.coffee
+display_url: https://www.beanbarrel.coffee
+logo_url: /favicon.png
+
+locale: hu
+
+collections:
+  - name: idle_story
+    label: "Easter egg történet (idle)"
+    label_singular: "Idle történet"
+    description: "A 20 másodperc tétlenség után megjelenő krétaszöveg."
+    files:
+      - name: idle
+        label: "Idle szöveg"
+        file: src/content/idle.json
+        format: json
+        fields:
+          - { name: idleSeconds, label: "Tétlenség (másodperc)", widget: number, default: 20, value_type: int, min: 5 }
+          - { name: title, label: "Cím", widget: string }
+          - { name: text, label: "Történet", widget: text }
+
+  - name: contact
+    label: "Kontakt információk"
+    files:
+      - name: contact
+        label: "Kontakt"
+        file: src/content/contact.json
+        format: json
+        fields:
+          - { name: phoneDisplay, label: "Telefon (megjelenített)", widget: string }
+          - { name: phoneHref, label: "Telefon (tárcsázás)", widget: string, hint: "Csak számjegyek és +, pl. +36202469775" }
+          - { name: email, label: "Email", widget: string }
+          - { name: formSubject, label: "Kapcsolati űrlap tárgy", widget: string }
+
+  - name: event_types
+    label: "Tipikus rendezvények (lista)"
+    files:
+      - name: event_types
+        label: "Lista"
+        file: src/content/event-types.json
+        format: json
+        fields:
+          - name: items
+            label: "Alkalmak"
+            widget: list
+            field: { name: name, label: "Megnevezés", widget: string }
+
+  - name: carousel
+    label: "Főoldal carousel"
+    label_singular: "Slide"
+    folder: src/content/carousel
+    format: json
+    create: true
+    slug: "{{order}}-{{slug}}"
+    summary: "{{order}} — {{title}}"
+    sortable_fields: [order, title]
+    fields:
+      - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
+      - { name: eyebrow, label: "Kis cím (eyebrow)", widget: string }
+      - { name: title, label: "Cím", widget: string }
+      - { name: body, label: "Leírás", widget: text }
+      - { name: ctaHref, label: "Gomb URL", widget: string, default: "/kontakt" }
+      - { name: ctaLabel, label: "Gomb felirat", widget: string }
+
+  - name: categories
+    label: "Kínálat kategóriák"
+    label_singular: "Kategória"
+    folder: src/content/categories
+    format: json
+    create: true
+    slug: "{{order}}-{{key}}"
+    summary: "{{order}} — {{label}}"
+    sortable_fields: [order, label]
+    fields:
+      - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
+      - { name: key, label: "Kulcs (egyedi azonosító)", widget: string, hint: "pl. kave, sor — angol betűk és kötőjel" }
+      - { name: label, label: "Megnevezés", widget: string }
+      - { name: sub, label: "Alcím", widget: string }
+      - name: items
+        label: "Tételek"
+        widget: list
+        field: { name: name, label: "Tétel neve", widget: string }
+
+  - name: reasons
+    label: "Rendezvények — Miért minket"
+    label_singular: "Indok"
+    folder: src/content/reasons
+    format: json
+    create: true
+    slug: "{{order}}-{{slug}}"
+    summary: "{{order}} — {{title}}"
+    sortable_fields: [order, title]
+    fields:
+      - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
+      - { name: title, label: "Cím", widget: string }
+      - { name: body, label: "Leírás", widget: text }
+
+  - name: upcoming_events
+    label: "Aktuális kitelepülések"
+    label_singular: "Kitelepülés"
+    folder: src/content/upcoming-events
+    format: json
+    create: true
+    slug: "{{date}}-{{slug}}"
+    summary: "{{date}} — {{title}} ({{location}})"
+    sortable_fields: [date, title, location]
+    fields:
+      - { name: title, label: "Esemény címe", widget: string }
+      - { name: date, label: "Kezdő dátum", widget: date, format: "YYYY-MM-DD" }
+      - { name: endDate, label: "Záró dátum (opcionális)", widget: date, format: "YYYY-MM-DD", required: false }
+      - { name: location, label: "Helyszín", widget: string, hint: "pl. Balatonfüred, Tagore sétány" }
+      - { name: description, label: "Rövid leírás", widget: text, required: false }
+      - { name: ctaUrl, label: "Részletek URL (opcionális)", widget: string, required: false, default: "" }
+      - { name: published, label: "Publikálva", widget: boolean, default: true, hint: "Vedd ki, ha még nem szabad megjelennie az oldalon." }

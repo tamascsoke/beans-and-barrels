@@ -1,0 +1,115 @@
+---
+import { getUpcomingEvents } from "../lib/content";
+
+interface Props {
+  limit?: number;
+  emptyMessage?: string;
+  showCta?: boolean;
+}
+
+const { limit, emptyMessage = "Hamarosan új időpontok — kövess minket vagy kérj egyedi alkalmat.", showCta = false } = Astro.props;
+const events = getUpcomingEvents({ limit });
+
+const fmtDate = (iso: string) => {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("hu-HU", { month: "long", day: "numeric" });
+};
+const fmtRange = (start: string, end?: string) => {
+  if (!end || end === start) return fmtDate(start);
+  return `${fmtDate(start)} – ${fmtDate(end)}`;
+};
+const fmtYear = (iso: string) => new Date(iso + "T00:00:00").getFullYear();
+---
+
+{events.length === 0 ? (
+  <p class="upcoming__empty body-text">{emptyMessage}</p>
+) : (
+  <div class="upcoming stagger">
+    {events.map((e) => (
+      <article class="upcoming__card">
+        <div class="upcoming__date">
+          <span class="upcoming__range">{fmtRange(e.date, e.endDate)}</span>
+          <span class="upcoming__year">{fmtYear(e.date)}</span>
+        </div>
+        <div class="upcoming__copy">
+          <span class="h-sub">{e.location}</span>
+          <h3 class="h-section">{e.title}</h3>
+          {e.description && <p class="body-text">{e.description}</p>}
+          {e.ctaUrl && (
+            <a class="btn btn--ghost upcoming__cta" href={e.ctaUrl}>Részletek</a>
+          )}
+        </div>
+      </article>
+    ))}
+  </div>
+)}
+
+{showCta && events.length > 0 && (
+  <div class="upcoming__more">
+    <a class="btn btn--ghost" href="/rendezvenyek#kitelepulesek">Összes kitelepülés</a>
+  </div>
+)}
+
+<style>
+  .upcoming {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 1fr;
+    margin-top: 26px;
+  }
+  @media (min-width: 760px) {
+    .upcoming { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  }
+
+  .upcoming__card {
+    display: grid;
+    gap: 16px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: rgba(255,255,255,0.02);
+    transition: transform 280ms var(--ease), box-shadow 280ms var(--ease), border-color 280ms var(--ease);
+  }
+  .upcoming__card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240, 138, 28, 0.45);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+  }
+
+  .upcoming__date {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .upcoming__range {
+    font-family: var(--f-logo);
+    color: var(--accent);
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    letter-spacing: var(--ls-body);
+    text-transform: uppercase;
+  }
+  .upcoming__year {
+    font-family: var(--f-body);
+    color: var(--ink-soft);
+    letter-spacing: var(--ls-label);
+    font-size: 0.9rem;
+  }
+
+  .upcoming__copy { display: grid; gap: 8px; }
+  .upcoming__copy h3 { font-size: clamp(1.2rem, 2.2vw, 1.5rem); }
+  .upcoming__cta { justify-self: start; margin-top: 8px; }
+
+  .upcoming__empty {
+    margin-top: 22px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .upcoming__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+</style>

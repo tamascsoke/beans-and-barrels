@@ -1,0 +1,7 @@
+{
+  "order": 3,
+  "key": "snack",
+  "label": "Snackek",
+  "sub": "Helyi alapanyagok",
+  "items": ["Croissant", "Pirított dió", "Sajttál", "Olajbogyó", "Mini fánk"]
+}

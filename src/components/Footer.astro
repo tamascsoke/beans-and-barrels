@@ -1,9 +1,10 @@
 ---
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL } from "../lib/contact";
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div class="container footer__grid">
+  <div class="container footer__grid stagger">
     <div class="footer__col">
       <div class="footer__brand">BEAN &amp; BARREL</div>
       <p class="body-text footer__tag">Kávé és sör — tuktukból, közösségből.</p>
@@ -21,24 +22,23 @@ const year = new Date().getFullYear();
     <div class="footer__col">
       <h4 class="h-sub">Kapcsolat</h4>
       <ul class="footer__list">
-        <li><a href="tel:+36202469775">+36 20 246 9775</a></li>
-        <li><a href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></li>
+        <li><a href={`tel:${PHONE_HREF}`}>{PHONE_DISPLAY}</a></li>
+        <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
       </ul>
     </div>
 
     <div class="footer__col">
       <h4 class="h-sub">Kövess minket</h4>
       <ul class="footer__list footer__social">
-        <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
-        <li><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a></li>
-        <li><a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a></li>
+        <li><span class="footer__soon">Instagram — hamarosan</span></li>
+        <li><span class="footer__soon">Facebook — hamarosan</span></li>
+        <li><span class="footer__soon">TikTok — hamarosan</span></li>
       </ul>
     </div>
   </div>
 
   <div class="footer__bottom container">
     <span>© {year} Bean &amp; Barrel</span>
-    <a href="/aszf" class="footer__legal">ÁSZF</a>
   </div>
 </footer>
 
@@ -88,13 +88,17 @@ const year = new Date().getFullYear();
   .footer__list a:hover {
     color: var(--accent);
   }
+  .footer__soon {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
 
   .footer__bottom {
     margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid var(--line);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     font-size: 0.85rem;
     color: var(--ink-faint);

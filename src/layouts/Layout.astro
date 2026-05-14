@@ -5,6 +5,8 @@ import SideTab from "../components/SideTab.astro";
 import ChalkCursor from "../components/ChalkCursor.astro";
 import ChalkBackground from "../components/ChalkBackground.astro";
 import ScrollExtras from "../components/ScrollExtras.astro";
+import TuktukProgress from "../components/TuktukProgress.astro";
+import EasterEggs from "../components/EasterEggs.astro";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
@@ -28,7 +30,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=League+Gothic&family=League+Spartan:wght@700;800&family=Share+Tech+Mono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=League+Gothic&family=League+Spartan:wght@700;800&display=swap"
       rel="stylesheet"
     />
     <title>{title}</title>
@@ -44,6 +46,8 @@ const {
     </main>
     <SideTab />
     <ScrollExtras />
+    <TuktukProgress />
+    <EasterEggs />
     <ChalkCursor />
     <Footer />
   </body>
@@ -94,7 +98,7 @@ const {
       }),
       { threshold: 0.15 },
     );
-    document.querySelectorAll(".reveal").forEach((el) => revealIO.observe(el));
+    document.querySelectorAll(".reveal, .stagger").forEach((el) => revealIO.observe(el));
 
     // typewriter
     document.querySelectorAll<HTMLElement>("[data-typewriter]").forEach((el) => {
@@ -135,24 +139,88 @@ const {
       });
     });
 
+    // section chalk-dust reveal
+    const sectionIO = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-visible"); sectionIO.unobserve(e.target); }
+      }),
+      { threshold: 0.08 }
+    );
+    document.querySelectorAll("section:not(.is-visible)").forEach((el) => {
+      el.classList.add("chalk-section");
+      sectionIO.observe(el);
+    });
+
+
+    // split text on h-display headings
+    document.querySelectorAll<HTMLElement>(".h-display:not([data-split])").forEach((el) => {
+      el.dataset.split = "1";
+      const inner = (el.querySelector(".chalk-underline") as HTMLElement) ?? el;
+      const text = inner.textContent?.trim() ?? "";
+      inner.innerHTML = "";
+      text.split(/\s+/).forEach((w, i) => {
+        const s = document.createElement("span");
+        s.className = "sw";
+        s.textContent = w;
+        s.style.transitionDelay = `${i * 90}ms`;
+        inner.appendChild(s);
+        inner.appendChild(document.createTextNode(" "));
+      });
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) { el.classList.add("sw-vis"); io.disconnect(); }
+      }, { threshold: 0.15 });
+      io.observe(el);
+    });
+
+    // heading chalk-write reveal
+    const writeIO = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-written"); writeIO.unobserve(e.target); }
+      }),
+      { threshold: 0 }
+    );
+    document.querySelectorAll(".h-display:not(.is-written)").forEach((el) => {
+      el.classList.add("chalk-write");
+      writeIO.observe(el);
+    });
+
   }
 
   initObservers();
   document.addEventListener("astro:after-swap", initObservers);
+
+</script>
+
+<script>
+  // Lenis smooth scroll — init once, survives View Transitions
+  if (!(window as any).__lenisReady) {
+    (window as any).__lenisReady = true;
+    import("lenis").then(({ default: Lenis }) => {
+      const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+      (window as any).__lenis = lenis;
+      function raf(t: number) { lenis.raf(t); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+      document.addEventListener("astro:before-swap", () => lenis.stop());
+      document.addEventListener("astro:after-swap", () => {
+        lenis.scrollTo(0, { immediate: true });
+        lenis.start();
+      });
+    });
+  }
 </script>
 
 <style is:global>
-  /* ── Page transition: chalk dust ── */
-  @keyframes chalk-out {
-    from { opacity: 1; filter: blur(0)   brightness(1); }
-    to   { opacity: 0; filter: blur(8px) brightness(1.5); }
+  /* ── Page transition: chalk slide-fade ── */
+  @keyframes page-out {
+    from { opacity: 1; transform: translateX(0);     filter: blur(0); }
+    to   { opacity: 0; transform: translateX(-28px); filter: blur(6px); }
   }
-  @keyframes chalk-in {
-    from { opacity: 0; filter: blur(8px) brightness(1.5); }
-    to   { opacity: 1; filter: blur(0)   brightness(1); }
+  @keyframes page-in {
+    from { opacity: 0; transform: translateX(28px);  filter: blur(6px); }
+    to   { opacity: 1; transform: translateX(0);     filter: blur(0); }
   }
-  ::view-transition-old(root) { animation: 300ms ease-in  forwards chalk-out; }
-  ::view-transition-new(root) { animation: 380ms 180ms ease-out both chalk-in; }
+  ::view-transition-old(root) { animation: 260ms ease-in  forwards page-out; }
+  ::view-transition-new(root) { animation: 360ms 150ms ease-out both page-in; }
 
   /* ── Typewriter cursor ── */
   .tw-cursor {
@@ -171,4 +239,36 @@ const {
     transition: transform 120ms ease-out;
     will-change: transform;
   }
+
+  /* ── Section chalk-dust reveal ── */
+  .chalk-section {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(3px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), filter 0.7s var(--ease);
+  }
+  .chalk-section.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  /* ── Heading chalk-write reveal ── */
+  @keyframes chalk-write-anim {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+  }
+  .chalk-write.is-written {
+    animation: chalk-write-anim 1.1s var(--ease) both;
+  }
+
+  /* ── Split text words ── */
+  .sw {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 650ms var(--ease), transform 650ms var(--ease);
+  }
+  .sw-vis .sw { opacity: 1; transform: none; }
+
 </style>

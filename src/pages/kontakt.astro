@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ChalkSelect from "../components/ChalkSelect.astro";
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT } from "../lib/contact";
 const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 ---
 
@@ -14,8 +15,8 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
           Rendezvény, franchise, sajtó vagy csak egy kérdés — itt megtalálsz minket.
         </p>
         <ul class="contact__list">
-          <li><span class="h-sub">Telefon</span><a href="tel:+36202469775">+36 20 246 9775</a></li>
-          <li><span class="h-sub">E-mail</span><a href="mailto:info@beanbarrel.coffee">info@beanbarrel.coffee</a></li>
+          <li><span class="h-sub">Telefon</span><a href={`tel:${PHONE_HREF}`}>{PHONE_DISPLAY}</a></li>
+          <li><span class="h-sub">E-mail</span><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
         </ul>
       </div>
 
@@ -28,12 +29,13 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       <h2 class="h-section"><span class="chalk-underline">Írj nekünk</span></h2>
       <form
         class="form"
-        action="https://formsubmit.co/info@beanbarrel.coffee"
+        action={FORM_ACTION}
         method="POST"
       >
-        <input type="hidden" name="_subject" value="Üzenet — beanbarrel.coffee" />
+        <input type="hidden" name="_subject" value={FORM_SUBJECT} />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value={`${Astro.url.origin}/koszonjuk`} />
 
         <label class="form-field">
           <span class="h-sub">Név</span>
@@ -91,20 +93,32 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   }
   .form-field input,
   .form-field textarea {
-    font: inherit;
-    font-family: var(--f-body);
+    font-family: var(--f-sub);
+    font-weight: 700;
     color: var(--ink);
     background: none;
     border: none;
     border-bottom: 1.5px solid var(--line);
     padding: 10px 0;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
     width: 100%;
     outline: none;
-    transition: border-color 200ms;
+    transition: border-color 200ms, box-shadow 240ms var(--ease);
   }
   .form-field input:focus,
-  .form-field textarea:focus { border-color: var(--accent); }
+  .form-field textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px -10px rgba(240, 138, 28, 0.55);
+  }
   .form-field textarea { resize: vertical; }
+
+  .form-field input:-webkit-autofill,
+  .form-field input:-webkit-autofill:hover,
+  .form-field input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #2a2929 inset !important;
+    box-shadow: 0 0 0 1000px #2a2929 inset !important;
+    -webkit-text-fill-color: #f4f4f4 !important;
+    caret-color: #f4f4f4;
+    transition: background-color 5000s ease-in-out 0s !important;
+  }
 </style>

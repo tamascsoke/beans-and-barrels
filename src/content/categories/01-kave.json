@@ -1,0 +1,7 @@
+{
+  "order": 1,
+  "key": "kave",
+  "label": "Kávé",
+  "sub": "Specialty pörkölés",
+  "items": ["Espresso", "Cappuccino", "Flat white", "Filter — V60", "Cold brew"]
+}

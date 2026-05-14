@@ -1,0 +1,7 @@
+{
+  "order": 2,
+  "key": "sor",
+  "label": "Sör",
+  "sub": "Magyar kézműves csapok",
+  "items": ["Lager", "IPA", "Stout", "Pils", "Szezonális"]
+}

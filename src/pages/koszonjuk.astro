@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Köszönjük — Bean & Barrel">
+  <section class="section">
+    <div class="container thanks">
+      <span class="h-sub">Köszönjük</span>
+      <h1 class="h-display"><span class="chalk-underline">Megkaptuk az üzeneted</span></h1>
+      <p class="lead">Hamarosan jelentkezünk e-mailben. Addig is — kísérd a tuktukot.</p>
+      <a class="btn" href="/">Vissza a főoldalra</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .thanks { display: grid; gap: 18px; max-width: 720px; }
+  .thanks .btn { justify-self: start; margin-top: 8px; }
+</style>
