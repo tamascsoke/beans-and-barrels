@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Az oldal nem található — Bean & Barrel">
+  <section class="section notfound">
+    <div class="container notfound__inner stagger">
+      <span class="h-sub">404</span>
+      <h1 class="h-display"><span class="chalk-underline">Elveszett a tuktuk?</span></h1>
+      <p class="lead">
+        Ez az oldal nem létezik — vagy elköltözött, ahogy mi is szokunk.
+      </p>
+      <div class="notfound__cta">
+        <a class="btn" href="/">Vissza a főoldalra</a>
+        <a class="btn btn--ghost" href="/kontakt">Írj nekünk</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .notfound {
+    min-height: calc(100dvh - var(--nav-h));
+    display: flex;
+    align-items: center;
+  }
+  .notfound__inner {
+    display: grid;
+    gap: 22px;
+    max-width: 640px;
+  }
+  .notfound__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+</style>

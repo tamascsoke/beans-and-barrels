@@ -53,11 +53,59 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
           <span class="h-sub">Üzenet</span>
           <textarea name="message" rows="6" required></textarea>
         </label>
-        <button type="submit" class="btn form__submit">Küldés</button>
+        <button type="submit" class="btn form__submit" id="formSubmit">
+          <span class="form__btn-label">Küldés</span>
+          <span class="form__btn-loading" aria-hidden="true">Küldés…</span>
+        </button>
+
+        <div class="form__feedback" id="formFeedback" aria-live="polite"></div>
       </form>
     </div>
   </section>
 </Layout>
+
+<script>
+  function initForm() {
+    const form     = document.querySelector(".form") as HTMLFormElement | null;
+    const btn      = document.getElementById("formSubmit")  as HTMLButtonElement | null;
+    const feedback = document.getElementById("formFeedback") as HTMLElement | null;
+    if (!form || !btn || !feedback) return;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      btn.dataset.state = "loading";
+      btn.disabled = true;
+      feedback.textContent = "";
+      feedback.className = "form__feedback";
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+
+        if (res.ok) {
+          btn.dataset.state = "done";
+          form.reset();
+          feedback.textContent = "Megkaptuk az üzeneted — hamarosan visszaírunk!";
+          feedback.classList.add("form__feedback--ok");
+        } else {
+          throw new Error("server");
+        }
+      } catch {
+        btn.dataset.state = "";
+        btn.disabled = false;
+        feedback.textContent = "Valami hiba történt. Próbáld újra, vagy írj emailben.";
+        feedback.classList.add("form__feedback--err");
+      }
+    });
+  }
+
+  initForm();
+  document.addEventListener("astro:after-swap", initForm);
+</script>
 
 <style>
   .contact {
@@ -84,7 +132,33 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   }
   @media (min-width: 640px) { .form { grid-template-columns: 1fr 1fr; } }
   .form__full { grid-column: 1 / -1; }
-  .form__submit { grid-column: 1 / -1; justify-self: start; }
+  .form__submit { grid-column: 1 / -1; justify-self: start; position: relative; }
+
+  .form__btn-loading { display: none; }
+
+  .form__submit[data-state="loading"] .form__btn-label { opacity: 0; }
+  .form__submit[data-state="loading"] .form__btn-loading {
+    display: block;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+  }
+  .form__submit[data-state="loading"] { pointer-events: none; opacity: 0.75; }
+  .form__submit[data-state="done"]    { background: #3a8c5a; pointer-events: none; }
+
+  .form__feedback {
+    grid-column: 1 / -1;
+    font-family: var(--f-body);
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    padding: 12px 0;
+    display: none;
+  }
+  .form__feedback--ok  { display: block; color: #7ecfa0; }
+  .form__feedback--err { display: block; color: #e07070; }
 
   /* Chalk-line field */
   .form-field {

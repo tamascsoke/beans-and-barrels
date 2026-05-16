@@ -1,5 +1,16 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  site: 'https://www.beanbarrel.coffee',
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/koszonjuk'),
+    }),
+  ],
+  image: {
+    experimentalLayout: 'responsive',
+  },
+});
+
