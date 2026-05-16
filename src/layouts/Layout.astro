@@ -191,24 +191,6 @@ const {
 
 </script>
 
-<script>
-  // Lenis smooth scroll — init once, survives View Transitions
-  if (!(window as any).__lenisReady) {
-    (window as any).__lenisReady = true;
-    import("lenis").then(({ default: Lenis }) => {
-      const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
-      (window as any).__lenis = lenis;
-      function raf(t: number) { lenis.raf(t); requestAnimationFrame(raf); }
-      requestAnimationFrame(raf);
-      document.addEventListener("astro:before-swap", () => lenis.stop());
-      document.addEventListener("astro:after-swap", () => {
-        lenis.scrollTo(0, { immediate: true });
-        lenis.start();
-      });
-    });
-  }
-</script>
-
 <style is:global>
   /* ── Page transition: chalk slide-fade ── */
   @keyframes page-out {
