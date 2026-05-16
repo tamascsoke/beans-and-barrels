@@ -68,6 +68,20 @@ export function getReasons(): Reason[] {
   return sortByOrder(values(mods));
 }
 
+export type GalleryPhoto = {
+  order?: number;
+  image: string;
+  alt: string;
+};
+
+export function getGalleryPhotos(): GalleryPhoto[] {
+  const mods = import.meta.glob<{ default: GalleryPhoto }>(
+    "../content/gallery/*.json",
+    { eager: true },
+  );
+  return sortByOrder(values(mods));
+}
+
 export function getUpcomingEvents(opts?: { limit?: number }): UpcomingEvent[] {
   const mods = import.meta.glob<{ default: UpcomingEvent }>(
     "../content/upcoming-events/*.json",

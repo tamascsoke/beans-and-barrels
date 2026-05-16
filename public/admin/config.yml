@@ -112,6 +112,27 @@ collections:
       - { name: title, label: "Cím", widget: string }
       - { name: body, label: "Leírás", widget: text }
 
+  - name: gallery
+    label: "Képgaléria"
+    label_singular: "Fotó"
+    description: "A főoldal galériasávjának képei. Feltöltés után automatikusan megjelenik."
+    folder: src/content/gallery
+    format: json
+    create: true
+    delete: true
+    slug: "{{order}}-{{slug}}"
+    summary: "{{order}} — {{alt}}"
+    sortable_fields: [order, alt]
+    fields:
+      - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1, hint: "Kisebb szám = előrébb" }
+      - name: image
+        label: "Fotó"
+        widget: image
+        media_folder: public/uploads/gallery
+        public_folder: /uploads/gallery
+        hint: "JPG vagy WebP ajánlott. Max. 2 MB, javasolt arány: 4:3."
+      - { name: alt, label: "Leírás (alt szöveg)", widget: string, hint: "pl. Bean & Barrel tuktuk egy esküvőn Balatonfüreden" }
+
   - name: upcoming_events
     label: "Aktuális kitelepülések"
     label_singular: "Kitelepülés"

@@ -1,0 +1,176 @@
+---
+import { getGalleryPhotos } from "../lib/content";
+const photos = getGalleryPhotos();
+---
+
+{photos.length > 0 && (
+  <section class="gallery-section section">
+    <div class="container gallery-head stagger">
+      <span class="h-sub">Képgaléria</span>
+      <h2 class="h-display"><span class="chalk-underline">Pillanatok</span></h2>
+    </div>
+
+    <div class="gallery-wrap" id="galleryWrap" aria-label="Fotógaléria" data-sets={photos.length < 5 ? "3" : "2"}>
+      <div class="gallery-inner" id="galleryInner">
+        {photos.map((p) => (
+          <div class="gallery-frame">
+            <img src={p.image} alt={p.alt} decoding="async" draggable="false" />
+          </div>
+        ))}
+        {photos.map((p) => (
+          <div class="gallery-frame" aria-hidden="true">
+            <img src={p.image} alt="" decoding="async" draggable="false" />
+          </div>
+        ))}
+        {photos.length < 5 && photos.map((p) => (
+          <div class="gallery-frame" aria-hidden="true">
+            <img src={p.image} alt="" decoding="async" draggable="false" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .gallery-head {
+    display: grid;
+    gap: 14px;
+    margin-bottom: clamp(24px, 4vw, 40px);
+  }
+
+  .gallery-wrap {
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 72px,
+      black calc(100% - 72px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 72px,
+      black calc(100% - 72px),
+      transparent 100%
+    );
+  }
+
+  .gallery-wrap:active { cursor: grabbing; }
+
+  .gallery-inner {
+    display: flex;
+    gap: 14px;
+    padding-block: 8px;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .gallery-frame {
+    height: clamp(200px, 28vw, 400px);
+    aspect-ratio: 4 / 3;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--r-md);
+    background: var(--bg-2);
+  }
+
+  .gallery-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    transition: transform 600ms var(--ease);
+  }
+
+  .gallery-wrap:hover .gallery-frame img {
+    transform: scale(1.03);
+  }
+</style>
+
+<script>
+  function initGallery() {
+    const wrap  = document.getElementById("galleryWrap")  as HTMLElement | null;
+    const inner = document.getElementById("galleryInner") as HTMLElement | null;
+    if (!wrap || !inner) return;
+
+    const SPEED = 0.55;
+    let pos        = 0;
+    let isPaused   = false;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartPos = 0;
+    let halfW      = 0;
+    let rafId: number | null = null;
+
+    function tick() {
+      if (!isPaused && !isDragging) {
+        pos += SPEED;
+        if (halfW > 0 && pos >= halfW) pos -= halfW;
+      }
+      inner!.style.transform = `translateX(${-pos}px)`;
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      const sets = parseInt(wrap!.dataset.sets ?? "2", 10);
+      halfW = inner!.scrollWidth / sets;
+      rafId = requestAnimationFrame(tick);
+    }
+
+    const imgs   = Array.from(inner.querySelectorAll("img")) as HTMLImageElement[];
+    let pending  = imgs.filter((img) => !img.complete).length;
+
+    if (pending === 0) {
+      start();
+    } else {
+      imgs.forEach((img) => {
+        if (!img.complete) {
+          const done = () => { if (--pending === 0) start(); };
+          img.addEventListener("load",  done, { once: true });
+          img.addEventListener("error", done, { once: true });
+        }
+      });
+    }
+
+    wrap.addEventListener("pointerenter", () => { isPaused = true; });
+    wrap.addEventListener("pointerleave", () => { if (!isDragging) isPaused = false; });
+
+    wrap.addEventListener("pointerdown", (e) => {
+      isDragging   = true;
+      isPaused     = true;
+      dragStartX   = e.clientX;
+      dragStartPos = pos;
+      wrap.setPointerCapture(e.pointerId);
+      wrap.style.cursor = "grabbing";
+    });
+
+    wrap.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const dx = dragStartX - e.clientX;
+      pos = dragStartPos + dx;
+      if (halfW > 0) {
+        if (pos < 0)       pos += halfW;
+        if (pos >= halfW)  pos -= halfW;
+      }
+    });
+
+    wrap.addEventListener("pointerup", () => {
+      if (!isDragging) return;
+      isDragging = false;
+      wrap.style.cursor = "";
+      setTimeout(() => { if (!isDragging) isPaused = false; }, 400);
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    }, { once: true });
+  }
+
+  initGallery();
+  document.addEventListener("astro:after-swap", initGallery);
+</script>
