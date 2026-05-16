@@ -237,32 +237,43 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   transform: rotate(0deg) scale(1.015);
   box-shadow: 6px 12px 34px rgba(0,0,0,0.6);
 }
-/* masking tape strip */
-.placeholder-img::before {
+/* masking tape — two corner strips */
+.placeholder-img::before,
+.placeholder-img::after {
   content: '';
   position: absolute;
-  top: -13px;
-  left: 50%;
-  translate: -50% 0;
-  width: 62px;
-  height: 20px;
-  background: repeating-linear-gradient(
-    -55deg,
-    rgba(255,248,200,0.2),
-    rgba(255,248,200,0.2) 3px,
-    rgba(255,248,200,0.13) 3px,
-    rgba(255,248,200,0.13) 6px
-  );
-  border-radius: 2px;
-  rotate: -2deg;
+  top: -15px;
+  width: 58px;
+  height: 26px;
+  background:
+    repeating-linear-gradient(
+      -65deg,
+      rgba(255,255,255,0)    0px,
+      rgba(255,255,255,0.22) 2px,
+      rgba(180,150,40,0.07)  3px,
+      rgba(255,255,255,0)    5.5px
+    ),
+    rgba(255, 241, 135, 0.72);
+  border-radius: 3px;
   z-index: 2;
   pointer-events: none;
+  box-shadow:
+    0 3px 9px rgba(0,0,0,0.55),
+    0 1px 2px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.28);
 }
+.placeholder-img::before { left: 16px;  rotate: -36deg; }
+.placeholder-img::after  { right: 16px; rotate:  36deg; }
+
 /* alternating tilt for visual variety */
 .highlight:nth-child(even) .placeholder-img,
 .cat:nth-child(even) .placeholder-img { transform: rotate(1.3deg); }
 .highlight:nth-child(even) .placeholder-img:hover,
 .cat:nth-child(even) .placeholder-img:hover { transform: rotate(0deg) scale(1.015); }
+.highlight:nth-child(even) .placeholder-img::before,
+.cat:nth-child(even) .placeholder-img::before { rotate:  36deg; }
+.highlight:nth-child(even) .placeholder-img::after,
+.cat:nth-child(even) .placeholder-img::after  { rotate: -36deg; }
 
 /* ── Steam hover — gőz animáció kávé/sör elemeken ── */
 @keyframes steam-rise {
