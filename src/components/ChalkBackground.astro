@@ -2,42 +2,33 @@
 ---
 
 <script>
-  let chalkUrl: string | null = null;
-
   function buildTexture(): string {
-    if (chalkUrl) return chalkUrl;
+    if ((window as any).__chalkUrl) return (window as any).__chalkUrl;
 
     const size = 600;
     const c = document.createElement("canvas");
     c.width = c.height = size;
     const ctx = c.getContext("2d")!;
 
-    // seeded LCG for stable pattern
     let s = 0x9e3779b9;
     const rng = () => {
       s = (Math.imul(s ^ (s >>> 13), 0x5bd1e995) >>> 0);
       return s / 2 ** 32;
     };
 
-    // pixel-level chalk dust: single pixels & sub-pixel dots = dusty, not snowy
     const img = ctx.createImageData(size, size);
     const d = img.data;
-    const n = Math.floor(size * size * 0.012); // ~1.2% pixel coverage
+    const n = Math.floor(size * size * 0.012);
 
     for (let i = 0; i < n; i++) {
       const x = Math.floor(rng() * size);
       const y = Math.floor(rng() * size);
       const idx = (y * size + x) * 4;
-      // warm dusty off-white, most pixels faint, few brighter
-      const v = Math.floor(rng() * 70 + 155); // 155–225
-      const a = Math.floor(rng() * 110 + 25);  // 25–135 (0.1–0.53)
-      d[idx]     = v;
-      d[idx + 1] = v - 4;
-      d[idx + 2] = v - 9;
-      d[idx + 3] = a;
+      const v = Math.floor(rng() * 70 + 155);
+      const a = Math.floor(rng() * 110 + 25);
+      d[idx] = v; d[idx+1] = v-4; d[idx+2] = v-9; d[idx+3] = a;
     }
 
-    // second pass: a handful of slightly larger smudged grains
     for (let i = 0; i < Math.floor(size * size * 0.001); i++) {
       const x = Math.floor(rng() * (size - 2)) + 1;
       const y = Math.floor(rng() * (size - 2)) + 1;
@@ -50,14 +41,14 @@
     }
 
     ctx.putImageData(img, 0, 0);
-    chalkUrl = c.toDataURL("image/png");
-    return chalkUrl;
+    (window as any).__chalkUrl = c.toDataURL("image/png");
+    return (window as any).__chalkUrl;
   }
 
   function apply() {
     const url = buildTexture();
-    document.body.style.backgroundImage = `url('${url}')`;
-    document.body.style.backgroundSize  = "600px 600px";
+    document.body.style.backgroundImage  = `url('${url}')`;
+    document.body.style.backgroundSize   = "600px 600px";
     document.body.style.backgroundRepeat = "repeat";
   }
 
