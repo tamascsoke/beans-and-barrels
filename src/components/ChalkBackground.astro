@@ -45,13 +45,16 @@
     return (window as any).__chalkUrl;
   }
 
-  function apply() {
+  function applyTo(el: HTMLElement) {
     const url = buildTexture();
-    document.body.style.backgroundImage  = `url('${url}')`;
-    document.body.style.backgroundSize   = "600px 600px";
-    document.body.style.backgroundRepeat = "repeat";
+    el.style.backgroundImage  = `url('${url}')`;
+    el.style.backgroundSize   = "600px 600px";
+    el.style.backgroundRepeat = "repeat";
   }
 
-  apply();
-  document.addEventListener("astro:after-swap", apply);
+  applyTo(document.body);
+
+  document.addEventListener("astro:before-swap", (e) => {
+    applyTo((e as any).newDocument.body);
+  });
 </script>
