@@ -63,7 +63,6 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    transform: translateX(-50%);
     height: 36px;
     transition: left 60ms linear;
   }
@@ -100,7 +99,11 @@
     prevScrollY = scrolled;
 
     fill!.style.transform = `scaleX(${pct})`;
-    vehicle!.style.left   = `${pct * 100}%`;
+
+    const roadW = (vehicle!.parentElement as HTMLElement).offsetWidth;
+    const vehW  = vehicle!.offsetWidth;
+    const px    = Math.max(0, Math.min(pct * roadW - vehW / 2, roadW - vehW));
+    vehicle!.style.left = `${px}px`;
 
     if (pct > 0.01 && pct < 0.999) bar!.classList.add("is-visible");
     else bar!.classList.remove("is-visible");

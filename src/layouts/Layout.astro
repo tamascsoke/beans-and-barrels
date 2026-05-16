@@ -196,7 +196,7 @@ const {
   if (!(window as any).__lenisReady) {
     (window as any).__lenisReady = true;
     import("lenis").then(({ default: Lenis }) => {
-      const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+      const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
       (window as any).__lenis = lenis;
       function raf(t: number) { lenis.raf(t); requestAnimationFrame(raf); }
       requestAnimationFrame(raf);
