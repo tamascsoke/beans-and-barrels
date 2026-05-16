@@ -242,28 +242,28 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 .placeholder-img::after {
   content: '';
   position: absolute;
-  top: -15px;
+  top: -13px;
   width: 58px;
   height: 26px;
   background:
     repeating-linear-gradient(
       -65deg,
       rgba(255,255,255,0)    0px,
-      rgba(255,255,255,0.22) 2px,
-      rgba(180,150,40,0.07)  3px,
+      rgba(255,255,255,0.18) 2px,
+      rgba(80,55,20,0.07)    3px,
       rgba(255,255,255,0)    5.5px
     ),
-    rgba(255, 241, 135, 0.72);
+    rgba(210, 188, 140, 0.68);
   border-radius: 3px;
   z-index: 2;
   pointer-events: none;
   box-shadow:
-    0 3px 9px rgba(0,0,0,0.55),
-    0 1px 2px rgba(0,0,0,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.28);
+    0 3px 9px rgba(0,0,0,0.50),
+    0 1px 2px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.22);
 }
-.placeholder-img::before { left: 16px;  rotate: -36deg; }
-.placeholder-img::after  { right: 16px; rotate:  36deg; }
+.placeholder-img::before { left: 14px;  rotate: -11deg; }
+.placeholder-img::after  { right: 14px; rotate:  11deg; }
 
 /* alternating tilt for visual variety */
 .highlight:nth-child(even) .placeholder-img,
