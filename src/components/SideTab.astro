@@ -6,6 +6,19 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 
 <div class="sidetab-overlay" id="sidetabOverlay"></div>
 
+<!-- Mobile FAB — visible only on small screens -->
+<button
+  class="sidetab-fab"
+  id="sidetabFab"
+  aria-controls="sidetab-panel"
+  aria-expanded="false"
+  aria-label="Elérhetőség megnyitása"
+>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.13 1 .37 1.97.72 2.9a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.18-1.18a2 2 0 012.11-.45c.93.35 1.9.59 2.9.72A2 2 0 0122 14.92z"/>
+  </svg>
+</button>
+
 <aside class="sidetab" id="sidetab">
   <button
     class="sidetab__pull"
@@ -97,7 +110,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   }
   .sidetab.is-open { transform: translateX(0); }
 
-  /* Pull tab */
+  /* Pull tab — desktop only */
   .sidetab__pull {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
@@ -115,6 +128,38 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     transition: filter 200ms;
   }
   .sidetab__pull:hover { filter: brightness(1.1); }
+
+  @media (max-width: 640px) {
+    .sidetab__pull { display: none; }
+    .sidetab { top: 0; }
+    .sidetab__panel { width: 100vw; }
+  }
+
+  /* Mobile FAB */
+  .sidetab-fab {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #1a1919;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45), 0 2px 6px rgba(240,138,28,0.4);
+    z-index: 55;
+    transition: transform 200ms var(--ease), box-shadow 200ms var(--ease), background 200ms;
+  }
+  .sidetab-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.5), 0 3px 10px rgba(240,138,28,0.5);
+  }
+  .sidetab-fab.is-open { background: rgba(26,25,25,0.9); color: var(--ink); }
+  @media (max-width: 640px) {
+    .sidetab-fab { display: inline-flex; }
+  }
 
   /* Panel — chalkboard */
   .sidetab__panel {
@@ -270,34 +315,38 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(240, 138, 28, 0.35);
   }
-
-  @media (max-width: 520px) {
-    .sidetab { top: var(--nav-h); }
-  }
 </style>
 
 <script>
   function initSideTab() {
-    const tab     = document.getElementById("sidetab")     as HTMLElement | null;
-    const pull    = document.getElementById("sidetabPull") as HTMLButtonElement | null;
+    const tab      = document.getElementById("sidetab")      as HTMLElement | null;
+    const pull     = document.getElementById("sidetabPull")  as HTMLButtonElement | null;
+    const fab      = document.getElementById("sidetabFab")   as HTMLButtonElement | null;
     const closeBtn = document.getElementById("sidetabClose") as HTMLButtonElement | null;
-    const overlay = document.getElementById("sidetabOverlay") as HTMLElement | null;
+    const overlay  = document.getElementById("sidetabOverlay") as HTMLElement | null;
     if (!tab || !pull) return;
 
     function openTab() {
       tab.classList.add("is-open");
       overlay?.classList.add("is-open");
       pull.setAttribute("aria-expanded", "true");
+      fab?.setAttribute("aria-expanded", "true");
+      fab?.classList.add("is-open");
       document.body.style.overflow = "hidden";
     }
     function closeTab() {
       tab.classList.remove("is-open");
       overlay?.classList.remove("is-open");
       pull.setAttribute("aria-expanded", "false");
+      fab?.setAttribute("aria-expanded", "false");
+      fab?.classList.remove("is-open");
       document.body.style.overflow = "";
     }
 
     pull.addEventListener("click", () =>
+      tab.classList.contains("is-open") ? closeTab() : openTab()
+    );
+    fab?.addEventListener("click", () =>
       tab.classList.contains("is-open") ? closeTab() : openTab()
     );
     closeBtn?.addEventListener("click", closeTab);
@@ -306,7 +355,6 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       if (e.key === "Escape" && tab.classList.contains("is-open")) closeTab();
     });
 
-    // Close when clicking contact links inside the panel
     tab.querySelectorAll("a[href^='tel:'], a[href^='mailto:']").forEach((a) =>
       a.addEventListener("click", closeTab)
     );
