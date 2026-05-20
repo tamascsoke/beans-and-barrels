@@ -108,6 +108,10 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     transform: translateX(calc(100% - 44px));
     transition: transform 360ms var(--ease);
   }
+  @media (max-width: 640px) {
+    .sidetab { transform: translateX(100%); }
+  }
+  }
   .sidetab.is-open { transform: translateX(0); }
 
   /* Pull tab — desktop only */
