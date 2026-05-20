@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import UpcomingEvents from "../components/UpcomingEvents.astro";
 import { getReasons } from "../lib/content";
 import eventTypes from "../content/event-types.json";
 
@@ -19,16 +18,7 @@ const events = eventTypes.items;
       </p>
       <div class="hero__cta">
         <a class="btn" href="/kontakt">Kérek ajánlatot</a>
-        <a class="btn btn--ghost" href="#kitelepulesek">Aktuális kitelepülések</a>
       </div>
-    </div>
-  </section>
-
-  <section class="section section--alt" id="kitelepulesek">
-    <div class="container">
-      <span class="h-sub">Hol találsz minket</span>
-      <h2 class="h-display"><span class="chalk-underline">Aktuális kitelepülések</span></h2>
-      <UpcomingEvents emptyMessage="Nincs jelenleg meghirdetett kitelepülés — kérj egyedi időpontot." />
     </div>
   </section>
 

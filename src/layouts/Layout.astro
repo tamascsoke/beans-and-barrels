@@ -122,8 +122,9 @@ const {
       twIO.observe(el);
     });
 
-    // magnetic buttons
-    document.querySelectorAll<HTMLElement>(".btn").forEach((btn) => {
+    // magnetic buttons — fine pointer only (avoid stuck transform on touch)
+    const hasFinePointer = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+    if (hasFinePointer) document.querySelectorAll<HTMLElement>(".btn").forEach((btn) => {
       btn.addEventListener("mousemove", (e) => {
         const r  = btn.getBoundingClientRect();
         const dx = (e.clientX - (r.left + r.width  / 2)) * 0.28;

@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import HomeCarousel from "../components/HomeCarousel.astro";
-import UpcomingEvents from "../components/UpcomingEvents.astro";
 import GalleryStrip from "../components/GalleryStrip.astro";
 ---
 
@@ -24,14 +23,6 @@ import GalleryStrip from "../components/GalleryStrip.astro";
 
   <HomeCarousel />
 
-  <section class="section section--alt">
-    <div class="container upcoming-section">
-      <span class="h-sub">Hol találsz minket legközelebb</span>
-      <h2 class="h-display"><span class="chalk-underline">Aktuális kitelepülések</span></h2>
-      <UpcomingEvents limit={3} showCta={true} emptyMessage="Most nincs meghirdetett kitelepülés — kérj egyedi alkalmat." />
-    </div>
-  </section>
-
   <section class="section">
     <div class="container highlights">
       <article class="highlight">
@@ -52,6 +43,42 @@ import GalleryStrip from "../components/GalleryStrip.astro";
     </div>
   </section>
 
+  <section class="section section--alt">
+    <div class="container about-teaser">
+      <div class="about-teaser__intro">
+        <span class="h-sub">Rólunk</span>
+        <h2 class="h-display"><span class="chalk-underline">Három srác, egy tuktuk</span></h2>
+        <p class="lead">
+          A Bean & Barrel három barát közös története. Hiszünk benne, hogy egy jó kávé és egy hideg sör közelebb hozza az embereket — bárhol legyen is a tuktuk.
+        </p>
+        <a class="btn btn--ghost" href="/rolunk">Ismerj meg minket</a>
+      </div>
+      <div class="about-teaser__team stagger">
+        <div class="team-card">
+          <div class="team-card__photo placeholder-img">Portré — Soós Balázs</div>
+          <div class="team-card__info">
+            <span class="team-card__name">Soós Balázs</span>
+            <span class="team-card__role">Alapító — kávé</span>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-card__photo placeholder-img">Portré — Warta Benedek</div>
+          <div class="team-card__info">
+            <span class="team-card__name">Warta Benedek</span>
+            <span class="team-card__role">Alapító — sör</span>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-card__photo placeholder-img">Portré — Váradi Donát</div>
+          <div class="team-card__info">
+            <span class="team-card__name">Váradi Donát</span>
+            <span class="team-card__role">Alapító — közösség</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <GalleryStrip />
 </Layout>
 
@@ -63,7 +90,57 @@ import GalleryStrip from "../components/GalleryStrip.astro";
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
 
   .section--alt { background: var(--bg-2); }
-  .upcoming-section { display: grid; gap: 14px; }
+
+  /* About teaser */
+  .about-teaser {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (min-width: 820px) {
+    .about-teaser { grid-template-columns: 1fr 1fr; align-items: center; }
+  }
+  .about-teaser__intro { display: grid; gap: 18px; }
+
+  .about-teaser__team { display: grid; gap: 16px; }
+  .team-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .team-card:first-child { border-top: 1px solid var(--line); }
+  .team-card__photo {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--r-md);
+    font-size: 0;
+    transform: none;
+  }
+  .team-card__photo::before,
+  .team-card__photo::after { content: none; }
+  .team-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .team-card__name {
+    font-family: var(--f-logo);
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .team-card__role {
+    font-family: var(--f-sub);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
 
   .highlights { display: grid; gap: 32px; grid-template-columns: 1fr; }
   @media (min-width: 760px) {

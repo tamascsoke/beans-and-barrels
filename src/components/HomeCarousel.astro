@@ -77,17 +77,29 @@ const slides = getCarouselSlides();
   .carousel__dots {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    padding-bottom: 30px;
+    gap: 4px;
+    padding-bottom: 22px;
   }
   .carousel__dot {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .carousel__dot::before {
+    content: "";
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: var(--ink-faint);
     transition: background 200ms var(--ease), transform 200ms var(--ease);
   }
-  .carousel__dot.is-active {
+  .carousel__dot.is-active::before {
     background: var(--accent);
     transform: scale(1.3);
   }

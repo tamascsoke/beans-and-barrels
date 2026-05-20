@@ -66,17 +66,35 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
     mask-image: linear-gradient(
       to right,
       transparent 0%,
-      black 72px,
-      black calc(100% - 72px),
+      black 32px,
+      black calc(100% - 32px),
       transparent 100%
     );
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0%,
-      black 72px,
-      black calc(100% - 72px),
+      black 32px,
+      black calc(100% - 32px),
       transparent 100%
     );
+  }
+  @media (min-width: 640px) {
+    .gallery-wrap {
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 72px,
+        black calc(100% - 72px),
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 72px,
+        black calc(100% - 72px),
+        transparent 100%
+      );
+    }
   }
 
   .gallery-wrap:active { cursor: grabbing; }
@@ -90,7 +108,7 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
   }
 
   .gallery-frame {
-    height: clamp(200px, 28vw, 400px);
+    height: clamp(150px, 38vw, 400px);
     aspect-ratio: 4 / 3;
     flex-shrink: 0;
     overflow: hidden;
@@ -107,8 +125,8 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
     transition: transform 600ms var(--ease);
   }
 
-  .gallery-wrap:hover .gallery-frame img {
-    transform: scale(1.03);
+  @media (hover: hover) and (pointer: fine) {
+    .gallery-wrap:hover .gallery-frame img { transform: scale(1.03); }
   }
 </style>
 
