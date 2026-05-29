@@ -28,10 +28,13 @@ const lastUpdated = "2026-05-29";
         </p>
 
         <h2 class="h-section">2. Milyen adatot kezelünk és miért?</h2>
+
+        <h3 class="legal__sub">2.1 Kapcsolatfelvételi űrlap</h3>
         <p>
-          A weboldalon egyetlen adatkezelés történik: a <strong>kapcsolatfelvételi űrlap</strong>
-          kitöltésekor megadott adatokat tároljuk és dolgozzuk fel, kizárólag a megkereséseddel
-          kapcsolatos kommunikáció céljából.
+          A weboldalon a <strong>kapcsolatfelvételi űrlap</strong> kitöltésekor megadott
+          adatokat tároljuk és dolgozzuk fel a megkereséseddel kapcsolatos kommunikáció,
+          valamint — ha "Rendezvény" vagy "Franchise" témát választasz — az ajánlatadás
+          és a szerződéskötés előkészítése céljából.
         </p>
 
         <table class="legal__table">
@@ -42,12 +45,39 @@ const lastUpdated = "2026-05-29";
             <tr>
               <td>Név</td>
               <td>Megszólítás, megkeresés azonosítása</td>
-              <td rowspan="4">GDPR 6. cikk (1) a) — érintett hozzájárulása</td>
-              <td rowspan="4">A megkeresés elintézését követő <strong>1 év</strong>, vagy ha kapcsolatfelvételből szerződés jön létre, a szerződéses kötelezettségek teljesítését követő, jogszabály által előírt időtartam</td>
+              <td rowspan="4">
+                GDPR 6. cikk (1) <strong>a)</strong> — érintett hozzájárulása (általános megkeresés esetén);<br/>
+                GDPR 6. cikk (1) <strong>b)</strong> — szerződés megkötését megelőző lépések megtétele (ajánlatkérés, rendezvény-egyeztetés, franchise-érdeklődés esetén)
+              </td>
+              <td rowspan="4">A megkeresés elintézését követő <strong>1 év</strong>, vagy ha kapcsolatfelvételből szerződés jön létre, a szerződéses kötelezettségek teljesítését követő, jogszabály által előírt időtartam (számviteli adatok esetén <strong>8 év</strong>)</td>
             </tr>
             <tr><td>E-mail cím</td><td>Válasz küldése</td></tr>
-            <tr><td>Téma</td><td>Megkeresés besorolása</td></tr>
+            <tr><td>Téma</td><td>Megkeresés besorolása, jogalap meghatározása</td></tr>
             <tr><td>Üzenet</td><td>Megkeresés tartalma</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="legal__sub">2.2 Szerverszintű naplózás</h3>
+        <p>
+          A weboldalt kiszolgáló tárhelyszolgáltató (Vercel Inc.) — ahogy minden modern
+          webszerver — biztonsági és üzemeltetési okból automatikusan naplózza a beérkező
+          kérések technikai adatait. Ez a naplózás akkor is megtörténik, ha nem töltesz ki
+          űrlapot.
+        </p>
+
+        <table class="legal__table">
+          <thead>
+            <tr><th>Adat</th><th>Cél</th><th>Jogalap</th><th>Megőrzés</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>IP-cím</td>
+              <td rowspan="3">A weboldal biztonságos üzemeltetése: visszaélések (pl. DDoS-támadás, automatizált bot-forgalom) felismerése és kivédése, hibakeresés, teljesítmény-monitorozás</td>
+              <td rowspan="3">GDPR 6. cikk (1) <strong>f)</strong> — az adatkezelő (illetve a tárhelyszolgáltató) <strong>jogos érdeke</strong> a weboldal biztonságos és stabil működtetéséhez</td>
+              <td rowspan="3">A Vercel által alkalmazott időtartam (jellemzően <strong>30 nap</strong>); a naplókat nem kapcsoljuk össze egyéb adatokkal és nem használjuk profilalkotásra</td>
+            </tr>
+            <tr><td>User-agent (böngésző/eszköz adatai)</td></tr>
+            <tr><td>Kérés időpontja, URL-je, HTTP-státusza</td></tr>
           </tbody>
         </table>
 
@@ -68,7 +98,7 @@ const lastUpdated = "2026-05-29";
         <h3 class="legal__sub">3.2 Vercel Inc. (tárhelyszolgáltató)</h3>
         <dl class="legal__list">
           <dt>Szolgáltató</dt>   <dd>Vercel Inc.</dd>
-          <dt>Tevékenység</dt>   <dd>A weboldal kiszolgálása, technikai naplók (pl. IP-cím rövid ideig tartó tárolása biztonsági célból).</dd>
+          <dt>Tevékenység</dt>   <dd>A weboldal kiszolgálása és a 2.2 pontban részletezett szerverszintű naplózás végzése.</dd>
           <dt>Adatkezelés helye</dt><dd>Amerikai Egyesült Államok</dd>
           <dt>Bővebben</dt>      <dd><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></dd>
         </dl>
