@@ -1,7 +1,1 @@
-{
-  "order": 3,
-  "key": "snack",
-  "label": "Snackek",
-  "sub": "Helyi alapanyagok",
-  "items": ["Croissant", "Pirított dió", "Sajttál", "Olajbogyó", "Mini fánk"]
-}
+{ "order": 3, "key": "snack", "label": "Snackek", "sub": "Helyi alapanyagok", "image": "/uploads/cookie.webp", "imageAlt": "Cookie és snackek a tuktuk pultjáról", "items": ["Croissant", "Pirított dió", "Sajttál", "Olajbogyó", "Mini fánk"] }

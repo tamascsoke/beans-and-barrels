@@ -1,7 +1,1 @@
-{
-  "order": 4,
-  "key": "koktel",
-  "label": "Koktélok",
-  "sub": "Hűs poharak",
-  "items": ["Aperol Spritz", "Hugo", "Espresso Martini", "Mojito", "Hideg gin tonic"]
-}
+{ "order": 4, "key": "koktel", "label": "Koktélok", "sub": "Hűs poharak", "image": "/uploads/kave2.webp", "imageAlt": "Kávéital közelről", "items": ["Aperol Spritz", "Hugo", "Espresso Martini", "Mojito", "Hideg gin tonic"] }

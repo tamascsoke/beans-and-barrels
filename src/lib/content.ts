@@ -24,6 +24,8 @@ export type Category = {
   label: string;
   sub: string;
   items: string[];
+  image?: string;
+  imageAlt?: string;
 };
 
 export type Reason = {
