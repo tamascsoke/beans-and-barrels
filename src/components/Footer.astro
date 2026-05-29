@@ -30,6 +30,11 @@ const year = new Date().getFullYear();
 
   <div class="footer__bottom container">
     <span>© {year} Bean &amp; Barrel</span>
+    <nav class="footer__legal-nav" aria-label="Jogi">
+      <a href="/impresszum">Impresszum</a>
+      <span aria-hidden="true">·</span>
+      <a href="/adatvedelem">Adatvédelem</a>
+    </nav>
   </div>
 </footer>
 
@@ -89,13 +94,25 @@ const year = new Date().getFullYear();
     padding-top: 20px;
     border-top: 1px solid var(--line);
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    justify-content: space-between;
     align-items: center;
     font-size: 0.85rem;
     color: var(--ink-faint);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
+  .footer__legal-nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .footer__legal-nav a {
+    color: var(--ink-faint);
+    transition: color 180ms var(--ease);
+  }
+  .footer__legal-nav a:hover { color: var(--accent); }
   .footer__legal:hover {
     color: var(--accent);
   }

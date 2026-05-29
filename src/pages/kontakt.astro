@@ -55,6 +55,15 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
           <span class="h-sub">Üzenet</span>
           <textarea name="message" rows="6" required></textarea>
         </label>
+
+        <label class="form-field form__full form__consent">
+          <input type="checkbox" name="gdpr" required />
+          <span>
+            Elolvastam és elfogadom az <a href="/adatvedelem" target="_blank" rel="noopener">Adatkezelési tájékoztatót</a>,
+            és hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása céljából kezeljétek.
+          </span>
+        </label>
+
         <button type="submit" class="btn form__submit" id="formSubmit">
           <span class="form__btn-label">Küldés</span>
           <span class="form__btn-loading" aria-hidden="true">Küldés…</span>
@@ -191,6 +200,57 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     box-shadow: 0 6px 18px -10px rgba(240, 138, 28, 0.55);
   }
   .form-field textarea { resize: vertical; }
+
+  .form__consent {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: start;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+  .form__consent input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--line);
+    border-radius: 3px;
+    margin-top: 3px;
+    cursor: pointer;
+    position: relative;
+    background: transparent;
+    transition: border-color 180ms, background 180ms;
+    flex-shrink: 0;
+  }
+  .form__consent input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .form__consent input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #1a1a1a;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .form__consent input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .form__consent a {
+    color: var(--ink);
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+  .form__consent a:hover { color: var(--accent); border-color: var(--accent); }
 
   .form-field input:-webkit-autofill,
   .form-field input:-webkit-autofill:hover,
