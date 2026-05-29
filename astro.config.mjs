@@ -9,8 +9,5 @@ export default defineConfig({
       filter: (page) => !page.includes('/koszonjuk'),
     }),
   ],
-  image: {
-    experimentalLayout: 'responsive',
-  },
 });
 

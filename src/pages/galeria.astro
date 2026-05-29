@@ -1,10 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getGalleryPhotos } from "../lib/content";
+import { Image, getImage } from 'astro:assets';
+import { getGalleryPhotos, resolveImage } from "../lib/content";
 
 const photos = getGalleryPhotos();
 const hasPhotos = photos.length > 0;
 const placeholders = Array.from({ length: 8 }, (_, i) => i + 1);
+
+const enriched = await Promise.all(photos.map(async (p) => {
+  const asset = resolveImage(p.image);
+  const fullSrc = asset
+    ? (await getImage({ src: asset, width: 1400, format: 'webp' })).src
+    : p.image;
+  return { ...p, asset, fullSrc };
+}));
 ---
 
 <Layout title="Galéria — Bean & Barrel" description="Bean & Barrel képgaléria — pillanatok a tuktukkal.">
@@ -16,9 +25,12 @@ const placeholders = Array.from({ length: 8 }, (_, i) => i + 1);
 
     <div class="container gal-masonry">
       {hasPhotos ? (
-        photos.map((p, i) => (
-          <div class="gal-frame" data-src={p.image} data-alt={p.alt} data-idx={i} tabindex="0" role="button" aria-label={p.alt}>
-            <img src={p.image} alt={p.alt} loading="lazy" decoding="async" />
+        enriched.map((p, i) => (
+          <div class="gal-frame" data-src={p.fullSrc} data-alt={p.alt} data-idx={i} tabindex="0" role="button" aria-label={p.alt}>
+            {p.asset
+              ? <Image src={p.asset} alt={p.alt} widths={[300, 600]} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw" loading="lazy" />
+              : <img src={p.image} alt={p.alt} loading="lazy" decoding="async" />
+            }
           </div>
         ))
       ) : (

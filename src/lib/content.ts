@@ -1,10 +1,23 @@
 // Helpers to read CMS-managed JSON collections from src/content/.
 // Sveltia CMS writes here; site reads at build time via Vite's import.meta.glob.
 
+import type { ImageMetadata } from 'astro';
+
 type WithOrder = { order?: number };
 
 function sortByOrder<T extends WithOrder>(entries: T[]): T[] {
   return [...entries].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+}
+
+const _imgs = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/uploads/*.webp',
+  { eager: true },
+);
+
+export function resolveImage(path: string | undefined): ImageMetadata | undefined {
+  if (!path) return undefined;
+  const filename = path.split('/').pop();
+  return _imgs[`../assets/uploads/${filename}`]?.default;
 }
 
 export type CarouselSlide = {

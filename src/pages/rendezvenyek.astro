@@ -1,7 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
 import { getReasons } from "../lib/content";
 import eventTypes from "../content/event-types.json";
+import halloweenImg from '../assets/uploads/halloween.webp';
 
 const reasons = getReasons();
 const events = eventTypes.items;
@@ -49,7 +51,7 @@ const events = eventTypes.items;
           {events.map((e) => <li>{e}</li>)}
         </ul>
       </div>
-      <div class="photo-frame events__photo"><img src="/uploads/halloween.webp" alt="Bean & Barrel rendezvény hangulat" decoding="async" /></div>
+      <div class="photo-frame events__photo"><Image src={halloweenImg} alt="Bean & Barrel rendezvény hangulat" widths={[400, 700]} sizes="(min-width: 760px) 50vw, 100vw" loading="lazy" /></div>
     </div>
   </section>
 </Layout>

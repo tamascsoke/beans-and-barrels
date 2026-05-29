@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
+import tuktuk2Img from '../assets/uploads/tuktuk2.webp';
 
 const blocks = [
   {
@@ -35,7 +37,7 @@ const steps = [
         </p>
         <a class="btn" href="/kontakt">Érdekel a franchise</a>
       </div>
-      <div class="photo-frame intro__photo"><img src="/uploads/tuktuk2.webp" alt="Bean & Barrel tuktuk" decoding="async" /></div>
+      <div class="photo-frame intro__photo"><Image src={tuktuk2Img} alt="Bean & Barrel tuktuk" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
     </div>
   </section>
 

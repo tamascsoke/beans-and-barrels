@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
+import csapatImg from '../assets/uploads/tuktuk-csapat.webp';
 
 const team = [
   {
@@ -29,7 +31,7 @@ const team = [
         A Bean & Barrel három barát közös története. Hiszünk benne, hogy egy jó kávé és egy hideg sör közelebb hozza
         az embereket — bárhol legyen is a tuktuk.
       </p>
-      <div class="photo-frame intro__photo"><img src="/uploads/tuktuk-csapat.webp" alt="Bean & Barrel csapat a tuktukkal" decoding="async" /></div>
+      <div class="photo-frame intro__photo"><Image src={csapatImg} alt="Bean & Barrel csapat a tuktukkal" widths={[600, 1100]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
     </div>
   </section>
 

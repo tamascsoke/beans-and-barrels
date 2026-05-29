@@ -1,7 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
 import HomeCarousel from "../components/HomeCarousel.astro";
 import GalleryStrip from "../components/GalleryStrip.astro";
+import tuktukKaveImg from '../assets/uploads/tuktuk-kave.webp';
+import kaveImg from '../assets/uploads/kave.webp';
+import sorImg from '../assets/uploads/sor.webp';
 ---
 
 <Layout title="Bean & Barrel — Kávé és Sör">
@@ -26,17 +30,17 @@ import GalleryStrip from "../components/GalleryStrip.astro";
   <section class="section">
     <div class="container highlights">
       <article class="highlight">
-        <div class="photo-frame"><img src="/uploads/tuktuk-kave.webp" alt="Bean & Barrel tuktuk kávézással" decoding="async" /></div>
+        <div class="photo-frame"><Image src={tuktukKaveImg} alt="Bean & Barrel tuktuk kávézással" widths={[400, 600]} sizes="(min-width: 760px) 33vw, 100vw" loading="lazy" /></div>
         <h3 class="h-section"><span class="chalk-underline">Mobil — bárhol</span></h3>
         <p class="body-text">A tuktuk odamegy, ahol szükség van rá. Belváros, kerthelyiség, fesztivál.</p>
       </article>
       <article class="highlight">
-        <div class="photo-frame"><img src="/uploads/kave.webp" alt="Specialty kávé közelről" decoding="async" /></div>
+        <div class="photo-frame"><Image src={kaveImg} alt="Specialty kávé közelről" widths={[400, 600]} sizes="(min-width: 760px) 33vw, 100vw" loading="lazy" /></div>
         <h3 class="h-section"><span class="chalk-underline">Igazi specialty</span></h3>
         <p class="body-text">Pörkölőtől a poharadig — gondozott kávé, helyi pörkölőkkel együttműködve.</p>
       </article>
       <article class="highlight">
-        <div class="photo-frame"><img src="/uploads/sor.webp" alt="Csapolt kézműves sör" decoding="async" /></div>
+        <div class="photo-frame"><Image src={sorImg} alt="Csapolt kézműves sör" widths={[400, 600]} sizes="(min-width: 760px) 33vw, 100vw" loading="lazy" /></div>
         <h3 class="h-section"><span class="chalk-underline">Csapolt élmény</span></h3>
         <p class="body-text">Magyar kézműves csapok, koktélok és snackek a tuktuk pultjáról.</p>
       </article>

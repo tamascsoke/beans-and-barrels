@@ -1,5 +1,6 @@
 ---
-import { getCarouselSlides } from "../lib/content";
+import { Image } from 'astro:assets';
+import { getCarouselSlides, resolveImage } from "../lib/content";
 const slides = getCarouselSlides();
 ---
 
@@ -8,8 +9,13 @@ const slides = getCarouselSlides();
     {
       slides.map((s, i) => (
         <article class="carousel__slide" aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
-          {s.image
-            ? <div class="photo-frame carousel__art"><img src={s.image} alt={s.imageAlt ?? s.eyebrow} decoding="async" /></div>
+          {s.image && resolveImage(s.image)
+            ? <div class="photo-frame carousel__art">
+                <Image src={resolveImage(s.image)!} alt={s.imageAlt ?? s.eyebrow}
+                       widths={[400, 700]} sizes="(min-width: 860px) 50vw, 100vw"
+                       loading={i === 0 ? "eager" : "lazy"}
+                       fetchpriority={i === 0 ? "high" : "auto"} />
+              </div>
             : <div class="carousel__art placeholder-img">{`Kép — ${s.eyebrow.toUpperCase()}`}</div>
           }
           <div class="carousel__copy stagger">

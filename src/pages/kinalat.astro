@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getCategories } from "../lib/content";
+import { Image } from 'astro:assets';
+import { getCategories, resolveImage } from "../lib/content";
+import tuktukKaveImg from '../assets/uploads/tuktuk-kave.webp';
 
 const categories = getCategories();
 ---
@@ -13,7 +15,7 @@ const categories = getCategories();
         <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
         <p class="lead">Görgess lefelé — a tuktuk megmutatja, mi mindent hoz magával.</p>
       </div>
-      <div class="photo-frame hero-img"><img src="/uploads/tuktuk-kave.webp" alt="Bean & Barrel tuktuk kínálat" decoding="async" /></div>
+      <div class="photo-frame hero-img"><Image src={tuktukKaveImg} alt="Bean & Barrel tuktuk kínálat" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
     </div>
 
   </section>
@@ -23,8 +25,8 @@ const categories = getCategories();
       {
         categories.map((c) => (
           <article class="cat" id={`cat-${c.key}`}>
-            {c.image
-              ? <div class="photo-frame cat__art"><img src={c.image} alt={c.imageAlt ?? c.label} decoding="async" loading="lazy" /></div>
+            {c.image && resolveImage(c.image)
+              ? <div class="photo-frame cat__art"><Image src={resolveImage(c.image)!} alt={c.imageAlt ?? c.label} widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="lazy" /></div>
               : <div class="cat__art placeholder-img">Kép — {c.label}</div>
             }
             <div class="cat__copy">
