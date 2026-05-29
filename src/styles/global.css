@@ -280,8 +280,6 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 .photo-frame {
   position: relative;
   aspect-ratio: 4 / 3;
-  border-radius: 8px;
-  overflow: hidden;
   transform: rotate(-1.4deg);
   box-shadow: 3px 6px 22px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.35);
   outline: 5px solid rgba(244,244,244,0.05);
@@ -292,6 +290,7 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 8px;
 }
 @media (hover: hover) and (pointer: fine) {
   .photo-frame:hover {
