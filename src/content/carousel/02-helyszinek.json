@@ -4,5 +4,7 @@
   "title": "Hol találsz minket?",
   "body": "Budapesttől a Balatonig — kövesd a tuktukot a városban, vagy nézd meg a következő állomásokat.",
   "ctaHref": "/kinalat",
-  "ctaLabel": "Nézd a kínálatot"
+  "ctaLabel": "Nézd a kínálatot",
+  "image": "/uploads/tuktuk-pult.webp",
+  "imageAlt": "Bean & Barrel tuktuk pult"
 }

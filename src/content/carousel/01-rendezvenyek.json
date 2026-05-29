@@ -4,5 +4,7 @@
   "title": "Hozd a tuktukot a buliba",
   "body": "Esküvők, céges napok, fesztiválok — Bean & Barrel a helyszínen készíti a kávét és csapolja a sört.",
   "ctaHref": "/rendezvenyek",
-  "ctaLabel": "Rendezvényt kérek"
+  "ctaLabel": "Rendezvényt kérek",
+  "image": "/uploads/tuktuk.webp",
+  "imageAlt": "Bean & Barrel tuktuk rendezvényen"
 }

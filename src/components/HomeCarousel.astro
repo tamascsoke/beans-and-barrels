@@ -8,7 +8,10 @@ const slides = getCarouselSlides();
     {
       slides.map((s, i) => (
         <article class="carousel__slide" aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
-          <div class="carousel__art placeholder-img">{`Kép — ${s.eyebrow.toUpperCase()}`}</div>
+          {s.image
+            ? <img class="carousel__art" src={s.image} alt={s.imageAlt ?? s.eyebrow} decoding="async" />
+            : <div class="carousel__art placeholder-img">{`Kép — ${s.eyebrow.toUpperCase()}`}</div>
+          }
           <div class="carousel__copy stagger">
             <span class="h-sub">{s.eyebrow}</span>
             <h2 class="h-display"><span class="chalk-underline">{s.title}</span></h2>
@@ -63,6 +66,10 @@ const slides = getCarouselSlides();
   .carousel__art {
     aspect-ratio: 4 / 3;
     width: 100%;
+    border-radius: var(--r-md);
+    object-fit: cover;
+    display: block;
+    box-shadow: 3px 6px 22px rgba(0,0,0,0.55);
   }
 
   .carousel__copy {

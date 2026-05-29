@@ -14,6 +14,8 @@ export type CarouselSlide = {
   body: string;
   ctaHref: string;
   ctaLabel: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 export type Category = {

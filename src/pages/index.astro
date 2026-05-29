@@ -26,17 +26,17 @@ import GalleryStrip from "../components/GalleryStrip.astro";
   <section class="section">
     <div class="container highlights">
       <article class="highlight">
-        <div class="placeholder-img">Kép — Tuktuk</div>
+        <img class="highlight__img" src="/uploads/tuktuk-kave.webp" alt="Bean & Barrel tuktuk kávézással" decoding="async" />
         <h3 class="h-section"><span class="chalk-underline">Mobil — bárhol</span></h3>
         <p class="body-text">A tuktuk odamegy, ahol szükség van rá. Belváros, kerthelyiség, fesztivál.</p>
       </article>
       <article class="highlight">
-        <div class="placeholder-img">Kép — Kávé</div>
+        <img class="highlight__img" src="/uploads/kave.webp" alt="Specialty kávé közelről" decoding="async" />
         <h3 class="h-section"><span class="chalk-underline">Igazi specialty</span></h3>
         <p class="body-text">Pörkölőtől a poharadig — gondozott kávé, helyi pörkölőkkel együttműködve.</p>
       </article>
       <article class="highlight">
-        <div class="placeholder-img">Kép — Sör</div>
+        <img class="highlight__img" src="/uploads/sor.webp" alt="Csapolt kézműves sör" decoding="async" />
         <h3 class="h-section"><span class="chalk-underline">Csapolt élmény</span></h3>
         <p class="body-text">Magyar kézműves csapok, koktélok és snackek a tuktuk pultjáról.</p>
       </article>
@@ -148,4 +148,20 @@ import GalleryStrip from "../components/GalleryStrip.astro";
   }
   .highlight { display: grid; gap: 14px; }
   .highlight h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); }
+
+  .highlight__img {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--r-md);
+    display: block;
+    box-shadow: 3px 6px 22px rgba(0,0,0,0.55);
+    transform: rotate(-1.4deg);
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .highlight:nth-child(even) .highlight__img { transform: rotate(1.3deg); }
+  @media (hover: hover) and (pointer: fine) {
+    .highlight__img:hover { transform: rotate(0deg) scale(1.015); box-shadow: 6px 12px 34px rgba(0,0,0,0.6); }
+    .highlight:nth-child(even) .highlight__img:hover { transform: rotate(0deg) scale(1.015); }
+  }
 </style>

@@ -4,5 +4,7 @@
   "title": "Három srác, egy tuktuk",
   "body": "Megismerheted a Bean & Barrel alapítóit és a közösséget, ami mögöttük áll.",
   "ctaHref": "/rolunk",
-  "ctaLabel": "Ismerd meg a csapatot"
+  "ctaLabel": "Ismerd meg a csapatot",
+  "image": "/uploads/tuktuk-csapat.webp",
+  "imageAlt": "Bean & Barrel csapat a tuktuk előtt"
 }
