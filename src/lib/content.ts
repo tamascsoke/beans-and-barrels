@@ -112,14 +112,38 @@ function galleryAlt(filename: string): string {
   return `${labels[group] ?? "Bean & Barrel pillanat"}${number ? ` ${number}` : ""}`;
 }
 
+const galleryExclusions = new Set([
+  // These photos are already used as hero, pillar, carousel, or category images.
+  "gallery-helyszin-01.webp",
+  "gallery-helyszin-02.webp",
+  "gallery-kave-01.webp",
+  "gallery-kave-02.webp",
+  "gallery-rendezvenyek-01.webp",
+  "gallery-rendezvenyek-03.webp",
+  "gallery-rendezvenyek-07.webp",
+  "gallery-rendezvenyek-19.webp",
+  "gallery-sor-01.webp",
+  "gallery-sor-05.webp",
+  // Near-duplicate frames from the same event / crop variants
+  "gallery-rendezvenyek-04.webp",
+  "gallery-rendezvenyek-06.webp",
+  "gallery-rendezvenyek-11.webp",
+  "gallery-rendezvenyek-15.webp",
+  "gallery-rendezvenyek-18.webp",
+]);
+
 export function getGalleryPhotos(): GalleryPhoto[] {
   const mods = import.meta.glob<{ default: GalleryPhoto }>(
     "../content/gallery/*.json",
     { eager: true },
   );
-  const cmsPhotos = sortByOrder(values(mods));
+  // Legacy CMS gallery entries point at root uploads that duplicate the curated gallery folder.
+  const cmsPhotos = sortByOrder(values(mods)).filter((photo) => (
+    !photo.image.startsWith("/uploads/") || photo.image.startsWith("/uploads/gallery/")
+  ));
   const uploadedPhotos = Object.keys(_galleryImgs)
     .sort((a, b) => a.localeCompare(b, "hu"))
+    .filter((key) => !galleryExclusions.has(key.split("/").pop()!))
     .map((key, index) => {
       const filename = key.split("/").pop()!;
       return {

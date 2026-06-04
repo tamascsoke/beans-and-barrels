@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Az oldal nem található — Bean & Barrel">
-  <section class="section notfound">
+  <section class="section section--last notfound">
     <div class="container notfound__inner stagger">
       <span class="h-sub">404</span>
       <h1 class="h-display"><span class="chalk-underline">Elveszett a tuktuk?</span></h1>
@@ -20,7 +20,7 @@ import Layout from "../layouts/Layout.astro";
 
 <style>
   .notfound {
-    min-height: calc(100dvh - var(--nav-h));
+    min-height: min(620px, calc(100dvh - var(--nav-h) - var(--main-footer-gap)));
     display: flex;
     align-items: center;
   }

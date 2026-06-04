@@ -25,7 +25,7 @@ const enriched = await Promise.all(items.map(async (p) => {
 }));
 ---
 
-<section class="gallery-section section">
+<section class="gallery-section section section--last">
   <div class="container gallery-head stagger">
     <span class="h-sub">Képgaléria</span>
     <h2 class="h-display"><span class="chalk-underline">Pillanatok</span></h2>
@@ -48,7 +48,7 @@ const enriched = await Promise.all(items.map(async (p) => {
     <button class="gallery-nav gallery-nav--next" type="button" aria-label="Következő képek"><span aria-hidden="true">›</span></button>
   </div>
 
-  <div class="gallery-lightbox" id="stripLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Képnéző">
+  <div class="gallery-lightbox" id="stripLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Képnéző" inert>
     <button class="gallery-lightbox__close" id="stripLbClose" type="button" aria-label="Bezárás">✕</button>
     <img id="stripLbImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" />
   </div>
@@ -77,7 +77,7 @@ const enriched = await Promise.all(items.map(async (p) => {
     justify-content: center;
     color: var(--ink-faint);
     font-size: 0.85rem;
-    letter-spacing: 0.3em;
+    letter-spacing: clamp(0.16em, 0.8vw, 0.3em);
     text-transform: uppercase;
   }
 
@@ -273,11 +273,13 @@ const enriched = await Promise.all(items.map(async (p) => {
   .gallery-cta {
     display: flex;
     justify-content: center;
-    margin-top: clamp(24px, 4vw, 42px);
+    margin-top: clamp(18px, 3vw, 30px);
   }
 </style>
 
 <script>
+  import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
+
   function initGallery() {
     const wrap  = document.getElementById("galleryWrap")  as HTMLElement | null;
     const inner = document.getElementById("galleryInner") as HTMLElement | null;
@@ -288,7 +290,8 @@ const enriched = await Promise.all(items.map(async (p) => {
     const lbImg = document.getElementById("stripLbImg") as HTMLImageElement | null;
     const lbClose = document.getElementById("stripLbClose");
 
-    const SPEED = 0.55;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const SPEED = reduceMotion ? 0 : 0.55;
     let pos        = 0;
     let isDragging = false;
     let dragStartX = 0;
@@ -362,20 +365,32 @@ const enriched = await Promise.all(items.map(async (p) => {
       }
     }
 
+    let releaseLbTrap: (() => void) | null = null;
+    let lbLastFocus: HTMLElement | null = null;
+
     function show(src: string, alt: string) {
       if (!lightbox || !lbImg || !src) return;
+      lbLastFocus = document.activeElement as HTMLElement | null;
       lbImg.src = src;
       lbImg.alt = alt;
       lightbox.setAttribute("aria-hidden", "false");
+      setInert(lightbox, false);
       document.body.classList.add("has-lightbox-open");
       document.body.style.overflow = "hidden";
+      releaseLbTrap = trapFocus(lightbox);
+      getFocusable(lightbox)[0]?.focus();
     }
 
     function hide() {
       if (!lightbox) return;
       lightbox.setAttribute("aria-hidden", "true");
+      setInert(lightbox, true);
       document.body.classList.remove("has-lightbox-open");
       document.body.style.overflow = "";
+      releaseLbTrap?.();
+      releaseLbTrap = null;
+      lbLastFocus?.focus();
+      lbLastFocus = null;
     }
 
     prev?.addEventListener("click", (e) => { e.stopPropagation(); shift(-1); });

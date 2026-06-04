@@ -1,34 +1,29 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
-import tuktuk2Img from '../assets/uploads/tuktuk2.webp';
+import franchiseTuktukImg from '../assets/uploads/franchise-tuktuk.webp';
 
 const benefits = [
   "Bejáratott brand és arculat – nem kell mindent a nulláról kitalálnod. Mi már megtettük. Rád csak annyi vár, hogy képviseld és élvezd minden velejáróját.",
-  "Egyszerű modell – egy kis hely, kevés költség, kreatív koncepció, gyors megtérülés. Kávé, sör, pár minőségi snack – nincs túlbonyolítva.",
+  "Egyszerű modell – egy kis hely, kevés költség, kreatív koncepció, gyors megtérülés. Kávé, SÖR, pár minőségi snack – nincs túlbonyolítva.",
 ];
 
 const packageItems = [
   "Teljes márkacsomag",
   "Minden know-how",
   "Barista és csapos betanítás",
-  "Marketing-, és kampánystratégia",
+  "Marketing és kampánystratégia",
   "Hozzáférés a beszállítói hálózathoz",
   "Folyamatos kapcsolattartás",
 ];
 
 const steps = [
   { n: "01", t: "Jelentkezz", d: "Vedd fel velünk a kapcsolatot." },
-  { n: "02", t: "Beszélgetünk", d: "Nem interjú, inkább egy laza kávé/sör mellett (termékteszt)." },
+  { n: "02", t: "Beszélgetünk", d: "Nem interjú, inkább egy laza kávé/SÖR mellett (termékteszt)." },
   { n: "03", t: "Megmutatjuk a modellt", d: "Számokkal, képekkel, tuktukkal." },
   { n: "04", t: "Üdv a csapatban", d: "Tuktuk beizzítva, sztori indul." },
 ];
 
-const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/beanbarrel_bp?igsh=b2YzbWYzeXRnNDdr&utm_source=qr" },
-  { label: "Facebook", href: "https://www.facebook.com/share/1SxeQupYdp/?mibextid=wwXIfr" },
-  { label: "TikTok", href: "https://www.tiktok.com/@beanbarrel_bp?_r=1&_t=ZN-96sdqSHL2R9" },
-];
 ---
 
 <Layout title="Franchise — Bean & Barrel">
@@ -40,20 +35,20 @@ const socials = [
         <p class="lead">
           Az országban rengeteg helyen van szükség a Bean&amp;Barrel-re. Irodák, sétálóutcák, rendezvények,
           lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
-          kávézó-söröző hálózatához.
+          kávézó-söröző hálózatához!
         </p>
         <div class="inline-action">
           <a class="btn" href="/kontakt?topic=Franchise#urlap">Érdekel a franchise</a>
         </div>
       </div>
-      <div class="photo-frame intro__photo"><Image src={tuktuk2Img} alt="Bean & Barrel tuktuk" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
+      <div class="photo-frame intro__photo"><Image src={franchiseTuktukImg} alt="Bean & Barrel tuktuk rendezvény közben" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
     </div>
   </section>
 
   <section class="section section--alt">
     <div class="container blocks stagger">
       <article class="block">
-        <h2 class="h-section"><span class="chalk-underline">Miért érdemes franchise-partnernek lenni?</span></h2>
+        <h2 class="h-section block__title"><span class="chalk-underline">Miért érdemes <span class="keep-together">franchise-partnernek</span> lenni?</span></h2>
         <ul class="block__list chalk-list chalk-list--ruled">
           {benefits.map((item) => <li><span>{item}</span></li>)}
         </ul>
@@ -67,16 +62,18 @@ const socials = [
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--last process-section">
     <div class="container">
-      <span class="h-sub">Folyamat</span>
-      <h2 class="h-display"><span class="chalk-underline">A csatlakozás menete</span></h2>
+      <div class="process-head">
+        <span class="h-sub">Folyamat</span>
+        <h2 class="h-display"><span class="chalk-underline">A csatlakozás menete</span></h2>
+      </div>
       <ol class="steps stagger">
         {
           steps.map((s) => (
             <li class="step">
               <span class="step__n">{s.n}</span>
-              <div>
+              <div class="step__copy">
                 <h3 class="h-section">{s.t}</h3>
                 <p class="body-text">{s.d}</p>
               </div>
@@ -86,14 +83,6 @@ const socials = [
       </ol>
       <div class="inline-action steps__action">
         <a class="btn" href="/kontakt?topic=Franchise#urlap">Csatlakozni szeretnék</a>
-      </div>
-      <div class="franchise-social">
-        <span class="h-sub">Kövess minket</span>
-        <div class="franchise-social__links">
-          {socials.map((item) => (
-            <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
-          ))}
-        </div>
       </div>
     </div>
   </section>
@@ -116,24 +105,35 @@ const socials = [
     box-shadow: var(--panel-shadow);
   }
   .block h2 { font-size: clamp(1.35rem, 2.3vw, 1.9rem); }
+  .block__title {
+    max-width: min(100%, 18ch);
+    text-wrap: balance;
+  }
+  .block__list span { text-wrap: pretty; }
+  .keep-together { white-space: nowrap; }
   .block__list--compact { gap: 0; }
 
+  .process-head { display: grid; gap: var(--stack-tight); }
   .steps {
     list-style: none;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 18px;
-    margin-top: 28px;
+    gap: clamp(16px, 2.6vw, 20px);
+    margin-top: var(--stack-loose);
     counter-reset: step;
   }
-  @media (min-width: 900px) {
+  @media (min-width: 620px) {
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 980px) {
     .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
   .step {
     display: grid;
-    gap: 24px;
-    align-content: space-between;
-    min-height: 245px;
+    grid-template-rows: auto 1fr;
+    gap: clamp(18px, 2.2vw, 24px);
+    align-content: start;
+    min-height: 0;
     padding: clamp(20px, 2.8vw, 28px);
     border: 1px solid var(--panel-border);
     border-radius: 8px;
@@ -170,29 +170,18 @@ const socials = [
     line-height: 1;
     letter-spacing: 0.04em;
   }
-  .step h3 { font-size: clamp(1.45rem, 2.4vw, 2rem); margin-bottom: 8px; }
-  .step .body-text { font-size: clamp(1rem, 1.16vw, 1.08rem); line-height: 1.68; letter-spacing: 0.035em; }
+  .step__copy {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+  .step h3 { font-size: clamp(1.45rem, 2.4vw, 2rem); }
+  .step .body-text { font-size: clamp(1rem, 1.16vw, 1.08rem); line-height: 1.68; letter-spacing: 0.035em; text-wrap: pretty; }
   .steps__action {
     margin-top: clamp(20px, 3vw, 32px);
   }
-  .franchise-social {
-    display: grid;
-    gap: 14px;
-    margin-top: clamp(28px, 5vw, 48px);
-  }
-  .franchise-social__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 20px;
-  }
-  .franchise-social__links a {
-    color: var(--ink-soft);
-    border-bottom: 1px dashed var(--ink-faint);
-    transition: color 180ms var(--ease), border-color 180ms var(--ease);
-  }
-  .franchise-social__links a:hover {
-    color: var(--accent);
-    border-color: var(--accent);
+  @media (max-width: 520px) {
+    .keep-together { white-space: normal; }
   }
   @keyframes step-pop {
     from { opacity: 0; transform: translateY(18px) scale(0.96); }

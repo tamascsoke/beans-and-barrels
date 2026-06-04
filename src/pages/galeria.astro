@@ -17,7 +17,7 @@ const enriched = await Promise.all(photos.map(async (p) => {
 ---
 
 <Layout title="Galéria — Bean & Barrel" description="Bean & Barrel képgaléria — pillanatok a tuktukkal.">
-  <section class="section gal-page">
+  <section class="section section--last gal-page">
     <div class="container gal-head stagger">
       <span class="h-sub">Képek</span>
       <h1 class="h-display"><span class="chalk-underline">Galéria</span></h1>
@@ -49,7 +49,7 @@ const enriched = await Promise.all(photos.map(async (p) => {
   </section>
 
   {hasPhotos && (
-    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Képnéző">
+    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Képnéző" inert>
       <button class="lightbox__close" id="lbClose" aria-label="Bezárás">✕</button>
       <button class="lightbox__prev"  id="lbPrev"  aria-label="Előző">‹</button>
       <button class="lightbox__next"  id="lbNext"  aria-label="Következő">›</button>
@@ -75,7 +75,7 @@ const enriched = await Promise.all(photos.map(async (p) => {
   .gal-action {
     display: flex;
     justify-content: center;
-    margin-top: clamp(24px, 4vw, 44px);
+    margin-top: clamp(18px, 3vw, 32px);
   }
 
   /* ── Masonry ── */
@@ -128,7 +128,7 @@ const enriched = await Promise.all(photos.map(async (p) => {
     justify-content: center;
     color: var(--ink-faint);
     font-size: 0.85rem;
-    letter-spacing: 0.3em;
+    letter-spacing: clamp(0.16em, 0.8vw, 0.3em);
     text-transform: uppercase;
   }
   .gal-frame--ph span { pointer-events: none; }
@@ -220,6 +220,8 @@ const enriched = await Promise.all(photos.map(async (p) => {
 </style>
 
 <script>
+  import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
+
   function initGalleryPage() {
     const frames    = Array.from(document.querySelectorAll(".gal-frame[data-src]")) as HTMLElement[];
     const lightbox  = document.getElementById("lightbox");
@@ -232,22 +234,36 @@ const enriched = await Promise.all(photos.map(async (p) => {
     if (!lightbox || !lbImg || frames.length === 0) return;
 
     let current = 0;
+    let releaseTrap: (() => void) | null = null;
+    let lastFocus: HTMLElement | null = null;
 
     function show(idx: number) {
       current = ((idx % frames.length) + frames.length) % frames.length;
       const f = frames[current];
+      if (lightbox.getAttribute("aria-hidden") === "true") {
+        lastFocus = document.activeElement as HTMLElement | null;
+      }
       lbImg!.src = f.dataset.src ?? "";
       lbImg!.alt = f.dataset.alt ?? "";
       if (lbCaption) lbCaption.textContent = f.dataset.alt ?? "";
       lightbox!.setAttribute("aria-hidden", "false");
+      setInert(lightbox, false);
       document.body.classList.add("has-lightbox-open");
       document.body.style.overflow = "hidden";
+      releaseTrap?.();
+      releaseTrap = trapFocus(lightbox);
+      getFocusable(lightbox)[0]?.focus();
     }
 
     function hide() {
       lightbox!.setAttribute("aria-hidden", "true");
+      setInert(lightbox, true);
       document.body.classList.remove("has-lightbox-open");
       document.body.style.overflow = "";
+      releaseTrap?.();
+      releaseTrap = null;
+      lastFocus?.focus();
+      lastFocus = null;
     }
 
     frames.forEach((f, i) => {

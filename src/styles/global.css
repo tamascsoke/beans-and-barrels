@@ -33,6 +33,15 @@
 
   --ease: cubic-bezier(.22, 1, .36, 1);
 
+  /* spacing scale */
+  --stack-tight: 14px;
+  --stack: 18px;
+  --stack-loose: clamp(24px, 4vw, 34px);
+  --section-y: clamp(40px, 6vw, 80px);
+  --section-y-compact: clamp(30px, 4.8vw, 58px);
+  --section-y-tight: clamp(22px, 3.4vw, 44px);
+  --main-footer-gap: clamp(24px, 4vw, 56px);
+
   /* radius scale */
   --r-sm: 6px;
   --r-md: 8px;
@@ -58,18 +67,9 @@ body.has-lightbox-open .nav {
   z-index: 1;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  /* very subtle edge darkening only — Canva design is essentially flat */
-  box-shadow: inset 0 0 160px 10px rgba(0, 0, 0, 0.25);
-}
-
 body {
   font-family: var(--f-body);
+  font-synthesis: none;
   color: var(--ink);
   background-color: var(--bg);
   letter-spacing: 0.04em;
@@ -89,6 +89,7 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   line-height: 1;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .h-section {
@@ -98,32 +99,41 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   line-height: 1.05;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .h-sub {
   font-family: var(--f-sub);
   font-weight: 700;
   font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-  letter-spacing: 0.4em;
+  letter-spacing: clamp(0.22em, 0.9vw, 0.4em);
   text-transform: uppercase;
   color: var(--ink-soft);
-  padding-left: 0.4em;
+  padding-left: clamp(0.22em, 0.9vw, 0.4em);
 }
 
 .lead {
   font-family: var(--f-body);
+  font-weight: 400;
+  font-synthesis: none;
   font-size: clamp(1rem, 1.4vw, 1.15rem);
   line-height: 1.6;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--ink-soft);
+  text-wrap: pretty;
 }
 
 .body-text {
   font-family: var(--f-body);
+  font-weight: 400;
+  font-synthesis: none;
   font-size: clamp(0.9rem, 1.1vw, 1rem);
   line-height: 1.7;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--ink-soft);
+  text-wrap: pretty;
 }
 
 .chalk-list {
@@ -132,9 +142,12 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   gap: 0;
   color: var(--ink-soft);
   font-family: var(--f-body);
+  font-weight: 400;
+  font-synthesis: none;
   font-size: clamp(1.08rem, 1.28vw, 1.2rem);
   line-height: 1.62;
   letter-spacing: var(--ls-body);
+  text-transform: uppercase;
 }
 
 .chalk-list--ruled {
@@ -173,6 +186,7 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 
 .chalk-list span {
   min-width: 0;
+  text-wrap: pretty;
 }
 
 .chalk-list--roomy li {
@@ -202,7 +216,15 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 }
 
 .section {
-  padding-block: clamp(40px, 6vw, 80px);
+  padding-block: var(--section-y);
+}
+
+.section--compact {
+  padding-block: var(--section-y-compact);
+}
+
+.section--last {
+  padding-bottom: var(--section-y-tight);
 }
 
 .section--alt {
@@ -220,8 +242,11 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   gap: 10px;
   padding: 14px 26px;
   font-family: var(--f-body);
+  font-weight: 400;
+  font-synthesis: none;
   font-size: 0.95rem;
   letter-spacing: 0.28em;
+  line-height: 1.2;
   text-transform: uppercase;
   background: var(--accent);
   color: #1a1919;
@@ -307,6 +332,10 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 }
 
 @media (max-width: 520px) {
+  :root {
+    --nav-h: 72px;
+  }
+
   .inline-action,
   .inline-action .btn {
     width: 100%;
@@ -314,6 +343,18 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 
   .inline-action .btn {
     justify-content: center;
+  }
+
+  .btn {
+    padding-inline: 20px;
+    font-size: 0.86rem;
+    letter-spacing: 0.18em;
+    text-align: center;
+  }
+
+  .h-sub {
+    letter-spacing: 0.18em;
+    padding-left: 0.18em;
   }
 }
 
@@ -352,6 +393,24 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 
   .btn:hover {
     transform: none;
+  }
+
+  .reveal,
+  .stagger,
+  .chalk-underline::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
   }
 }
 

@@ -1,10 +1,10 @@
 {
   "order": 2,
-  "eyebrow": "Helyszínek",
-  "title": "Állandó Helyszínek",
-  "body": "KÉZIFÉK BEHÚZVA // Tuktukjainkat kérheted állandó nyitásra is!",
+  "eyebrow": "Állandó helyszínek",
+  "title": "Kézifék behúzva",
+  "body": "Tuktukjainkat kérheted állandó nyitásra is!",
   "ctaHref": "/kontakt?topic=Rendezv%C3%A9ny#urlap",
   "ctaLabel": "Részletek",
-  "image": "/uploads/telekom-campus.webp",
-  "imageAlt": "Bean & Barrel tuktuk a Telekom Campus környezetében"
+  "image": "/uploads/helyszin2.webp",
+  "imageAlt": "Bean & Barrel tuktuk állandó helyszínen"
 }

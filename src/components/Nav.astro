@@ -31,7 +31,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 <div class="nav__overlay" id="navOverlay"></div>
 
-<nav id="nav-drawer" class="nav__drawer" aria-hidden="true">
+<nav id="nav-drawer" class="nav__drawer" aria-hidden="true" inert>
   <div class="nav__panel-head">
     <img src="/tuktuk-logo.webp" alt="Bean & Barrel tuktuk" class="nav__panel-logo" />
     <button class="nav__close" id="navClose" aria-label="Menü bezárása">✕</button>
@@ -152,7 +152,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
       linear-gradient(160deg, #2a2929 0%, #363535 100%);
     background-size: 180px 180px, cover;
     border-left: 1px solid rgba(255,255,255,0.08);
-    box-shadow: -12px 0 48px rgba(0,0,0,0.6);
+    box-shadow: none;
     transform: translateX(100%);
     transition: transform 340ms var(--ease);
     z-index: 59;
@@ -161,7 +161,10 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     flex-direction: column;
     padding-bottom: 40px;
   }
-  .nav__drawer[aria-hidden="false"] { transform: translateX(0); }
+  .nav__drawer[aria-hidden="false"] {
+    transform: translateX(0);
+    box-shadow: -10px 0 36px rgba(0,0,0,0.42);
+  }
 
   /* panel header: logo + close */
   .nav__panel-head {
@@ -276,6 +279,8 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 </style>
 
 <script>
+  import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
+
   function initNav() {
     const btn      = document.getElementById("navToggle")  as HTMLButtonElement | null;
     const drawer   = document.getElementById("nav-drawer") as HTMLElement | null;
@@ -284,18 +289,29 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     if (!btn || !drawer) return;
     const navButton = btn;
     const navDrawer = drawer;
+    let releaseTrap: (() => void) | null = null;
+    let lastFocus: HTMLElement | null = null;
 
     function open() {
+      lastFocus = document.activeElement as HTMLElement | null;
       navButton.setAttribute("aria-expanded", "true");
       navDrawer.setAttribute("aria-hidden", "false");
+      setInert(navDrawer, false);
       overlay?.classList.add("is-open");
       document.body.style.overflow = "hidden";
+      releaseTrap = trapFocus(navDrawer);
+      (closeBtn ?? getFocusable(navDrawer)[0])?.focus();
     }
     function close() {
       navButton.setAttribute("aria-expanded", "false");
       navDrawer.setAttribute("aria-hidden", "true");
+      setInert(navDrawer, true);
       overlay?.classList.remove("is-open");
       document.body.style.overflow = "";
+      releaseTrap?.();
+      releaseTrap = null;
+      lastFocus?.focus();
+      lastFocus = null;
     }
 
     navButton.addEventListener("click", () =>
@@ -304,6 +320,12 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     closeBtn?.addEventListener("click", close);
     overlay?.addEventListener("click", close);
     navDrawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navButton.getAttribute("aria-expanded") === "true") {
+        e.preventDefault();
+        close();
+      }
+    });
   }
 
   initNav();

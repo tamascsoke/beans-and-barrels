@@ -22,7 +22,7 @@ const categories = getCategories();
 
   </section>
 
-  <section class="section">
+  <section class="section section--last">
     <div class="container categories">
       {
         categories.map((c) => (
@@ -66,13 +66,13 @@ const categories = getCategories();
   .hero-copy { display: grid; gap: 18px; }
   .hero-img { aspect-ratio: 4 / 3; }
 
-  .categories { display: grid; gap: clamp(40px, 8vw, 90px); }
+  .categories { display: grid; gap: clamp(28px, 6vw, 64px); }
   .cat {
     display: grid;
     grid-template-columns: 1fr;
     gap: clamp(20px, 4vw, 40px);
     align-items: center;
-    padding-block: clamp(28px, 5vw, 58px);
+    padding-block: clamp(24px, 4vw, 46px);
     border-top: 1px solid var(--line);
   }
   .cat:last-child { border-bottom: 1px solid var(--line); }

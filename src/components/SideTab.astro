@@ -12,12 +12,13 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   id="sidetabFab"
   aria-controls="sidetab-panel"
   aria-expanded="false"
-  aria-label="Elérhetőség megnyitása"
+  aria-label="Keress minket panel megnyitása"
 >
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <rect x="2" y="4" width="20" height="16" rx="2"/>
     <path d="M2 7l10 7 10-7"/>
   </svg>
+  <span class="sidetab-fab__label">Keress minket</span>
 </button>
 
 <aside class="sidetab" id="sidetab">
@@ -26,10 +27,10 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     id="sidetabPull"
     aria-controls="sidetab-panel"
     aria-expanded="false"
-    aria-label="Elérhetőség megnyitása"
-  >Elérhetőség</button>
+    aria-label="Keress minket panel megnyitása"
+  >Keress minket</button>
 
-  <div class="sidetab__panel" id="sidetab-panel" role="dialog" aria-label="Elérhetőség">
+  <div class="sidetab__panel" id="sidetab-panel" role="dialog" aria-label="Keress minket" inert>
     <!-- Header -->
     <div class="sidetab__head">
       <span class="sidetab__brand">BEAN &amp; BARREL</span>
@@ -78,6 +79,13 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
         <span class="st-field__lbl">Üzenet</span>
         <textarea name="message" rows="2" required class="st-input st-input--area"></textarea>
       </label>
+      <label class="st-field st-field--consent">
+        <input type="checkbox" name="gdpr" required class="st-consent__input" />
+        <span class="st-consent__text">
+          Elolvastam és elfogadom az <a href="/adatvedelem" target="_blank" rel="noopener">Adatkezelési tájékoztatót</a>,
+          és hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása céljából kezeljétek.
+        </span>
+      </label>
       <button type="submit" class="btn btn--compact sidetab__btn">Küldés</button>
     </form>
   </div>
@@ -98,6 +106,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 
   /* Container */
   .sidetab {
+    --sidetab-pull-w: 44px;
     position: fixed;
     right: 0;
     top: var(--nav-h);
@@ -106,7 +115,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     display: flex;
     flex-direction: row;
     align-items: center;
-    transform: translateX(calc(100% - 34px));
+    transform: translateX(calc(100% - var(--sidetab-pull-w)));
     transition: transform 360ms var(--ease);
   }
   @media (max-width: 640px) {
@@ -116,22 +125,58 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 
   /* Pull tab — desktop only */
   .sidetab__pull {
+    position: relative;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    padding: 16px 9px;
+    min-width: var(--sidetab-pull-w);
+    padding: 20px 11px;
     background: var(--accent);
     color: #1a1919;
     font-family: var(--f-body);
-    font-size: 0.68rem;
-    letter-spacing: 0.24em;
+    font-size: 0.74rem;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
     border-radius: 0 10px 10px 0;
-    box-shadow: -2px 0 18px rgba(0,0,0,0.4);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.12) inset,
+      0 0 0 1px rgba(240,138,28,0.18),
+      0 0 18px rgba(240,138,28,0.16);
     align-self: center;
     flex-shrink: 0;
-    transition: filter 200ms;
+    overflow: visible;
+    transition: filter 200ms, box-shadow 220ms var(--ease), transform 220ms var(--ease);
+    animation: sidetab-breathe 3.4s ease-in-out infinite;
   }
-  .sidetab__pull:hover { filter: brightness(1.1); }
+  .sidetab__pull::before,
+  .sidetab__pull::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    border-radius: 999px;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .sidetab__pull::before {
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    background: #1a1919;
+    opacity: 0.42;
+  }
+  .sidetab__pull::after {
+    inset: -8px -4px;
+    border: 1px solid rgba(240,138,28,0.34);
+    opacity: 0;
+    transform: none;
+    animation: sidetab-ring 3.4s ease-in-out infinite;
+  }
+  .sidetab__pull:hover {
+    filter: brightness(1.08);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.16) inset,
+      0 0 0 1px rgba(240,138,28,0.28),
+      0 0 28px rgba(240,138,28,0.28);
+  }
 
   @media (max-width: 640px) {
     .sidetab__pull { display: none; }
@@ -145,22 +190,36 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     position: fixed;
     bottom: 18px;
     right: 16px;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
+    min-width: 54px;
+    height: 54px;
+    padding-inline: 16px;
+    gap: 10px;
+    border-radius: 999px;
     background: var(--accent);
     color: #1a1919;
     align-items: center;
     justify-content: center;
     opacity: 0.82;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.38), 0 2px 6px rgba(240,138,28,0.28);
+    box-shadow:
+      0 0 18px rgba(240,138,28,0.24),
+      0 0 0 1px rgba(255,255,255,0.16) inset;
     z-index: 55;
-    transition: transform 200ms var(--ease), box-shadow 200ms var(--ease), background 200ms;
+    transition: transform 200ms var(--ease), box-shadow 200ms var(--ease), background 200ms, opacity 200ms;
+    animation: sidetab-fab-breathe 3.4s ease-in-out infinite;
+  }
+  .sidetab-fab__label {
+    font-family: var(--f-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
   .sidetab-fab:hover {
     opacity: 1;
-    transform: scale(1.04);
-    box-shadow: 0 6px 28px rgba(0,0,0,0.5), 0 3px 10px rgba(240,138,28,0.5);
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 28px rgba(240,138,28,0.38),
+      0 0 0 1px rgba(255,255,255,0.2) inset;
   }
   .sidetab-fab.is-open { background: rgba(26,25,25,0.9); color: var(--ink); }
   @media (max-width: 640px) {
@@ -178,8 +237,13 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
       linear-gradient(160deg, #1e1d1d 0%, #2a2929 100%);
     background-size: 180px 180px, cover;
-    border-left: 1px solid rgba(255,255,255,0.08);
-    box-shadow: -12px 0 48px rgba(0,0,0,0.6);
+    border-left: 1px solid rgba(240,138,28,0.28);
+    box-shadow: none;
+  }
+  .sidetab.is-open .sidetab__panel {
+    box-shadow:
+      -1px 0 0 rgba(255,255,255,0.08),
+      -10px 0 34px rgba(240,138,28,0.14);
   }
 
   /* Panel header */
@@ -310,30 +374,105 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     transition: background-color 5000s ease-in-out 0s !important;
   }
 
+  .st-field--consent {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 12px;
+    align-items: start;
+    margin-top: 4px;
+  }
+  .st-consent__input {
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .st-consent__text {
+    font-family: var(--f-sub);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-transform: none;
+  }
+  .st-consent__text a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
   .sidetab__btn {
-    justify-self: start;
-    margin-top: 2px;
+    justify-self: stretch;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 13px 18px;
+    margin-top: 8px;
+    border-radius: 12px;
+    letter-spacing: 0.26em;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.2),
+      0 0 0 1px rgba(240,138,28,0.22),
+      0 10px 24px rgba(240,138,28,0.12);
+  }
+  .sidetab__btn:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.24),
+      0 0 0 1px rgba(240,138,28,0.34),
+      0 14px 28px rgba(240,138,28,0.2);
+  }
+
+  @keyframes sidetab-breathe {
+    0%, 64%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.13) inset, 0 0 0 1px rgba(240,138,28,0.22), 0 0 20px rgba(240,138,28,0.2); }
+    78% { box-shadow: 0 0 0 1px rgba(255,255,255,0.18) inset, 0 0 0 1px rgba(240,138,28,0.42), 0 0 42px rgba(240,138,28,0.5); }
+  }
+  @keyframes sidetab-ring {
+    0%, 62%, 100% { opacity: 0; transform: scale(0.9); }
+    76% { opacity: 0.72; transform: scale(1.03); }
+    92% { opacity: 0; transform: scale(1.18); }
+  }
+  @keyframes sidetab-fab-breathe {
+    0%, 64%, 100% { opacity: 0.88; box-shadow: 0 0 20px rgba(240,138,28,0.28), 0 0 0 1px rgba(255,255,255,0.16) inset; }
+    78% { opacity: 1; box-shadow: 0 0 42px rgba(240,138,28,0.55), 0 0 0 1px rgba(255,255,255,0.24) inset; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sidetab__pull,
+    .sidetab__pull::after,
+    .sidetab-fab {
+      animation: none;
+    }
   }
 </style>
 
 <script>
+  import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
+
   function initSideTab() {
     const tab      = document.getElementById("sidetab")      as HTMLElement | null;
+    const panel    = document.getElementById("sidetab-panel") as HTMLElement | null;
     const pull     = document.getElementById("sidetabPull")  as HTMLButtonElement | null;
     const fab      = document.getElementById("sidetabFab")   as HTMLButtonElement | null;
     const closeBtn = document.getElementById("sidetabClose") as HTMLButtonElement | null;
     const overlay  = document.getElementById("sidetabOverlay") as HTMLElement | null;
-    if (!tab || !pull) return;
+    if (!tab || !pull || !panel) return;
     const sideTab = tab;
     const pullButton = pull;
+    let releaseTrap: (() => void) | null = null;
+    let lastFocus: HTMLElement | null = null;
 
     function openTab() {
+      lastFocus = document.activeElement as HTMLElement | null;
       sideTab.classList.add("is-open");
       overlay?.classList.add("is-open");
       pullButton.setAttribute("aria-expanded", "true");
       fab?.setAttribute("aria-expanded", "true");
       fab?.classList.add("is-open");
+      setInert(panel, false);
       document.body.style.overflow = "hidden";
+      releaseTrap = trapFocus(panel);
+      (closeBtn ?? getFocusable(panel)[0])?.focus();
     }
     function closeTab() {
       sideTab.classList.remove("is-open");
@@ -341,7 +480,12 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       pullButton.setAttribute("aria-expanded", "false");
       fab?.setAttribute("aria-expanded", "false");
       fab?.classList.remove("is-open");
+      setInert(panel, true);
       document.body.style.overflow = "";
+      releaseTrap?.();
+      releaseTrap = null;
+      lastFocus?.focus();
+      lastFocus = null;
     }
 
     pullButton.addEventListener("click", () =>

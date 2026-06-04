@@ -27,11 +27,11 @@ const selected = value && options.includes(value) ? value : options[0];
     </svg>
   </button>
 
-  <ul class="chalk-select__list" role="listbox" aria-label={label ?? name}>
+  <ul class="chalk-select__list" role="listbox" aria-label={label ?? name} inert>
     {options.map((o, i) => (
       <li
         role="option"
-        tabindex="0"
+        tabindex="-1"
         aria-selected={o === selected ? "true" : "false"}
         data-val={o}
         style={`--i:${i}`}
@@ -148,6 +148,8 @@ const selected = value && options.includes(value) ? value : options[0];
 </style>
 
 <script>
+  import { setInert } from "../lib/overlay-a11y";
+
   function initChalkSelects() {
     document.querySelectorAll<HTMLElement>("[data-chalk-select]").forEach((cs) => {
       if (cs.dataset.csInit) return;
@@ -156,11 +158,22 @@ const selected = value && options.includes(value) ? value : options[0];
       const trigger = cs.querySelector<HTMLButtonElement>(".chalk-select__trigger")!;
       const valSpan = cs.querySelector<HTMLElement>(".chalk-select__val")!;
       const native  = cs.querySelector<HTMLSelectElement>(".chalk-select__native")!;
+      const list    = cs.querySelector<HTMLElement>(".chalk-select__list")!;
       const items   = [...cs.querySelectorAll<HTMLElement>('li[role="option"]')];
 
       const isOpen = () => cs.dataset.open !== undefined;
-      const open   = () => { cs.dataset.open = ""; trigger.setAttribute("aria-expanded", "true"); };
-      const close  = () => { delete cs.dataset.open; trigger.setAttribute("aria-expanded", "false"); };
+      const open   = () => {
+        cs.dataset.open = "";
+        trigger.setAttribute("aria-expanded", "true");
+        setInert(list, false);
+        items.forEach((i) => { i.tabIndex = 0; });
+      };
+      const close  = () => {
+        delete cs.dataset.open;
+        trigger.setAttribute("aria-expanded", "false");
+        setInert(list, true);
+        items.forEach((i) => { i.tabIndex = -1; });
+      };
 
       function choose(item: HTMLElement) {
         items.forEach((i) => { i.classList.remove("is-selected"); i.setAttribute("aria-selected", "false"); });
@@ -199,6 +212,9 @@ const selected = value && options.includes(value) ? value : options[0];
         if (!cs.contains(e.target as Node)) {
           delete cs.dataset.open;
           cs.querySelector<HTMLButtonElement>(".chalk-select__trigger")?.setAttribute("aria-expanded", "false");
+          const list = cs.querySelector<HTMLElement>(".chalk-select__list");
+          setInert(list, true);
+          cs.querySelectorAll<HTMLElement>('li[role="option"]').forEach((i) => { i.tabIndex = -1; });
         }
       });
     });
