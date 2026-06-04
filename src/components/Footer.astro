@@ -4,10 +4,17 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
+  <div class="container footer__cta">
+    <div class="footer__cta-copy">
+      <span class="h-sub">Rendezvényre készülsz?</span>
+      <p>Rendeld meg a tuktukot a rendezvényedre!</p>
+    </div>
+    <a class="btn" href="/rendezvenyek">Rendeld meg a tuktukot a rendezvényedre!</a>
+  </div>
+
   <div class="container footer__grid stagger">
     <div class="footer__col">
       <div class="footer__brand">BEAN &amp; BARREL</div>
-      <p class="body-text footer__tag">Kávé és sör — tuktukból, közösségből.</p>
     </div>
 
     <div class="footer__col">
@@ -21,9 +28,9 @@ const year = new Date().getFullYear();
     <div class="footer__col">
       <h4 class="h-sub">Kövess minket</h4>
       <ul class="footer__list footer__social">
-        <li><span class="footer__soon">Instagram — hamarosan</span></li>
-        <li><span class="footer__soon">Facebook — hamarosan</span></li>
-        <li><span class="footer__soon">TikTok — hamarosan</span></li>
+        <li><a href="https://www.instagram.com/beanbarrel_bp?igsh=b2YzbWYzeXRnNDdr&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="https://www.facebook.com/share/1SxeQupYdp/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        <li><a href="https://www.tiktok.com/@beanbarrel_bp?_r=1&_t=ZN-96sdqSHL2R9" target="_blank" rel="noopener noreferrer">TikTok</a></li>
       </ul>
     </div>
   </div>
@@ -46,10 +53,42 @@ const year = new Date().getFullYear();
     background: var(--bg-2);
   }
 
+  .footer__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px 28px;
+    margin-bottom: clamp(34px, 5vw, 58px);
+    padding-bottom: clamp(28px, 4vw, 44px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .footer__cta-copy {
+    display: grid;
+    gap: 8px;
+    min-width: min(100%, 320px);
+  }
+
+  .footer__cta-copy p {
+    font-family: var(--f-logo);
+    font-size: clamp(2rem, 5vw, 4.2rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .footer__cta .btn {
+    max-width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
   .footer__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 32px;
+    align-items: center;
   }
 
   @media (min-width: 720px) {
@@ -63,11 +102,13 @@ const year = new Date().getFullYear();
     font-size: clamp(1.6rem, 2.6vw, 2.2rem);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    line-height: 1;
   }
 
-  .footer__tag {
-    max-width: 28ch;
+  .footer__col:first-child {
+    display: flex;
+    align-items: center;
+    min-height: 100%;
   }
 
   .footer__col h4 {
@@ -84,11 +125,6 @@ const year = new Date().getFullYear();
   .footer__list a:hover {
     color: var(--accent);
   }
-  .footer__soon {
-    color: var(--ink-faint);
-    font-style: italic;
-  }
-
   .footer__bottom {
     margin-top: 40px;
     padding-top: 20px;

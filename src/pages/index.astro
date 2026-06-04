@@ -3,24 +3,35 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import HomeCarousel from "../components/HomeCarousel.astro";
 import GalleryStrip from "../components/GalleryStrip.astro";
-import tuktukKaveImg from '../assets/uploads/tuktuk-kave.webp';
-import kaveImg from '../assets/uploads/kave.webp';
-import sorImg from '../assets/uploads/sor.webp';
+import kaveImg from '../assets/uploads/latte-art-pillar.webp';
+import sorImg from '../assets/uploads/csapolt-sor-pillar.webp';
+import donatImg from '../assets/uploads/donat.webp';
 ---
 
 <Layout title="Bean & Barrel — Kávé és Sör">
   <section class="hero">
     <div class="container hero__inner">
-      <span class="h-sub">Kávé és sör — egy tuktukból</span>
-      <h1 class="h-display hero__title" data-parallax="1.4">
-        <span class="chalk-underline">Bean &amp; Barrel</span>
-      </h1>
-      <p class="lead hero__lead" data-typewriter data-parallax="0.7">
-        Mozgó tuktuk kávézó és söröző, ami odamegy, ahol a közösség van. Esküvőkre, fesztiválokra, hétvégi pillanatokra.
-      </p>
-      <div class="hero__cta">
-        <a class="btn" href="/kontakt">Rendezvényt kérek</a>
-        <a class="btn btn--ghost" href="/kinalat">Nézd a kínálatot</a>
+      <div class="hero__copy">
+        <span class="h-sub">Kávé, sör és egyebek egy tuktukból</span>
+        <h1 class="h-display hero__title"><span class="chalk-underline">Bean &amp; Barrel</span></h1>
+        <p class="lead hero__lead" data-typewriter>
+          Egy mozgó tuktuk specialty kávéval, csapolt sörrel és olyan vendéglátással, ami feldobja a hangulatot.
+        </p>
+        <div class="hero__cta">
+          <a class="btn" href="/kontakt?topic=Rendezv%C3%A9ny#urlap">Rendezvényt kérek</a>
+          <a class="btn btn--ghost" href="/kinalat">Nézd a kínálatot</a>
+        </div>
+      </div>
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero__speed-lines">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="hero__road"></div>
+        <div class="hero__skid"></div>
+        <img class="hero__tuktuk" src="/tuktuk-logo.webp" alt="" />
+        <div class="hero__brake-dust"></div>
       </div>
     </div>
   </section>
@@ -28,22 +39,24 @@ import sorImg from '../assets/uploads/sor.webp';
   <HomeCarousel />
 
   <section class="section">
-    <div class="container highlights">
-      <article class="highlight">
-        <div class="photo-frame"><Image src={tuktukKaveImg} alt="Bean & Barrel tuktuk kávézással" widths={[400, 600]} sizes="(min-width: 760px) 33vw, 100vw" loading="lazy" /></div>
-        <h3 class="h-section"><span class="chalk-underline">Mobil — bárhol</span></h3>
-        <p class="body-text">A tuktuk odamegy, ahol szükség van rá. Belváros, kerthelyiség, fesztivál.</p>
-      </article>
-      <article class="highlight">
-        <div class="photo-frame"><Image src={kaveImg} alt="Specialty kávé közelről" widths={[400, 600]} sizes="(min-width: 760px) 33vw, 100vw" loading="lazy" /></div>
-        <h3 class="h-section"><span class="chalk-underline">Igazi specialty</span></h3>
-        <p class="body-text">Pörkölőtől a poharadig — gondozott kávé, helyi pörkölőkkel együttműködve.</p>
-      </article>
-      <article class="highlight">
-        <div class="photo-frame"><Image src={sorImg} alt="Csapolt kézműves sör" widths={[400, 600]} sizes="(min-width: 760px) 33vw, 100vw" loading="lazy" /></div>
-        <h3 class="h-section"><span class="chalk-underline">Csapolt élmény</span></h3>
-        <p class="body-text">Magyar kézműves csapok, koktélok és snackek a tuktuk pultjáról.</p>
-      </article>
+    <div class="container pillars">
+      <div class="pillars__head stagger">
+        <span class="h-sub">Kínálat</span>
+        <h2 class="h-display"><span class="chalk-underline">Alappilléreink</span></h2>
+      </div>
+      <div class="pillars__grid">
+        <article class="pillar">
+          <div class="photo-frame pillar__photo pillar__photo--coffee"><Image src={kaveImg} alt="Latte art a Bean & Barrel pultjánál" widths={[420, 720, 960]} sizes="(min-width: 760px) 28vw, 82vw" loading="lazy" /></div>
+          <h3 class="h-section">Specialty kávék</h3>
+        </article>
+        <article class="pillar">
+          <div class="photo-frame pillar__photo pillar__photo--beer"><Image src={sorImg} alt="Csapolt sörök felülnézetből" widths={[420, 720, 960]} sizes="(min-width: 760px) 28vw, 82vw" loading="lazy" /></div>
+          <h3 class="h-section">Csapolt sörök</h3>
+        </article>
+      </div>
+      <div class="inline-action inline-action--center pillars__cta">
+        <a class="btn" href="/kinalat">Nézd meg teljes kínálatunkat</a>
+      </div>
     </div>
   </section>
 
@@ -52,33 +65,15 @@ import sorImg from '../assets/uploads/sor.webp';
       <div class="about-teaser__intro">
         <span class="h-sub">Rólunk</span>
         <h2 class="h-display"><span class="chalk-underline">Három srác, egy tuktuk</span></h2>
-        <p class="lead">
-          A Bean & Barrel három barát közös története. Hiszünk benne, hogy egy jó kávé és egy hideg sör közelebb hozza az embereket — bárhol legyen is a tuktuk.
-        </p>
-        <a class="btn btn--ghost" href="/rolunk">Ismerj meg minket</a>
+        <p class="lead">Ismerd meg a Bean &amp; Barrel alapítóit és sztoriját!</p>
+        <div class="inline-action">
+          <a class="btn btn--ghost" href="/rolunk">Elolvasom</a>
+        </div>
       </div>
       <div class="about-teaser__team stagger">
-        <div class="team-card">
-          <div class="team-card__photo placeholder-img">Portré — Soós Balázs</div>
-          <div class="team-card__info">
-            <span class="team-card__name">Soós Balázs</span>
-            <span class="team-card__role">Alapító — kávé</span>
-          </div>
-        </div>
-        <div class="team-card">
-          <div class="team-card__photo placeholder-img">Portré — Warta Benedek</div>
-          <div class="team-card__info">
-            <span class="team-card__name">Warta Benedek</span>
-            <span class="team-card__role">Alapító — sör</span>
-          </div>
-        </div>
-        <div class="team-card">
-          <div class="team-card__photo placeholder-img">Portré — Váradi Donát</div>
-          <div class="team-card__info">
-            <span class="team-card__name">Váradi Donát</span>
-            <span class="team-card__role">Alapító — közösség</span>
-          </div>
-        </div>
+        <div class="team-card"><div class="team-card__avatar" aria-hidden="true">SB</div><div class="team-card__info"><span class="team-card__name">Soós Balázs</span><span class="team-card__role">Alapító - menedzsment</span></div></div>
+        <div class="team-card"><div class="team-card__avatar" aria-hidden="true">WB</div><div class="team-card__info"><span class="team-card__name">Warta Benedek</span><span class="team-card__role">Alapító - szakmai háttér</span></div></div>
+        <div class="team-card"><div class="team-card__photo"><Image src={donatImg} alt="Váradi Donát, a Bean & Barrel alapítója" widths={[160, 240]} sizes="72px" loading="lazy" /></div><div class="team-card__info"><span class="team-card__name">Váradi Donát</span><span class="team-card__role">Alapító - kiváncsifáncsi</span></div></div>
       </div>
     </div>
   </section>
@@ -87,69 +82,233 @@ import sorImg from '../assets/uploads/sor.webp';
 </Layout>
 
 <style>
-  .hero { padding-block: clamp(50px, 10vw, 120px) clamp(20px, 4vw, 40px); }
-  .hero__inner { display: grid; gap: 18px; max-width: 880px; }
-  .hero__title { font-size: clamp(3rem, 9vw, 6.5rem); }
-  .hero__lead { max-width: 56ch; }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
-
-  .section--alt { background: var(--bg-2); }
-
-  /* About teaser */
-  .about-teaser {
+  .hero {
+    position: relative;
     display: grid;
-    gap: clamp(32px, 5vw, 64px);
-    align-items: start;
-  }
-  @media (min-width: 820px) {
-    .about-teaser { grid-template-columns: 1fr 1fr; align-items: center; }
-  }
-  .about-teaser__intro { display: grid; gap: 18px; }
-
-  .about-teaser__team { display: grid; gap: 16px; }
-  .team-card {
-    display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--line);
+    min-height: min(860px, max(520px, calc(94svh - var(--nav-h))));
+    padding-block: clamp(24px, 5svh, 58px);
+    overflow: hidden;
   }
+  @supports (height: 100dvh) {
+    .hero { min-height: min(860px, max(520px, calc(94dvh - var(--nav-h)))); }
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 18% -8% auto auto;
+    width: clamp(280px, min(42vw, 52svh), 560px);
+    height: 42%;
+    background:
+      repeating-linear-gradient(-8deg, transparent 0 22px, rgba(244,244,244,0.055) 22px 24px, transparent 24px 52px);
+    opacity: 0;
+    transform: translateX(34px);
+    animation: hero-motion-field 1100ms 380ms var(--ease) both;
+    pointer-events: none;
+  }
+  .hero__inner { display: grid; gap: clamp(18px, 4vw, 48px); max-width: 880px; position: relative; }
+  .hero__copy { display: grid; gap: clamp(12px, 2svh, 18px); position: relative; z-index: 2; max-width: 62ch; min-width: 0; }
+  .hero__visual { display: none; }
+  .hero__title { font-size: clamp(3.25rem, min(8vw, 11svh), 6.25rem); }
+  .hero__lead { max-width: 52ch; font-size: clamp(0.98rem, min(1.25vw, 2.35svh), 1.12rem); }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(2px, 1svh, 8px); }
+  .pillars { display: grid; gap: clamp(28px, 5vw, 56px); }
+  .pillars__head { display: grid; gap: 14px; text-align: center; justify-items: center; }
+  .pillars__grid { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 5vw, 64px); }
+  .pillar { display: grid; gap: 16px; justify-items: center; align-content: start; text-align: center; }
+  .pillar__photo { width: min(360px, 82vw); border-radius: 8px; aspect-ratio: 4 / 5; overflow: hidden; }
+  .pillar__photo :global(img) { object-position: center center; }
+  .pillar__photo--coffee :global(img) { object-position: 50% 72%; }
+  .pillar__photo--beer :global(img) { object-position: 50% 38%; }
+  .pillar h3 { font-size: clamp(1.8rem, 4vw, 3rem); }
+  .about-teaser { display: grid; gap: clamp(32px, 5vw, 64px); align-items: start; }
+  .about-teaser__intro { display: grid; gap: 18px; }
+  .about-teaser__team { display: grid; gap: 16px; }
+  .team-card { display: flex; align-items: center; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--line); }
   .team-card:first-child { border-top: 1px solid var(--line); }
-  .team-card__photo {
+  .team-card__photo,
+  .team-card__avatar {
     width: 72px;
     height: 72px;
     flex-shrink: 0;
-    aspect-ratio: 1 / 1;
-    border-radius: var(--r-md);
-    font-size: 0;
+    border-radius: 8px;
     transform: none;
+    overflow: hidden;
   }
-  .team-card__photo::before,
-  .team-card__photo::after { content: none; }
-  .team-card__info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .team-card__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 42%;
   }
-  .team-card__name {
+  .team-card__avatar {
+    display: grid;
+    place-items: center;
+    border: 1px dashed var(--line);
+    background: var(--panel-bg);
+    color: var(--accent);
     font-family: var(--f-logo);
-    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    font-size: 2rem;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
-  .team-card__role {
-    font-family: var(--f-sub);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
+  .team-card__info { display: flex; flex-direction: column; gap: 4px; }
+  .team-card__name { font-family: var(--f-logo); font-size: clamp(1rem, 1.8vw, 1.3rem); letter-spacing: 0.04em; text-transform: uppercase; }
+  .team-card__role { font-family: var(--f-sub); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-faint); }
+  @media (min-width: 820px) {
+    .hero__inner { max-width: var(--max-w); grid-template-columns: minmax(390px, 1fr) minmax(320px, 0.9fr); align-items: center; min-height: 0; }
+    .hero__copy { animation: hero-copy-out 900ms 180ms var(--ease) both; transform-origin: center; }
+    .hero__copy .h-sub { letter-spacing: clamp(0.28em, 0.36vw, 0.4em); }
+    .hero__cta { flex-wrap: nowrap; align-items: center; }
+    .hero__cta .btn { white-space: nowrap; }
+    .hero__visual { display: grid; place-items: center; min-height: clamp(260px, min(36vw, 44svh), 420px); overflow: visible; position: relative; z-index: 1; isolation: isolate; }
+    .hero__tuktuk { width: clamp(280px, min(36vw, 48svh), 500px); filter: drop-shadow(0 24px 40px rgba(0,0,0,0.46)); animation: tuktuk-brake-in 1450ms 360ms cubic-bezier(.12,.82,.18,1) both; transform-origin: 52% 82%; position: relative; z-index: 3; }
+    .hero__speed-lines {
+      position: absolute;
+      z-index: 1;
+      right: -4vw;
+      top: 41%;
+      width: clamp(210px, min(28vw, 34svh), 360px);
+      height: clamp(74px, 13svh, 112px);
+      transform: translateX(90vw);
+      opacity: 0;
+      animation: speed-lines-brake 1050ms 280ms ease-out both;
+    }
+    .hero__speed-lines span {
+      position: absolute;
+      right: 0;
+      height: 2px;
+      background: rgba(244,244,244,0.6);
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(244,244,244,0.22);
+    }
+    .hero__speed-lines span:nth-child(1) { top: 18px; width: 82%; }
+    .hero__speed-lines span:nth-child(2) { top: 52px; width: 100%; opacity: 0.72; }
+    .hero__speed-lines span:nth-child(3) { top: 86px; width: 66%; opacity: 0.52; }
+    .hero__road {
+      position: absolute;
+      z-index: 0;
+      left: -18%;
+      right: -14%;
+      top: calc(50% + clamp(54px, 10svh, 92px));
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(244,244,244,0.48) 14%, rgba(244,244,244,0.36) 78%, transparent);
+      transform: scaleX(0);
+      transform-origin: right center;
+      animation: road-draw 900ms 520ms var(--ease) both;
+    }
+    .hero__road::after {
+      content: "";
+      position: absolute;
+      inset: -13px 12% auto 22%;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, rgba(244,244,244,0.28) 0 20px, transparent 20px 42px);
+      opacity: 0.7;
+    }
+    .hero__skid {
+      position: absolute;
+      z-index: 2;
+      right: 20%;
+      top: calc(50% + clamp(56px, 10svh, 95px));
+      width: clamp(150px, min(18vw, 28svh), 260px);
+      height: 11px;
+      background:
+        linear-gradient(90deg, transparent, rgba(244,244,244,0.48), transparent),
+        repeating-linear-gradient(90deg, rgba(244,244,244,0.22) 0 18px, transparent 18px 34px);
+      opacity: 0;
+      transform: translateX(90px) scaleX(0.4);
+      transform-origin: right center;
+      filter: blur(0.3px);
+      animation: skid-mark 1050ms 840ms var(--ease) both;
+    }
+    .hero__brake-dust {
+      position: absolute;
+      z-index: 2;
+      right: 18%;
+      top: calc(50% + clamp(32px, 7svh, 58px));
+      width: clamp(130px, min(17vw, 24svh), 220px);
+      height: clamp(44px, 8svh, 70px);
+      background:
+        repeating-radial-gradient(ellipse at 70% 65%, rgba(244,244,244,0.28) 0 1px, transparent 1px 8px),
+        repeating-linear-gradient(15deg, transparent 0 10px, rgba(244,244,244,0.14) 10px 12px, transparent 12px 24px);
+      opacity: 0;
+      transform: translateX(72px) scale(0.72);
+      filter: blur(0.8px);
+      animation: brake-dust 900ms 900ms ease-out both;
+      pointer-events: none;
+    }
+    .pillars__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: clamp(44px, 7vw, 96px); }
+    .pillar { justify-items: center; text-align: center; min-width: 0; }
+    .pillar__photo { width: clamp(280px, 28vw, 390px); }
+    .pillar h3 { font-size: clamp(1.75rem, 3vw, 2.55rem); max-width: none; overflow-wrap: normal; }
+    .about-teaser { grid-template-columns: 1fr 1fr; align-items: center; }
+  }
+  @media (min-width: 820px) and (max-height: 680px) {
+    .hero {
+      min-height: min(700px, max(430px, calc(94svh - var(--nav-h))));
+      padding-block: clamp(18px, 4svh, 38px);
+    }
+    @supports (height: 100dvh) {
+      .hero { min-height: min(700px, max(430px, calc(94dvh - var(--nav-h)))); }
+    }
+    .hero__inner { gap: clamp(24px, 4vw, 40px); }
+    .hero__copy { gap: 12px; }
+    .hero__title { font-size: clamp(3rem, min(7vw, 10svh), 5.55rem); }
+    .hero__lead { font-size: clamp(0.94rem, min(1.1vw, 2.2svh), 1.02rem); line-height: 1.5; }
+  }
+  @media (min-width: 1080px) {
+    .hero__inner { grid-template-columns: minmax(500px, 1.02fr) minmax(360px, 0.9fr); }
+  }
+  @media (max-width: 980px) {
+    .hero__cta { flex-wrap: wrap; }
+  }
+  @keyframes hero-copy-out { from { transform: translateX(34%) scale(1.04); opacity: 0.88; } to { transform: translateX(0) scale(1); opacity: 1; } }
+  @keyframes tuktuk-brake-in {
+    0% { transform: translateX(118vw) translateY(6px) rotate(0deg); opacity: 1; }
+    56% { transform: translateX(-30px) translateY(0) rotate(-2.2deg); opacity: 1; }
+    70% { transform: translateX(18px) translateY(0) rotate(1.6deg); }
+    84% { transform: translateX(-7px) translateY(0) rotate(-0.7deg); }
+    100% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+  }
+  @keyframes speed-lines-brake {
+    0% { opacity: 0; transform: translateX(75vw); }
+    16% { opacity: 0.8; }
+    64% { opacity: 0.62; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-42px); }
+  }
+  @keyframes road-draw {
+    from { transform: scaleX(0); opacity: 0; }
+    to { transform: scaleX(1); opacity: 1; }
+  }
+  @keyframes skid-mark {
+    0% { opacity: 0; transform: translateX(90px) scaleX(0.25); }
+    34% { opacity: 0.8; }
+    100% { opacity: 0.34; transform: translateX(0) scaleX(1); }
+  }
+  @keyframes brake-dust {
+    0% { opacity: 0; transform: translateX(70px) scale(0.65); }
+    28% { opacity: 0.72; }
+    100% { opacity: 0; transform: translateX(16px) scale(1.12); }
+  }
+  @keyframes hero-motion-field {
+    from { opacity: 0; transform: translateX(60px); }
+    45% { opacity: 1; }
+    to { opacity: 0.28; transform: translateX(0); }
   }
 
-  .highlights { display: grid; gap: 32px; grid-template-columns: 1fr; }
-  @media (min-width: 760px) {
-    .highlights { grid-template-columns: repeat(3, 1fr); }
+  @media (prefers-reduced-motion: reduce) {
+    .hero::before,
+    .hero__copy,
+    .hero__tuktuk,
+    .hero__speed-lines,
+    .hero__road,
+    .hero__skid,
+    .hero__brake-dust {
+      animation: none !important;
+      opacity: 1;
+      transform: none;
+    }
+    .hero__speed-lines,
+    .hero__skid,
+    .hero__brake-dust { display: none; }
   }
-  .highlight { display: grid; gap: 14px; }
-  .highlight h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); }
 </style>

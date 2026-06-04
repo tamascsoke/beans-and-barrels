@@ -92,7 +92,6 @@ collections:
       - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
       - { name: key, label: "Kulcs (egyedi azonosító)", widget: string, hint: "pl. kave, sor — angol betűk és kötőjel" }
       - { name: label, label: "Megnevezés", widget: string }
-      - { name: sub, label: "Alcím", widget: string }
       - name: items
         label: "Tételek"
         widget: list

@@ -17,7 +17,7 @@ const enriched = await Promise.all(photos.map(async (p) => {
 ---
 
 <Layout title="Galéria — Bean & Barrel" description="Bean & Barrel képgaléria — pillanatok a tuktukkal.">
-  <section class="section">
+  <section class="section gal-page">
     <div class="container gal-head stagger">
       <span class="h-sub">Képek</span>
       <h1 class="h-display"><span class="chalk-underline">Galéria</span></h1>
@@ -41,6 +41,11 @@ const enriched = await Promise.all(photos.map(async (p) => {
         ))
       )}
     </div>
+    <div class="container gal-action">
+      <div class="inline-action inline-action--center">
+        <a class="btn" href="/rendezvenyek">Rendelj meg rendezvényedre!</a>
+      </div>
+    </div>
   </section>
 
   {hasPhotos && (
@@ -49,7 +54,7 @@ const enriched = await Promise.all(photos.map(async (p) => {
       <button class="lightbox__prev"  id="lbPrev"  aria-label="Előző">‹</button>
       <button class="lightbox__next"  id="lbNext"  aria-label="Következő">›</button>
       <figure class="lightbox__fig">
-        <img id="lbImg" src="" alt="" />
+        <img id="lbImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" />
         <figcaption id="lbCaption" class="lightbox__caption"></figcaption>
       </figure>
     </div>
@@ -61,6 +66,16 @@ const enriched = await Promise.all(photos.map(async (p) => {
     display: grid;
     gap: 14px;
     margin-bottom: clamp(28px, 5vw, 52px);
+  }
+
+  .gal-page {
+    padding-top: clamp(56px, 8vw, 104px);
+  }
+
+  .gal-action {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(24px, 4vw, 44px);
   }
 
   /* ── Masonry ── */
@@ -79,6 +94,8 @@ const enriched = await Promise.all(photos.map(async (p) => {
     cursor: pointer;
     position: relative;
     background: var(--bg-2);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
   }
 
   .gal-frame img {
@@ -223,11 +240,13 @@ const enriched = await Promise.all(photos.map(async (p) => {
       lbImg!.alt = f.dataset.alt ?? "";
       if (lbCaption) lbCaption.textContent = f.dataset.alt ?? "";
       lightbox!.setAttribute("aria-hidden", "false");
+      document.body.classList.add("has-lightbox-open");
       document.body.style.overflow = "hidden";
     }
 
     function hide() {
       lightbox!.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("has-lightbox-open");
       document.body.style.overflow = "";
     }
 

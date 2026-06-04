@@ -1,1 +1,1 @@
-{ "order": 2, "key": "sor", "label": "Sör", "sub": "Magyar kézműves csapok", "image": "/uploads/beni-sor.webp", "imageAlt": "Csapolt kézműves sör", "items": ["Lager", "IPA", "Stout", "Pils", "Szezonális"] }
+{ "order": 2, "key": "sor", "label": "Csapolt sör és Koktélok", "image": "/uploads/beni-sor.webp", "imageAlt": "Csapolt kézműves sör", "items": ["Lager", "IPA", "Pils", "Aperol Spritz", "Espresso Martini"] }

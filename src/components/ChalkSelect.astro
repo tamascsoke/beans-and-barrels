@@ -3,13 +3,15 @@ interface Props {
   name: string;
   options: string[];
   label?: string;
+  value?: string;
 }
-const { name, options, label } = Astro.props;
+const { name, options, label, value } = Astro.props;
+const selected = value && options.includes(value) ? value : options[0];
 ---
 
 <div class="chalk-select" data-chalk-select>
   <select name={name} class="chalk-select__native" aria-hidden="true" tabindex="-1">
-    {options.map((o) => <option value={o}>{o}</option>)}
+    {options.map((o) => <option value={o} selected={o === selected}>{o}</option>)}
   </select>
 
   <button
@@ -19,7 +21,7 @@ const { name, options, label } = Astro.props;
     aria-expanded="false"
     aria-label={label ?? name}
   >
-    <span class="chalk-select__val">{options[0]}</span>
+    <span class="chalk-select__val">{selected}</span>
     <svg class="chalk-select__arrow" width="10" height="7" viewBox="0 0 10 7" aria-hidden="true" fill="none">
       <path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
@@ -30,10 +32,10 @@ const { name, options, label } = Astro.props;
       <li
         role="option"
         tabindex="0"
-        aria-selected={i === 0 ? "true" : "false"}
+        aria-selected={o === selected ? "true" : "false"}
         data-val={o}
         style={`--i:${i}`}
-        class:list={[{ "is-selected": i === 0 }]}
+        class:list={[{ "is-selected": o === selected }]}
       >
         <span class="chalk-select__num">0{i + 1}</span>
         {o}

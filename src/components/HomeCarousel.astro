@@ -22,12 +22,21 @@ const slides = getCarouselSlides();
             <span class="h-sub">{s.eyebrow}</span>
             <h2 class="h-display"><span class="chalk-underline">{s.title}</span></h2>
             <p class="lead">{s.body}</p>
-            <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
+            <div class="inline-action">
+              <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
+            </div>
           </div>
         </article>
       ))
     }
   </div>
+
+  <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Előző dia">
+    <span aria-hidden="true">‹</span>
+  </button>
+  <button class="carousel__nav carousel__nav--next" type="button" aria-label="Következő dia">
+    <span aria-hidden="true">›</span>
+  </button>
 
   <div class="carousel__dots" role="tablist">
     {slides.map((_, i) => (
@@ -56,10 +65,10 @@ const slides = getCarouselSlides();
     display: grid;
     grid-template-columns: 1fr;
     gap: clamp(20px, 4vw, 40px);
-    padding-inline: var(--gutter);
+    padding-inline: max(var(--gutter), calc((100vw - var(--max-w)) / 2 + var(--gutter)));
     padding-block: clamp(40px, 7vw, 80px);
-    max-width: var(--max-w);
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
     align-items: center;
   }
 
@@ -71,15 +80,24 @@ const slides = getCarouselSlides();
 
   .carousel__art {
     width: 100%;
+    max-width: 620px;
+    justify-self: center;
+    aspect-ratio: 4 / 3;
+    transform: none;
+    outline: 0;
+    box-shadow: var(--photo-shadow);
+    overflow: hidden;
+    border-radius: var(--r-md);
+    background: var(--bg-2);
   }
+  .carousel__art::before,
+  .carousel__art::after { content: none; }
+  .carousel__art img { border-radius: var(--r-md); }
 
   .carousel__copy {
     display: grid;
     gap: 18px;
     align-content: center;
-  }
-  .carousel__copy .btn {
-    justify-self: start;
   }
 
   .carousel__dots {
@@ -111,12 +129,88 @@ const slides = getCarouselSlides();
     background: var(--accent);
     transform: scale(1.3);
   }
+
+  .carousel__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgba(42,41,41,0.58);
+    opacity: 0.88;
+    transform: translateY(-50%);
+    transition: opacity 220ms var(--ease), background 220ms var(--ease);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .carousel__nav--prev { left: 12px; }
+  .carousel__nav--next { right: 12px; }
+  .carousel__nav span {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(244,244,244,0.26);
+    border-radius: 999px;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  @media (hover: hover) and (pointer: fine) and (min-width: 860px) {
+    .carousel__nav {
+      top: 0;
+      bottom: 54px;
+      height: auto;
+      align-items: center;
+      width: 30%;
+      opacity: 0;
+      border-radius: 0;
+      background: transparent;
+      transform: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      transition: opacity 220ms var(--ease), background 220ms var(--ease);
+    }
+    .carousel__nav:hover,
+    .carousel__nav:focus-visible {
+      opacity: 1;
+      background: linear-gradient(90deg, rgba(0,0,0,0.2), transparent);
+    }
+    .carousel__nav--prev {
+      left: 0;
+      justify-items: start;
+      padding-left: var(--gutter);
+    }
+    .carousel__nav--next {
+      right: 0;
+      justify-items: end;
+      padding-right: var(--gutter);
+    }
+    .carousel__nav--next:hover,
+    .carousel__nav--next:focus-visible {
+      background: linear-gradient(270deg, rgba(0,0,0,0.2), transparent);
+    }
+    .carousel__nav span {
+      width: 54px;
+      height: 54px;
+      background: rgba(42,41,41,0.44);
+      font-size: 3rem;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+  }
 </style>
 
 <script>
   function initCarousel() {
     const track = document.getElementById("carouselTrack") as HTMLElement | null;
     const dots  = Array.from(document.querySelectorAll(".carousel__dot")) as HTMLButtonElement[];
+    const prev  = document.querySelector<HTMLButtonElement>(".carousel__nav--prev");
+    const nextBtn = document.querySelector<HTMLButtonElement>(".carousel__nav--next");
     if (!track || !dots.length) return;
 
     const slides = Array.from(track.children) as HTMLElement[];
@@ -141,12 +235,15 @@ const slides = getCarouselSlides();
       track.scrollTo({ left: slides[i].offsetLeft, behavior: "smooth" });
 
     const next = () => goTo((getActive() + 1) % slides.length);
+    const prevSlide = () => goTo((getActive() - 1 + slides.length) % slides.length);
 
     const startAuto = () => { stopAuto(); timer = setInterval(next, 4500); };
     const stopAuto  = () => { if (timer) { clearInterval(timer); timer = null; } };
 
     track.addEventListener("scroll", () => requestAnimationFrame(setActive), { passive: true });
     dots.forEach((d, i) => d.addEventListener("click", () => { goTo(i); startAuto(); }));
+    prev?.addEventListener("click", () => { prevSlide(); startAuto(); });
+    nextBtn?.addEventListener("click", () => { next(); startAuto(); });
     track.addEventListener("mouseenter", stopAuto);
     track.addEventListener("mouseleave", startAuto);
     track.addEventListener("touchstart", stopAuto,  { passive: true });

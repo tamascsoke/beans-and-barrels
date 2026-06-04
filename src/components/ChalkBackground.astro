@@ -18,7 +18,7 @@
 
     const img = ctx.createImageData(size, size);
     const d = img.data;
-    const n = Math.floor(size * size * 0.012);
+    const n = Math.floor(size * size * 0.0065);
 
     for (let i = 0; i < n; i++) {
       const x = Math.floor(rng() * size);
@@ -29,7 +29,7 @@
       d[idx] = v; d[idx+1] = v-4; d[idx+2] = v-9; d[idx+3] = a;
     }
 
-    for (let i = 0; i < Math.floor(size * size * 0.001); i++) {
+    for (let i = 0; i < Math.floor(size * size * 0.00045); i++) {
       const x = Math.floor(rng() * (size - 2)) + 1;
       const y = Math.floor(rng() * (size - 2)) + 1;
       const v = Math.floor(rng() * 50 + 170);

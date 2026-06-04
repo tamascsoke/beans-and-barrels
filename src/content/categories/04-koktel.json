@@ -1,1 +1,1 @@
-{ "order": 4, "key": "koktel", "label": "Koktélok", "sub": "Hűs poharak", "image": "/uploads/kave2.webp", "imageAlt": "Kávéital közelről", "items": ["Aperol Spritz", "Hugo", "Espresso Martini", "Mojito", "Hideg gin tonic"] }
+{ "order": 4, "key": "szezonalis", "label": "Szezonális különlegességek", "image": "/uploads/kave3.webp", "imageAlt": "Szezonális Bean & Barrel ital", "items": ["Cold brew tonic", "Forró csoki", "Szezonális limonádé", "Téli fűszeres latte", "Alkalomhoz igazított italok"] }

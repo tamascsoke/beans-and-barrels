@@ -1,10 +1,10 @@
 {
   "order": 2,
   "eyebrow": "Helyszínek",
-  "title": "Hol találsz minket?",
-  "body": "Budapesttől a Balatonig — kövesd a tuktukot a városban, vagy nézd meg a következő állomásokat.",
-  "ctaHref": "/kinalat",
-  "ctaLabel": "Nézd a kínálatot",
-  "image": "/uploads/tuktuk-pult.webp",
-  "imageAlt": "Bean & Barrel tuktuk pult"
+  "title": "Állandó Helyszínek",
+  "body": "KÉZIFÉK BEHÚZVA // Tuktukjainkat kérheted állandó nyitásra is!",
+  "ctaHref": "/kontakt?topic=Rendezv%C3%A9ny#urlap",
+  "ctaLabel": "Részletek",
+  "image": "/uploads/telekom-campus.webp",
+  "imageAlt": "Bean & Barrel tuktuk a Telekom Campus környezetében"
 }

@@ -10,12 +10,19 @@ function sortByOrder<T extends WithOrder>(entries: T[]): T[] {
 }
 
 const _imgs = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/uploads/*.webp',
+  '../assets/uploads/**/*.webp',
+  { eager: true },
+);
+
+const _galleryImgs = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/uploads/gallery/*.webp',
   { eager: true },
 );
 
 export function resolveImage(path: string | undefined): ImageMetadata | undefined {
   if (!path) return undefined;
+  const normalized = path.replace(/^\/?uploads\//, "../assets/uploads/");
+  if (_imgs[normalized]) return _imgs[normalized].default;
   const filename = path.split('/').pop();
   return _imgs[`../assets/uploads/${filename}`]?.default;
 }
@@ -35,7 +42,7 @@ export type Category = {
   order?: number;
   key: string;
   label: string;
-  sub: string;
+  sub?: string;
   items: string[];
   image?: string;
   imageAlt?: string;
@@ -91,12 +98,37 @@ export type GalleryPhoto = {
   alt: string;
 };
 
+function galleryAlt(filename: string): string {
+  const match = filename.match(/^gallery-([a-z0-9-]+)-(\d+)\.webp$/);
+  const group = match?.[1] ?? "pillanat";
+  const number = match ? Number(match[2]) : undefined;
+  const labels: Record<string, string> = {
+    helyszin: "Bean & Barrel helyszín",
+    kave: "Bean & Barrel kávé",
+    sor: "Bean & Barrel sör",
+    cookie: "Bean & Barrel snack",
+    rendezvenyek: "Bean & Barrel rendezvény",
+  };
+  return `${labels[group] ?? "Bean & Barrel pillanat"}${number ? ` ${number}` : ""}`;
+}
+
 export function getGalleryPhotos(): GalleryPhoto[] {
   const mods = import.meta.glob<{ default: GalleryPhoto }>(
     "../content/gallery/*.json",
     { eager: true },
   );
-  return sortByOrder(values(mods));
+  const cmsPhotos = sortByOrder(values(mods));
+  const uploadedPhotos = Object.keys(_galleryImgs)
+    .sort((a, b) => a.localeCompare(b, "hu"))
+    .map((key, index) => {
+      const filename = key.split("/").pop()!;
+      return {
+        order: 1000 + index,
+        image: `/uploads/gallery/${filename}`,
+        alt: galleryAlt(filename),
+      };
+    });
+  return [...cmsPhotos, ...uploadedPhotos];
 }
 
 export function getUpcomingEvents(opts?: { limit?: number }): UpcomingEvent[] {

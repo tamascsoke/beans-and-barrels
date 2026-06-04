@@ -11,9 +11,11 @@ const categories = getCategories();
   <section class="section kinalat-hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <span class="h-sub">Kínálat</span>
         <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
-        <p class="lead">Görgess lefelé — a tuktuk megmutatja, mi mindent hoz magával.</p>
+        <p class="lead">Specialty kávé, csapolt sör, snackek és szezonális italok egy mozgó pultból.</p>
+        <div class="inline-action hero-action">
+          <a class="btn" href="/rendezvenyek">Kérd rendezvényre</a>
+        </div>
       </div>
       <div class="photo-frame hero-img"><Image src={tuktukKaveImg} alt="Bean & Barrel tuktuk kínálat" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
     </div>
@@ -30,10 +32,9 @@ const categories = getCategories();
               : <div class="cat__art placeholder-img">Kép — {c.label}</div>
             }
             <div class="cat__copy">
-              <span class="h-sub">{c.sub}</span>
               <h2 class="h-section"><span class="chalk-underline">{c.label}</span></h2>
-              <ul class="cat__list">
-                {c.items.map((it) => <li>{it}</li>)}
+              <ul class="cat__list chalk-list chalk-list--ruled">
+                {c.items.map((it) => <li><span>{it}</span></li>)}
               </ul>
             </div>
           </article>
@@ -45,7 +46,13 @@ const categories = getCategories();
 
 <style>
   .kinalat-hero {
-    padding-block: clamp(50px, 8vw, 100px);
+    display: grid;
+    align-items: center;
+    min-height: min(720px, max(520px, calc(88svh - var(--nav-h))));
+    padding-block: clamp(36px, 6vw, 76px);
+  }
+  @supports (height: 100dvh) {
+    .kinalat-hero { min-height: min(720px, max(520px, calc(88dvh - var(--nav-h)))); }
   }
   .hero-grid {
     display: grid;
@@ -65,23 +72,18 @@ const categories = getCategories();
     grid-template-columns: 1fr;
     gap: clamp(20px, 4vw, 40px);
     align-items: center;
+    padding-block: clamp(28px, 5vw, 58px);
+    border-top: 1px solid var(--line);
   }
+  .cat:last-child { border-bottom: 1px solid var(--line); }
   @media (min-width: 820px) {
     .cat { grid-template-columns: 1.1fr 1fr; }
     .cat:nth-child(even) .cat__art { order: 2; }
   }
   .cat__art { aspect-ratio: 4 / 3; width: 100%; }
-  .cat__copy { display: grid; gap: 14px; }
+  .cat__copy { display: grid; gap: 14px; align-content: center; align-self: center; }
+  .cat__copy h2 { font-size: clamp(2rem, 4vw, 3.4rem); }
   .cat__list {
-    list-style: none;
-    display: grid;
-    gap: 6px;
-    font-family: var(--f-body);
-    letter-spacing: 0.08em;
-    color: var(--ink-soft);
-  }
-  .cat__list li::before {
-    content: "—  ";
-    color: var(--accent);
+    margin-top: 4px;
   }
 </style>

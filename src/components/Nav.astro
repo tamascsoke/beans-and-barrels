@@ -92,11 +92,22 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 
   .nav__brand {
     font-family: var(--f-logo);
-    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    font-size: clamp(2.25rem, 5vw, 4.15rem);
     letter-spacing: 0.08em;
     text-align: center;
     text-transform: uppercase;
     line-height: 1;
+  }
+
+  @media (max-width: 640px) {
+    .nav__inner {
+      height: 72px;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+    }
+    .nav__logo { height: 48px; }
+    .nav__brand { display: none; }
+    .nav__toggle { width: 40px; height: 40px; }
   }
 
   .nav__toggle {
@@ -271,26 +282,28 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     const overlay  = document.getElementById("navOverlay") as HTMLElement | null;
     const closeBtn = document.getElementById("navClose")   as HTMLButtonElement | null;
     if (!btn || !drawer) return;
+    const navButton = btn;
+    const navDrawer = drawer;
 
     function open() {
-      btn.setAttribute("aria-expanded", "true");
-      drawer!.setAttribute("aria-hidden", "false");
+      navButton.setAttribute("aria-expanded", "true");
+      navDrawer.setAttribute("aria-hidden", "false");
       overlay?.classList.add("is-open");
       document.body.style.overflow = "hidden";
     }
     function close() {
-      btn.setAttribute("aria-expanded", "false");
-      drawer!.setAttribute("aria-hidden", "true");
+      navButton.setAttribute("aria-expanded", "false");
+      navDrawer.setAttribute("aria-hidden", "true");
       overlay?.classList.remove("is-open");
       document.body.style.overflow = "";
     }
 
-    btn.addEventListener("click", () =>
-      btn.getAttribute("aria-expanded") === "true" ? close() : open()
+    navButton.addEventListener("click", () =>
+      navButton.getAttribute("aria-expanded") === "true" ? close() : open()
     );
     closeBtn?.addEventListener("click", close);
     overlay?.addEventListener("click", close);
-    drawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+    navDrawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
   }
 
   initNav();

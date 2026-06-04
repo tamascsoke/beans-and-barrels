@@ -3,26 +3,31 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import tuktuk2Img from '../assets/uploads/tuktuk2.webp';
 
-const blocks = [
-  {
-    h: "Mit kapsz a Bean & Barrel franchise-zal?",
-    p: "Kipróbált koncepció, márka, beszállítói hálózat, képzés, marketing-támogatás és a tuktuk maga.",
-  },
-  {
-    h: "Kinek ajánljuk?",
-    p: "Vendéglátás iránt elkötelezett vállalkozóknak, akik mobil, közösségi élményt akarnak építeni.",
-  },
-  {
-    h: "Hogyan indulj el?",
-    p: "Töltsd ki az érdeklődési űrlapot, beszélgetünk, megnézzük a területet, és összerakjuk a tervet.",
-  },
+const benefits = [
+  "Bejáratott brand és arculat – nem kell mindent a nulláról kitalálnod. Mi már megtettük. Rád csak annyi vár, hogy képviseld és élvezd minden velejáróját.",
+  "Egyszerű modell – egy kis hely, kevés költség, kreatív koncepció, gyors megtérülés. Kávé, sör, pár minőségi snack – nincs túlbonyolítva.",
+];
+
+const packageItems = [
+  "Teljes márkacsomag",
+  "Minden know-how",
+  "Barista és csapos betanítás",
+  "Marketing-, és kampánystratégia",
+  "Hozzáférés a beszállítói hálózathoz",
+  "Folyamatos kapcsolattartás",
 ];
 
 const steps = [
-  { n: "01", t: "Érdeklődés", d: "Küldj egy üzenetet — vagy hívj minket." },
-  { n: "02", t: "Bemutatkozás", d: "Egy beszélgetés, ahol megnézzük, illik-e a Bean & Barrel hozzád." },
-  { n: "03", t: "Terület és terv", d: "Helyszín, ütemezés, befektetési terv és kalkuláció." },
-  { n: "04", t: "Indulás", d: "Képzés, tuktuk átadás, márkanyitás közösen." },
+  { n: "01", t: "Jelentkezz", d: "Vedd fel velünk a kapcsolatot." },
+  { n: "02", t: "Beszélgetünk", d: "Nem interjú, inkább egy laza kávé/sör mellett (termékteszt)." },
+  { n: "03", t: "Megmutatjuk a modellt", d: "Számokkal, képekkel, tuktukkal." },
+  { n: "04", t: "Üdv a csapatban", d: "Tuktuk beizzítva, sztori indul." },
+];
+
+const socials = [
+  { label: "Instagram", href: "https://www.instagram.com/beanbarrel_bp?igsh=b2YzbWYzeXRnNDdr&utm_source=qr" },
+  { label: "Facebook", href: "https://www.facebook.com/share/1SxeQupYdp/?mibextid=wwXIfr" },
+  { label: "TikTok", href: "https://www.tiktok.com/@beanbarrel_bp?_r=1&_t=ZN-96sdqSHL2R9" },
 ];
 ---
 
@@ -31,34 +36,42 @@ const steps = [
     <div class="container intro">
       <div class="intro__copy">
         <span class="h-sub">Franchise</span>
-        <h1 class="h-display"><span class="chalk-underline">Vidd magaddal a tuktukot</span></h1>
+        <h1 class="h-display"><span class="chalk-underline">Kávézz, sörözz velünk!</span></h1>
         <p class="lead">
-          Bean & Barrel partner vagyunk a városodban. Egy bevált koncepció, egy kis csapat, sok vendég.
+          Az országban rengeteg helyen van szükség a Bean&amp;Barrel-re. Irodák, sétálóutcák, rendezvények,
+          lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
+          kávézó-söröző hálózatához.
         </p>
-        <a class="btn" href="/kontakt">Érdekel a franchise</a>
+        <div class="inline-action">
+          <a class="btn" href="/kontakt?topic=Franchise#urlap">Érdekel a franchise</a>
+        </div>
       </div>
       <div class="photo-frame intro__photo"><Image src={tuktuk2Img} alt="Bean & Barrel tuktuk" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="eager" fetchpriority="high" /></div>
     </div>
   </section>
 
   <section class="section section--alt">
-    <div class="container blocks">
-      {
-        blocks.map((b) => (
-          <article class="block">
-            <h2 class="h-section"><span class="chalk-underline">{b.h}</span></h2>
-            <p class="body-text">{b.p}</p>
-          </article>
-        ))
-      }
+    <div class="container blocks stagger">
+      <article class="block">
+        <h2 class="h-section"><span class="chalk-underline">Miért érdemes franchise-partnernek lenni?</span></h2>
+        <ul class="block__list chalk-list chalk-list--ruled">
+          {benefits.map((item) => <li><span>{item}</span></li>)}
+        </ul>
+      </article>
+      <article class="block">
+        <h2 class="h-section"><span class="chalk-underline">Mit kapsz?</span></h2>
+        <ul class="block__list block__list--compact chalk-list chalk-list--ruled">
+          {packageItems.map((item) => <li><span>{item}</span></li>)}
+        </ul>
+      </article>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
       <span class="h-sub">Folyamat</span>
-      <h2 class="h-display"><span class="chalk-underline">Négy lépés az indulásig</span></h2>
-      <ol class="steps">
+      <h2 class="h-display"><span class="chalk-underline">A csatlakozás menete</span></h2>
+      <ol class="steps stagger">
         {
           steps.map((s) => (
             <li class="step">
@@ -71,6 +84,17 @@ const steps = [
           ))
         }
       </ol>
+      <div class="inline-action steps__action">
+        <a class="btn" href="/kontakt?topic=Franchise#urlap">Csatlakozni szeretnék</a>
+      </div>
+      <div class="franchise-social">
+        <span class="h-sub">Kövess minket</span>
+        <div class="franchise-social__links">
+          {socials.map((item) => (
+            <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 </Layout>
@@ -79,27 +103,104 @@ const steps = [
   .intro { display: grid; gap: clamp(24px, 4vw, 48px); align-items: center; }
   @media (min-width: 820px) { .intro { grid-template-columns: 1fr 1fr; } }
   .intro__copy { display: grid; gap: 18px; }
-  .intro__copy .btn { justify-self: start; margin-top: 6px; }
-  .section--alt { background: var(--bg-2); }
 
-  .blocks { display: grid; gap: 32px; grid-template-columns: 1fr; }
-  @media (min-width: 820px) { .blocks { grid-template-columns: repeat(3, 1fr); } }
-  .block h2 { font-size: clamp(1.2rem, 2vw, 1.6rem); margin-bottom: 12px; }
+  .blocks { display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 820px) { .blocks { grid-template-columns: 1fr 1fr; } }
+  .block {
+    display: grid;
+    gap: 16px;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    box-shadow: var(--panel-shadow);
+  }
+  .block h2 { font-size: clamp(1.35rem, 2.3vw, 1.9rem); }
+  .block__list--compact { gap: 0; }
 
-  .steps { list-style: none; display: grid; gap: 22px; margin-top: 24px; counter-reset: step; }
+  .steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 28px;
+    counter-reset: step;
+  }
+  @media (min-width: 900px) {
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
   .step {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 18px;
-    padding: 22px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
+    gap: 24px;
+    align-content: space-between;
+    min-height: 245px;
+    padding: clamp(20px, 2.8vw, 28px);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    box-shadow: var(--panel-shadow);
+    transition: border-color 260ms var(--ease), box-shadow 260ms var(--ease), background 260ms var(--ease), transform 260ms var(--ease);
+  }
+  .steps.is-visible .step {
+    animation: step-pop 560ms var(--ease) both;
+  }
+  .steps.is-visible .step:nth-child(1) { animation-delay: 40ms; }
+  .steps.is-visible .step:nth-child(2) { animation-delay: 120ms; }
+  .steps.is-visible .step:nth-child(3) { animation-delay: 200ms; }
+  .steps.is-visible .step:nth-child(4) { animation-delay: 280ms; }
+  .step:hover {
+    border-color: rgba(240, 138, 28, 0.45);
+    background: var(--panel-hover);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+    transform: translateY(-6px);
+  }
+  .steps.stagger.is-visible > .step:hover {
+    transform: translateY(-6px);
   }
   .step__n {
+    display: inline-grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border: 1px solid rgba(240, 138, 28, 0.5);
+    border-radius: 8px;
     font-family: var(--f-logo);
     color: var(--accent);
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    line-height: 1;
     letter-spacing: 0.04em;
   }
-  .step h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); margin-bottom: 6px; }
+  .step h3 { font-size: clamp(1.45rem, 2.4vw, 2rem); margin-bottom: 8px; }
+  .step .body-text { font-size: clamp(1rem, 1.16vw, 1.08rem); line-height: 1.68; letter-spacing: 0.035em; }
+  .steps__action {
+    margin-top: clamp(20px, 3vw, 32px);
+  }
+  .franchise-social {
+    display: grid;
+    gap: 14px;
+    margin-top: clamp(28px, 5vw, 48px);
+  }
+  .franchise-social__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+  .franchise-social__links a {
+    color: var(--ink-soft);
+    border-bottom: 1px dashed var(--ink-faint);
+    transition: color 180ms var(--ease), border-color 180ms var(--ease);
+  }
+  .franchise-social__links a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  @keyframes step-pop {
+    from { opacity: 0; transform: translateY(18px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .steps.is-visible .step {
+      animation: none;
+    }
+  }
 </style>

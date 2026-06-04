@@ -2,10 +2,8 @@
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import SideTab from "../components/SideTab.astro";
-import ChalkCursor from "../components/ChalkCursor.astro";
 import ChalkBackground from "../components/ChalkBackground.astro";
 import ScrollExtras from "../components/ScrollExtras.astro";
-import TuktukProgress from "../components/TuktukProgress.astro";
 import EasterEggs from "../components/EasterEggs.astro";
 import { ClientRouter } from "astro:transitions";
 import "@fontsource/league-gothic/400.css";
@@ -43,35 +41,12 @@ const {
     </main>
     <SideTab />
     <ScrollExtras />
-    <TuktukProgress />
     <EasterEggs />
-    <ChalkCursor />
     <Footer />
   </body>
 </html>
 
 <script>
-  /* ── Global one-time inits (survive page swaps via astro:after-swap) ── */
-
-  // Parallax — single global listener, queries [data-parallax] each frame
-  if (!document.body.dataset.parallaxInit && window.matchMedia("(pointer:fine)").matches) {
-    document.body.dataset.parallaxInit = "1";
-    let ticking = false;
-    document.addEventListener("mousemove", (e) => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const xPct = e.clientX / window.innerWidth  - 0.5;
-        const yPct = e.clientY / window.innerHeight - 0.5;
-        document.querySelectorAll<HTMLElement>("[data-parallax]").forEach((el) => {
-          const d = parseFloat(el.dataset.parallax ?? "1");
-          el.style.transform = `translate(${xPct * d * -22}px, ${yPct * d * -10}px)`;
-        });
-        ticking = false;
-      });
-    });
-  }
-
   /* ── Per-page inits (re-run after each navigation) ── */
   function initObservers() {
     // chalk underline draw-in
@@ -117,24 +92,6 @@ const {
         type();
       }, { threshold: 0.6 });
       twIO.observe(el);
-    });
-
-    // magnetic buttons — fine pointer only (avoid stuck transform on touch)
-    const hasFinePointer = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
-    if (hasFinePointer) document.querySelectorAll<HTMLElement>(".btn").forEach((btn) => {
-      btn.addEventListener("mousemove", (e) => {
-        const r  = btn.getBoundingClientRect();
-        const dx = (e.clientX - (r.left + r.width  / 2)) * 0.28;
-        const dy = (e.clientY - (r.top  + r.height / 2)) * 0.28 - 2;
-        btn.style.transform = `translate(${dx}px,${dy}px)`;
-        btn.style.boxShadow = btn.classList.contains("btn--ghost")
-          ? "none"
-          : `0 12px 34px rgba(240,138,28,0.4)`;
-      });
-      btn.addEventListener("mouseleave", () => {
-        btn.style.transform = "";
-        btn.style.boxShadow = "";
-      });
     });
 
     // section chalk-dust reveal
@@ -184,8 +141,19 @@ const {
 
   }
 
+  function scrollToCurrentHash() {
+    const id = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+    if (!id) return;
+    window.requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ block: "start" });
+    });
+  }
+
   initObservers();
   document.addEventListener("astro:after-swap", initObservers);
+  document.addEventListener("astro:after-swap", scrollToCurrentHash);
+  window.addEventListener("hashchange", scrollToCurrentHash);
+  scrollToCurrentHash();
 
 </script>
 
@@ -214,17 +182,11 @@ const {
   .tw-cursor.tw-done { opacity: 0; animation: none; }
   @keyframes tw-blink { 50% { opacity: 0; } }
 
-  /* ── Parallax elements: smooth follow ── */
-  [data-parallax] {
-    transition: transform 120ms ease-out;
-    will-change: transform;
-  }
-
   /* ── Section chalk-dust reveal ── */
   .chalk-section {
-    opacity: 0;
-    transform: translateY(14px);
-    filter: blur(3px);
+    opacity: 1;
+    transform: none;
+    filter: none;
     transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), filter 0.7s var(--ease);
   }
   .chalk-section.is-visible {
@@ -245,10 +207,14 @@ const {
   /* ── Split text words ── */
   .sw {
     display: inline-block;
-    opacity: 0;
-    transform: translateY(24px);
+    opacity: 1;
+    transform: none;
     transition: opacity 650ms var(--ease), transform 650ms var(--ease);
   }
   .sw-vis .sw { opacity: 1; transform: none; }
+
+  :target {
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+  }
 
 </style>

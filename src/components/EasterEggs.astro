@@ -19,7 +19,7 @@ import idleContent from "../content/idle.json";
 <canvas id="ee-canvas" aria-hidden="true"></canvas>
 
 <!-- Idle overlay -->
-<div id="ee-idle" aria-hidden="true">
+<div id="ee-idle" aria-hidden="true" data-idle-seconds={idleContent.idleSeconds}>
   <div class="ee-lens">
     <div class="ee-lens__vignette"></div>
     <div class="ee-story" style="filter: url(#chalk-tex)">
@@ -285,7 +285,8 @@ import idleContent from "../content/idle.json";
   function resetIdleTimer() {
     if (idleTimer) clearTimeout(idleTimer);
     if (idleShown) hideIdleScreen();
-    idleTimer = setTimeout(showIdleScreen, 20000);
+    const idleSeconds = Number(document.getElementById("ee-idle")?.dataset.idleSeconds ?? "55");
+    idleTimer = setTimeout(showIdleScreen, Number.isFinite(idleSeconds) ? idleSeconds * 1000 : 55000);
   }
 
   initChalkCanvas();

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { getGalleryPhotos, resolveImage } from "../lib/content";
 
 function shuffle<T>(arr: T[]): T[] {
@@ -11,10 +11,18 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-const photos    = shuffle(getGalleryPhotos());
+const photos    = shuffle(getGalleryPhotos()).slice(0, 16);
 const hasPhotos = photos.length > 0;
 const items     = hasPhotos ? photos : Array.from({ length: 6 }, (_, i) => ({ image: "", alt: `Kép ${i + 1}` }));
 const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
+
+const enriched = await Promise.all(items.map(async (p) => {
+  const asset = resolveImage(p.image);
+  const fullSrc = asset
+    ? (await getImage({ src: asset, width: 1400, format: 'webp' })).src
+    : p.image;
+  return { ...p, asset, fullSrc };
+}));
 ---
 
 <section class="gallery-section section">
@@ -25,16 +33,29 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
 
   <div class="gallery-wrap" id="galleryWrap" aria-label="Fotógaléria" data-sets={sets}>
     <div class="gallery-inner" id="galleryInner">
-      {Array.from({ length: sets }, () => items).flat().map((p) => (
-        <div class={`gallery-frame${!hasPhotos ? " gallery-frame--ph" : ""}`}>
-          {hasPhotos && resolveImage(p.image)
-            ? <Image src={resolveImage(p.image)!} alt={p.alt} width={400} loading="eager" draggable="false" />
+      {Array.from({ length: sets }, () => enriched).flat().map((p) => (
+        <button class={`gallery-frame${!hasPhotos ? " gallery-frame--ph" : ""}`} type="button" data-src={p.fullSrc} data-alt={p.alt} disabled={!hasPhotos}>
+          {hasPhotos && p.asset
+            ? <Image src={p.asset} alt={p.alt} width={400} loading="eager" draggable="false" />
             : hasPhotos
               ? <img src={p.image} alt={p.alt} decoding="async" draggable="false" />
               : <span>{p.alt}</span>
           }
-        </div>
+        </button>
       ))}
+    </div>
+    <button class="gallery-nav gallery-nav--prev" type="button" aria-label="Előző képek"><span aria-hidden="true">‹</span></button>
+    <button class="gallery-nav gallery-nav--next" type="button" aria-label="Következő képek"><span aria-hidden="true">›</span></button>
+  </div>
+
+  <div class="gallery-lightbox" id="stripLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Képnéző">
+    <button class="gallery-lightbox__close" id="stripLbClose" type="button" aria-label="Bezárás">✕</button>
+    <img id="stripLbImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" />
+  </div>
+
+  <div class="container gallery-cta">
+    <div class="inline-action inline-action--center">
+      <a class="btn btn--ghost" href="/galeria">Galéria</a>
     </div>
   </div>
 </section>
@@ -63,6 +84,7 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
   .gallery-frame--ph span { pointer-events: none; }
 
   .gallery-wrap {
+    position: relative;
     overflow: hidden;
     cursor: grab;
     user-select: none;
@@ -112,12 +134,21 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
   }
 
   .gallery-frame {
-    height: clamp(150px, 38vw, 400px);
+    height: clamp(140px, 34vw, 340px);
     aspect-ratio: 4 / 3;
     flex-shrink: 0;
     overflow: hidden;
     border-radius: var(--r-md);
     background: var(--bg-2);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
+    color: inherit;
+    padding: 0;
+  }
+  .gallery-frame:disabled { cursor: default; }
+
+  @media (min-width: 900px) {
+    .gallery-frame { height: clamp(130px, 24vw, 256px); }
   }
 
   .gallery-frame img {
@@ -132,6 +163,118 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
   @media (hover: hover) and (pointer: fine) {
     .gallery-wrap:hover .gallery-frame img { transform: scale(1.03); }
   }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgba(42,41,41,0.58);
+    opacity: 0.88;
+    transform: translateY(-50%);
+    transition: opacity 220ms var(--ease), background 220ms var(--ease);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .gallery-nav--prev { left: 12px; }
+  .gallery-nav--next { right: 12px; }
+  .gallery-nav span {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(244,244,244,0.28);
+    border-radius: 999px;
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+    .gallery-nav {
+      top: 0;
+      bottom: 0;
+      height: auto;
+      align-items: center;
+      width: 24%;
+      opacity: 0;
+      border-radius: 0;
+      background: transparent;
+      transform: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      transition: opacity 220ms var(--ease), background 220ms var(--ease);
+    }
+    .gallery-nav:hover,
+    .gallery-nav:focus-visible {
+      opacity: 1;
+      background: linear-gradient(90deg, rgba(0,0,0,0.22), transparent);
+    }
+    .gallery-nav--prev {
+      left: 0;
+      justify-items: start;
+      padding-left: var(--gutter);
+    }
+    .gallery-nav--next {
+      right: 0;
+      justify-items: end;
+      padding-right: var(--gutter);
+    }
+    .gallery-nav--next:hover,
+    .gallery-nav--next:focus-visible {
+      background: linear-gradient(270deg, rgba(0,0,0,0.22), transparent);
+    }
+    .gallery-nav span {
+      width: 52px;
+      height: 52px;
+      background: rgba(42,41,41,0.46);
+      font-size: 3rem;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+  }
+
+  .gallery-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 220;
+    display: grid;
+    place-items: center;
+    padding: var(--gutter);
+    background: rgba(0,0,0,0.92);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms var(--ease);
+  }
+  .gallery-lightbox[aria-hidden="false"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .gallery-lightbox img {
+    max-width: min(92vw, 1280px);
+    max-height: 86vh;
+    object-fit: contain;
+    border-radius: var(--r-md);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  }
+  .gallery-lightbox__close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    font-size: 1.1rem;
+  }
+  .gallery-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(24px, 4vw, 42px);
+  }
 </style>
 
 <script>
@@ -139,18 +282,23 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
     const wrap  = document.getElementById("galleryWrap")  as HTMLElement | null;
     const inner = document.getElementById("galleryInner") as HTMLElement | null;
     if (!wrap || !inner) return;
+    const prev = wrap.querySelector<HTMLButtonElement>(".gallery-nav--prev");
+    const next = wrap.querySelector<HTMLButtonElement>(".gallery-nav--next");
+    const lightbox = document.getElementById("stripLightbox");
+    const lbImg = document.getElementById("stripLbImg") as HTMLImageElement | null;
+    const lbClose = document.getElementById("stripLbClose");
 
     const SPEED = 0.55;
     let pos        = 0;
-    let isPaused   = false;
     let isDragging = false;
     let dragStartX = 0;
     let dragStartPos = 0;
+    let didDrag = false;
     let halfW      = 0;
     let rafId: number | null = null;
 
     function tick() {
-      if (!isPaused && !isDragging) {
+      if (!isDragging) {
         pos += SPEED;
         if (halfW > 0 && pos >= halfW) pos -= halfW;
       }
@@ -179,12 +327,10 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
       });
     }
 
-    wrap.addEventListener("pointerenter", () => { isPaused = true; });
-    wrap.addEventListener("pointerleave", () => { if (!isDragging) isPaused = false; });
-
     wrap.addEventListener("pointerdown", (e) => {
+      if ((e.target as HTMLElement).closest(".gallery-nav")) return;
       isDragging   = true;
-      isPaused     = true;
+      didDrag      = false;
       dragStartX   = e.clientX;
       dragStartPos = pos;
       wrap.setPointerCapture(e.pointerId);
@@ -194,6 +340,7 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
     wrap.addEventListener("pointermove", (e) => {
       if (!isDragging) return;
       const dx = dragStartX - e.clientX;
+      if (Math.abs(dx) > 6) didDrag = true;
       pos = dragStartPos + dx;
       if (halfW > 0) {
         if (pos < 0)       pos += halfW;
@@ -205,11 +352,54 @@ const sets      = hasPhotos ? (photos.length < 5 ? 3 : 2) : 2;
       if (!isDragging) return;
       isDragging = false;
       wrap.style.cursor = "";
-      setTimeout(() => { if (!isDragging) isPaused = false; }, 400);
+    });
+
+    function shift(dir: 1 | -1) {
+      pos += dir * wrap!.clientWidth * 0.72;
+      if (halfW > 0) {
+        if (pos < 0) pos += halfW;
+        if (pos >= halfW) pos -= halfW;
+      }
+    }
+
+    function show(src: string, alt: string) {
+      if (!lightbox || !lbImg || !src) return;
+      lbImg.src = src;
+      lbImg.alt = alt;
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("has-lightbox-open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function hide() {
+      if (!lightbox) return;
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("has-lightbox-open");
+      document.body.style.overflow = "";
+    }
+
+    prev?.addEventListener("click", (e) => { e.stopPropagation(); shift(-1); });
+    next?.addEventListener("click", (e) => { e.stopPropagation(); shift(1); });
+
+    wrap.addEventListener("click", (e) => {
+      if (didDrag) {
+        e.preventDefault();
+        didDrag = false;
+        return;
+      }
+      const frame = (e.target as HTMLElement).closest<HTMLElement>(".gallery-frame[data-src]");
+      if (!frame || frame.hasAttribute("disabled")) return;
+      show(frame.dataset.src ?? "", frame.dataset.alt ?? "");
+    });
+    lbClose?.addEventListener("click", hide);
+    lightbox?.addEventListener("click", (e) => { if (e.target === lightbox) hide(); });
+    document.addEventListener("keydown", (e) => {
+      if (lightbox?.getAttribute("aria-hidden") === "false" && e.key === "Escape") hide();
     });
 
     document.addEventListener("astro:before-swap", () => {
       if (rafId) cancelAnimationFrame(rafId);
+      hide();
     }, { once: true });
   }
 

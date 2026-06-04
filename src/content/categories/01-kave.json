@@ -1,1 +1,1 @@
-{ "order": 1, "key": "kave", "label": "Kávé", "sub": "Specialty pörkölés", "image": "/uploads/kave.webp", "imageAlt": "Specialty kávé közelről", "items": ["Espresso", "Cappuccino", "Flat white", "Filter — V60", "Cold brew"] }
+{ "order": 1, "key": "kave", "label": "Specialty kávék", "image": "/uploads/kave.webp", "imageAlt": "Specialty kávé közelről", "items": ["Espresso", "Cappuccino", "Flat white", "Filter — V60", "Cold brew"] }

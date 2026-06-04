@@ -5,6 +5,7 @@ import ChalkSelect from "../components/ChalkSelect.astro";
 import tuktukPultImg from '../assets/uploads/tuktuk-pult.webp';
 import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT } from "../lib/contact";
 const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
+const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
 ---
 
 <Layout title="Kontakt — Bean & Barrel">
@@ -26,7 +27,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     </div>
   </section>
 
-  <section class="section section--alt">
+  <section class="section section--alt" id="urlap">
     <div class="container">
       <h2 class="h-section"><span class="chalk-underline">Írj nekünk</span></h2>
       <form
@@ -49,7 +50,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
         </label>
         <div class="form-field form__full">
           <span class="h-sub">Téma</span>
-          <ChalkSelect name="topic" options={topics} label="Téma" />
+          <ChalkSelect name="topic" options={topics} label="Téma" value={selectedTopic} />
         </div>
         <label class="form-field form__full">
           <span class="h-sub">Üzenet</span>
@@ -108,7 +109,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       } catch {
         btn.dataset.state = "";
         btn.disabled = false;
-        feedback.textContent = "Valami hiba történt. Próbáld újra, vagy írj emailben.";
+        feedback.textContent = "Valami hiba történt. Próbáld újra, vagy írj e-mailben.";
         feedback.classList.add("form__feedback--err");
       }
     });
@@ -131,8 +132,6 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   .contact__list { list-style: none; display: grid; gap: 12px; margin-top: 10px; }
   .contact__list li { display: grid; gap: 2px; }
   .contact__list a:hover { color: var(--accent); }
-
-  .section--alt { background: var(--bg-2); }
 
   .form {
     display: grid;
