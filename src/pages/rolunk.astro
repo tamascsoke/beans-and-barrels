@@ -35,7 +35,7 @@ const founders: Founder[] = [
     note: "Mindenre rákérdez, amiből jobb ital, jobb sztori vagy jobb hangulat lehet.",
     photo: donatImg,
     photoAlt: "Váradi Donát, a Bean & Barrel alapítója",
-    photoPosition: "50% 32%",
+    photoPosition: "50% 46%",
   },
 ];
 ---
@@ -68,18 +68,16 @@ const founders: Founder[] = [
       <div class="founders__grid stagger">
         {founders.map((founder) => (
           <article class="founder-card" style={founder.photoPosition ? `--founder-photo-position: ${founder.photoPosition};` : undefined}>
-            {founder.photo ? (
-              <div class="founder-card__photo">
+            <div class:list={["founder-card__media", founder.photo && "founder-card__media--photo"]}>
+              {founder.photo ? (
                 <Image src={founder.photo} alt={founder.photoAlt ?? founder.name} widths={[320, 520, 720]} sizes="(min-width: 900px) 28vw, 100vw" loading="lazy" />
-              </div>
-            ) : (
-              <div class="founder-card__avatar" aria-hidden="true">{founder.initials}</div>
-            )}
-            <div class="founder-card__copy">
-              <h3 class="h-section">{founder.name}</h3>
-              <span>{founder.role}</span>
-              <p class="body-text">{founder.note}</p>
+              ) : (
+                <span class="founder-card__initials" aria-hidden="true">{founder.initials}</span>
+              )}
             </div>
+            <h3 class="h-section founder-card__name">{founder.name}</h3>
+            <span class="founder-card__role">{founder.role}</span>
+            <p class="body-text founder-card__note">{founder.note}</p>
           </article>
         ))}
       </div>
@@ -104,7 +102,12 @@ const founders: Founder[] = [
   .founders__head { display: grid; gap: 14px; }
   .founders__grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
   @media (min-width: 900px) {
-    .founders__grid { grid-template-columns: repeat(3, 1fr); }
+    .founders__grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto auto 1fr;
+      column-gap: 18px;
+      row-gap: 0;
+    }
   }
   .founder-card {
     display: grid;
@@ -115,14 +118,22 @@ const founders: Founder[] = [
     background: var(--panel-bg);
     box-shadow: var(--panel-shadow);
   }
-  .founder-card__avatar,
-  .founder-card__photo {
+  @media (min-width: 900px) {
+    .founder-card {
+      grid-template-rows: subgrid;
+      grid-row: span 4;
+      row-gap: 8px;
+    }
+    .founder-card__media { margin-bottom: 10px; }
+  }
+  .founder-card__media {
+    position: relative;
     width: 100%;
-    min-height: 0;
     aspect-ratio: 4 / 3;
     border-radius: 8px;
+    overflow: hidden;
   }
-  .founder-card__avatar {
+  .founder-card__media:not(.founder-card__media--photo) {
     display: grid;
     place-items: center;
     background:
@@ -130,25 +141,27 @@ const founders: Founder[] = [
       linear-gradient(135deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)),
       var(--bg);
     border: 1px dashed var(--line);
-    color: var(--accent);
-    font-family: var(--f-logo);
-    font-size: clamp(3rem, 8vw, 5rem);
-    letter-spacing: 0.04em;
   }
-  .founder-card__photo {
-    overflow: hidden;
+  .founder-card__media--photo {
     border: 1px solid var(--panel-border);
     background: var(--bg);
   }
-  .founder-card__photo :global(img) {
+  .founder-card__media--photo :global(img) {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: var(--founder-photo-position, 50% 42%);
   }
-  .founder-card__copy { display: grid; gap: 8px; }
-  .founder-card__copy h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
-  .founder-card__copy span {
+  .founder-card__initials {
+    font-family: var(--f-logo);
+    font-size: clamp(3rem, 8vw, 5rem);
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+  .founder-card__name { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+  .founder-card__role {
     font-family: var(--f-sub);
     font-size: 0.72rem;
     font-weight: 700;
@@ -156,4 +169,5 @@ const founders: Founder[] = [
     text-transform: uppercase;
     color: var(--accent);
   }
+  .founder-card__note { margin: 0; }
 </style>
