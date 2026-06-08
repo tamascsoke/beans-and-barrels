@@ -64,17 +64,20 @@ const slides = getCarouselSlides();
     scroll-snap-align: start;
     display: grid;
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
     gap: clamp(20px, 4vw, 40px);
     padding-inline: max(var(--gutter), calc((100vw - var(--max-w)) / 2 + var(--gutter)));
     padding-block: clamp(28px, 5vw, 64px);
     width: 100%;
     max-width: none;
-    align-items: center;
+    align-items: start;
   }
 
   @media (min-width: 860px) {
     .carousel__slide {
       grid-template-columns: 1.1fr 1fr;
+      grid-template-rows: auto;
+      align-items: center;
     }
   }
 
@@ -83,6 +86,7 @@ const slides = getCarouselSlides();
     max-width: 620px;
     justify-self: center;
     aspect-ratio: 4 / 3;
+    height: auto;
     transform: none;
     outline: 0;
     box-shadow: var(--photo-shadow);
@@ -95,9 +99,38 @@ const slides = getCarouselSlides();
   .carousel__art img { border-radius: var(--r-md); }
 
   .carousel__copy {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 18px;
-    align-content: center;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .carousel__copy .h-sub {
+    min-height: 1.4em;
+  }
+
+  .carousel__copy .h-display {
+    min-height: 3em;
+  }
+
+  .carousel__copy .lead {
+    min-height: calc(1.6em * 4);
+    flex: 1;
+  }
+
+  .carousel__copy .inline-action {
+    margin-top: auto;
+  }
+
+  @media (min-width: 860px) {
+    .carousel__copy {
+      height: auto;
+    }
+
+    .carousel__copy .lead {
+      flex: none;
+    }
   }
 
   .carousel__dots {
