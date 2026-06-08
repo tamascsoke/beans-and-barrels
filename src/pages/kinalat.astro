@@ -12,7 +12,7 @@ const categories = getCategories();
     <div class="container hero-grid">
       <div class="hero-copy">
         <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
-        <p class="lead">Specialty kávé, csapolt SÖR, snackek és szezonális italok egy mozgó pultból.</p>
+        <p class="lead kinalat-hero__lead">SPECIALTY KÁVÉ, CSAPOLT SÖR, SNACKEK ÉS SZEZONÁLIS ITALOK EGY MOZGÓ PULTBÓL.</p>
         <div class="inline-action hero-action">
           <a class="btn" href="/rendezvenyek">Kérd rendezvényre</a>
         </div>
@@ -60,6 +60,7 @@ const categories = getCategories();
     .hero-grid { grid-template-columns: 1fr 1fr; }
   }
   .hero-copy { display: grid; gap: 18px; }
+  .kinalat-hero__lead { text-transform: none; }
   .hero-img { aspect-ratio: 4 / 3; }
 
   .categories { display: grid; gap: clamp(28px, 6vw, 64px); }

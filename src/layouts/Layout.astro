@@ -85,11 +85,15 @@ const {
       const twIO = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) return;
         twIO.disconnect();
-        function type() {
-          if (i < text.length) { cursor.before(text[i++]); setTimeout(type, 26 + Math.random() * 18); }
-          else cursor.classList.add("tw-done");
-        }
-        type();
+        const runType = () => {
+          function type() {
+            if (i < text.length) { cursor.before(text[i++]); setTimeout(type, 26 + Math.random() * 18); }
+            else cursor.classList.add("tw-done");
+          }
+          type();
+        };
+        if (document.fonts?.ready) document.fonts.ready.then(runType);
+        else runType();
       }, { threshold: 0.6 });
       twIO.observe(el);
     });

@@ -124,6 +124,11 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   text-wrap: pretty;
 }
 
+/* Hero typewriter + előre nagybetűzött magyar szöveg — iOS-en az uppercase törné az Ö-t */
+[data-typewriter] {
+  text-transform: none;
+}
+
 .body-text {
   font-family: var(--f-body);
   font-weight: 400;
