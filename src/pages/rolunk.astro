@@ -16,6 +16,7 @@ type Founder = {
   photoAlt?: string;
   photoPosition?: string;
   heroMedia?: boolean;
+  compact?: boolean;
 };
 
 const founders: Founder[] = [
@@ -27,6 +28,7 @@ const founders: Founder[] = [
     photo: soosBalazsImg,
     photoAlt: "Soós Balázs, a Bean & Barrel alapítója",
     photoPosition: "48% 28%",
+    compact: true,
   },
   {
     initials: "WB",
@@ -46,6 +48,7 @@ const founders: Founder[] = [
     photo: donatImg,
     photoAlt: "Váradi Donát, a Bean & Barrel alapítója",
     photoPosition: "50% 7%",
+    compact: true,
   },
 ];
 ---
@@ -82,7 +85,7 @@ const founders: Founder[] = [
             : undefined;
 
           return (
-          <article class:list={["founder-card", "panel-motion", founder.heroMedia && "founder-card--hero"]}>
+          <article class:list={["founder-card", "panel-motion", founder.heroMedia && "founder-card--hero", founder.compact && "founder-card--compact"]}>
             <div
               class:list={[
                 "founder-card__media",
@@ -92,14 +95,16 @@ const founders: Founder[] = [
               style={mediaStyle}
             >
               {founder.photo ? (
-                <Image src={founder.photo} alt={founder.photoAlt ?? founder.name} widths={[320, 520, 720]} sizes="(min-width: 900px) 28vw, 100vw" loading="lazy" />
+                <Image src={founder.photo} alt={founder.photoAlt ?? founder.name} widths={[280, 440, 560]} sizes="(min-width: 900px) 22vw, 88vw" loading="lazy" />
               ) : (
                 <span class="founder-card__initials panel-motion__badge" aria-hidden="true">{founder.initials}</span>
               )}
             </div>
-            <h3 class="h-section founder-card__name">{founder.name}</h3>
-            <span class="founder-card__role">{founder.role}</span>
-            <p class="body-text founder-card__note">{founder.note}</p>
+            <div class="founder-card__body">
+              <h3 class="h-section founder-card__name">{founder.name}</h3>
+              <span class="founder-card__role">{founder.role}</span>
+              <p class="body-text founder-card__note">{founder.note}</p>
+            </div>
           </article>
           );
         })}
@@ -123,42 +128,60 @@ const founders: Founder[] = [
   .story__copy { display: grid; gap: 18px; }
   .founders { display: grid; gap: clamp(26px, 5vw, 54px); }
   .founders__head { display: grid; gap: 14px; }
-  .founders__grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  .founders__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: 900px;
+    margin-inline: auto;
+  }
   @media (min-width: 900px) {
     .founders__grid {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto auto 1fr;
+      grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr) minmax(0, 0.78fr);
       column-gap: 18px;
-      row-gap: 0;
+      align-items: start;
     }
   }
   .founder-card {
-    display: grid;
-    gap: 18px;
-    padding: clamp(18px, 2.6vw, 24px);
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    gap: 10px;
+    padding: 12px 12px 14px;
     border: 1px solid var(--panel-border);
     border-radius: 8px;
     background: var(--panel-bg);
     box-shadow: var(--panel-shadow);
   }
+  .founder-card--compact {
+    --founder-media-h: clamp(108px, 10.5vw, 128px);
+    width: min(100%, 196px);
+    margin-inline: auto;
+    padding: 10px 10px 12px;
+    gap: 10px;
+  }
   .founder-card--hero {
-    overflow: visible;
+    --founder-media-h: clamp(156px, 17vw, 196px);
+    gap: 10px;
+    padding: 12px 12px 14px;
   }
   @media (min-width: 900px) {
-    .founder-card {
-      grid-template-rows: subgrid;
-      grid-row: span 4;
-      row-gap: 8px;
+    .founder-card--hero {
+      margin-top: clamp(28px, 4vw, 48px);
     }
-    .founder-card__media { margin-bottom: 10px; }
+  }
+  .founder-card__body {
+    display: grid;
+    gap: 6px;
+    align-content: start;
   }
   .founder-card__media {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    height: var(--founder-media-h);
     border-radius: 8px;
     overflow: hidden;
-    align-self: start;
+    flex: 0 0 auto;
   }
   .founder-card__media:not(.founder-card__media--photo) {
     display: grid;
@@ -189,19 +212,8 @@ const founders: Founder[] = [
     object-position: var(--founder-photo-position, center);
   }
   .founder-card__media--hero {
-    width: 104%;
-    margin-left: -2%;
-    aspect-ratio: 4 / 3.12;
-    margin-top: clamp(6px, 1.2vw, 12px);
-    z-index: 1;
+    height: calc(var(--founder-media-h) * 1.18);
     box-shadow: var(--photo-shadow);
-  }
-  @media (min-width: 900px) {
-    .founder-card__media--hero {
-      width: 106%;
-      margin-left: -3%;
-      aspect-ratio: 4 / 3.18;
-    }
   }
   .founder-card__initials {
     font-family: var(--f-logo);
@@ -209,14 +221,29 @@ const founders: Founder[] = [
     letter-spacing: 0.04em;
     color: var(--accent);
   }
-  .founder-card__name { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+  .founder-card__name { font-size: clamp(1.2rem, 1.9vw, 1.55rem); }
+  .founder-card--compact .founder-card__name {
+    font-size: clamp(1.02rem, 1.45vw, 1.2rem);
+  }
   .founder-card__role {
     font-family: var(--f-sub);
-    font-size: 0.72rem;
+    font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--accent);
   }
-  .founder-card__note { margin: 0; }
+  .founder-card__note {
+    margin: 0;
+    font-size: clamp(0.82rem, 1vw, 0.92rem);
+    line-height: 1.55;
+  }
+  .founder-card--compact .founder-card__role {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+  }
+  .founder-card--compact .founder-card__note {
+    font-size: clamp(0.76rem, 0.9vw, 0.84rem);
+    line-height: 1.5;
+  }
 </style>

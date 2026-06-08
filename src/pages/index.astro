@@ -100,7 +100,7 @@ const teamMembers = [
         {teamMembers.map((member) => (
           <div class="team-card">
             <div class="team-card__photo" style={`--team-photo-position: ${member.photoPosition}`}>
-              <Image src={member.photo} alt={member.photoAlt} widths={[160, 240]} sizes="72px" loading="lazy" />
+              <Image src={member.photo} alt={member.photoAlt} widths={[176, 264]} sizes="88px" loading="lazy" />
             </div>
             <div class="team-card__info">
               <span class="team-card__name">{member.name}</span>
@@ -177,11 +177,11 @@ const teamMembers = [
   .about-teaser { display: grid; gap: clamp(32px, 5vw, 64px); align-items: start; }
   .about-teaser__intro { display: grid; gap: 18px; }
   .about-teaser__team { display: grid; gap: 16px; }
-  .team-card { display: flex; align-items: center; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(240, 138, 28, 0.44); }
+  .team-card { display: flex; align-items: center; gap: 22px; padding: 18px 0; border-bottom: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card:first-child { border-top: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card__photo {
-    width: 72px;
-    height: 72px;
+    width: clamp(84px, 11vw, 92px);
+    height: clamp(84px, 11vw, 92px);
     flex-shrink: 0;
     border-radius: 8px;
     transform: none;
@@ -196,8 +196,8 @@ const teamMembers = [
     object-position: var(--team-photo-position, center top);
   }
   .team-card__info { display: flex; flex-direction: column; gap: 4px; }
-  .team-card__name { font-family: var(--f-logo); font-size: clamp(1rem, 1.8vw, 1.3rem); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
-  .team-card__role { font-family: var(--f-sub); font-size: 0.68rem; font-weight: 700; letter-spacing: clamp(0.16em, 0.8vw, 0.3em); text-transform: uppercase; color: var(--ink-faint); }
+  .team-card__name { font-family: var(--f-logo); font-size: clamp(1.05rem, 1.9vw, 1.38rem); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+  .team-card__role { font-family: var(--f-sub); font-size: 0.72rem; font-weight: 700; letter-spacing: clamp(0.16em, 0.8vw, 0.3em); text-transform: uppercase; color: var(--ink-faint); }
   @media (min-width: 820px) {
     .hero {
       min-height: min(780px, max(500px, calc(84svh - var(--nav-h))));

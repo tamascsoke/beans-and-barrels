@@ -485,7 +485,7 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 
 @media (max-width: 640px) {
   body {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   }
 }
 
