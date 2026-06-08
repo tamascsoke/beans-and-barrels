@@ -100,7 +100,7 @@ const teamMembers = [
         {teamMembers.map((member) => (
           <div class="team-card">
             <div class="team-card__photo" style={`--team-photo-position: ${member.photoPosition}`}>
-              <Image src={member.photo} alt={member.photoAlt} widths={[176, 264]} sizes="88px" loading="lazy" />
+              <Image src={member.photo} alt={member.photoAlt} widths={[200, 320, 440]} sizes="(min-width: 820px) 132px, 108px" loading="lazy" />
             </div>
             <div class="team-card__info">
               <span class="team-card__name">{member.name}</span>
@@ -176,12 +176,12 @@ const teamMembers = [
   .pillar h3 { font-size: clamp(1.8rem, 4vw, 3rem); }
   .about-teaser { display: grid; gap: clamp(32px, 5vw, 64px); align-items: start; }
   .about-teaser__intro { display: grid; gap: 18px; }
-  .about-teaser__team { display: grid; gap: 16px; }
-  .team-card { display: flex; align-items: center; gap: 22px; padding: 18px 0; border-bottom: 1px solid rgba(240, 138, 28, 0.44); }
+  .about-teaser__team { display: grid; gap: 16px; width: 100%; }
+  .team-card { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 28px); padding: clamp(16px, 2vw, 24px) 0; border-bottom: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card:first-child { border-top: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card__photo {
-    width: clamp(84px, 11vw, 92px);
-    height: clamp(84px, 11vw, 92px);
+    width: clamp(92px, 12vw, 108px);
+    height: clamp(92px, 12vw, 108px);
     flex-shrink: 0;
     border-radius: 8px;
     transform: none;
@@ -195,9 +195,9 @@ const teamMembers = [
     object-fit: cover;
     object-position: var(--team-photo-position, center top);
   }
-  .team-card__info { display: flex; flex-direction: column; gap: 4px; }
-  .team-card__name { font-family: var(--f-logo); font-size: clamp(1.05rem, 1.9vw, 1.38rem); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
-  .team-card__role { font-family: var(--f-sub); font-size: 0.72rem; font-weight: 700; letter-spacing: clamp(0.16em, 0.8vw, 0.3em); text-transform: uppercase; color: var(--ink-faint); }
+  .team-card__info { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .team-card__name { font-family: var(--f-logo); font-size: clamp(1.1rem, 2vw, 1.5rem); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+  .team-card__role { font-family: var(--f-sub); font-size: clamp(0.68rem, 0.85vw, 0.78rem); font-weight: 700; letter-spacing: clamp(0.16em, 0.8vw, 0.3em); text-transform: uppercase; color: var(--ink-faint); }
   @media (min-width: 820px) {
     .hero {
       min-height: min(780px, max(500px, calc(84svh - var(--nav-h))));
@@ -291,7 +291,18 @@ const teamMembers = [
     .pillar { justify-items: center; text-align: center; min-width: 0; }
     .pillar__photo { width: clamp(280px, 28vw, 390px); }
     .pillar h3 { font-size: clamp(1.75rem, 3vw, 2.55rem); max-width: none; overflow-wrap: normal; }
-    .about-teaser { grid-template-columns: 1fr 1fr; align-items: center; }
+    .about-teaser {
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      align-items: center;
+      gap: clamp(36px, 5vw, 72px);
+    }
+    .about-teaser__team { gap: clamp(14px, 1.6vw, 20px); }
+    .team-card__photo {
+      width: clamp(108px, 10.5vw, 132px);
+      height: clamp(108px, 10.5vw, 132px);
+    }
+    .team-card__name { font-size: clamp(1.22rem, 1.65vw, 1.62rem); }
+    .team-card__role { font-size: 0.76rem; }
   }
   @media (min-width: 820px) and (max-height: 680px) {
     .hero {
