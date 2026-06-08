@@ -17,8 +17,8 @@ const events = eventTypes.items;
       <div class="reasons stagger">
         {
           reasons.map((r, i) => (
-            <article class="reason">
-              <span class="reason__n">{String(i + 1).padStart(2, "0")}</span>
+            <article class="reason panel-motion">
+              <span class="reason__n panel-motion__badge">{String(i + 1).padStart(2, "0")}</span>
               <h3 class="h-section">{r.title}</h3>
               <p class="body-text">{r.body}</p>
             </article>
@@ -72,11 +72,6 @@ const events = eventTypes.items;
     border: 1px solid var(--panel-border);
     border-radius: 8px;
     background: var(--panel-bg);
-    transition: box-shadow 280ms var(--ease), border-color 280ms var(--ease), background 280ms var(--ease);
-  }
-  .reason:hover {
-    border-color: rgba(240, 138, 28, 0.45);
-    background: var(--panel-hover);
     box-shadow: var(--panel-shadow);
   }
   .reason__n { font-family: var(--f-logo); color: var(--accent); font-size: 1.6rem; letter-spacing: var(--ls-body); }

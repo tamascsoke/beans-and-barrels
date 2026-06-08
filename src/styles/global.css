@@ -397,9 +397,16 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 
   .reveal,
   .stagger,
+  .stagger > *,
+  .panel-motion,
+  .panel-motion__badge,
   .chalk-underline::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  .panel-motion:hover {
+    transform: none !important;
   }
 
   ::view-transition-old(root),
@@ -573,20 +580,61 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
 .reveal.is-visible { animation-play-state: running; }
 
 /* Stagger children — apply to a list/grid; children fade up with delay */
-.stagger > * {
-  opacity: 1;
-  transform: none;
+.stagger > *:not(.panel-motion) {
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
   transition: opacity 600ms var(--ease), transform 600ms var(--ease);
 }
-.stagger.is-visible > * {
+.stagger.is-visible > *:not(.panel-motion) {
   opacity: 1;
   transform: none;
 }
-.stagger.is-visible > *:nth-child(1)  { transition-delay:  60ms; }
-.stagger.is-visible > *:nth-child(2)  { transition-delay: 140ms; }
-.stagger.is-visible > *:nth-child(3)  { transition-delay: 220ms; }
-.stagger.is-visible > *:nth-child(4)  { transition-delay: 300ms; }
-.stagger.is-visible > *:nth-child(5)  { transition-delay: 380ms; }
-.stagger.is-visible > *:nth-child(6)  { transition-delay: 460ms; }
-.stagger.is-visible > *:nth-child(7)  { transition-delay: 540ms; }
-.stagger.is-visible > *:nth-child(8)  { transition-delay: 620ms; }
+.stagger.is-visible > *:nth-child(1)  { transition-delay:  60ms; animation-delay:  60ms; }
+.stagger.is-visible > *:nth-child(2)  { transition-delay: 140ms; animation-delay: 140ms; }
+.stagger.is-visible > *:nth-child(3)  { transition-delay: 220ms; animation-delay: 220ms; }
+.stagger.is-visible > *:nth-child(4)  { transition-delay: 300ms; animation-delay: 300ms; }
+.stagger.is-visible > *:nth-child(5)  { transition-delay: 380ms; animation-delay: 380ms; }
+.stagger.is-visible > *:nth-child(6)  { transition-delay: 460ms; animation-delay: 460ms; }
+.stagger.is-visible > *:nth-child(7)  { transition-delay: 540ms; animation-delay: 540ms; }
+.stagger.is-visible > *:nth-child(8)  { transition-delay: 620ms; animation-delay: 620ms; }
+
+/* Panel cards — scroll pop-in + hover lift */
+@keyframes panel-pop-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes panel-badge-pop {
+  from { opacity: 0; transform: scale(0.75); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.panel-motion {
+  transition:
+    border-color 260ms var(--ease),
+    box-shadow 260ms var(--ease),
+    background 260ms var(--ease),
+    transform 260ms var(--ease);
+}
+
+.stagger > .panel-motion {
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+}
+
+.stagger.is-visible > .panel-motion {
+  animation: panel-pop-in 560ms var(--ease) both;
+}
+
+.stagger.is-visible .panel-motion .panel-motion__badge {
+  animation: panel-badge-pop 420ms var(--ease) 140ms both;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .panel-motion:hover {
+    border-color: rgba(240, 138, 28, 0.45);
+    background: var(--panel-hover);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    transform: translateY(-5px) scale(1.02);
+  }
+}

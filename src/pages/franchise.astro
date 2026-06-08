@@ -47,13 +47,13 @@ const steps = [
 
   <section class="section section--alt">
     <div class="container blocks stagger">
-      <article class="block">
+      <article class="block panel-motion">
         <h2 class="h-section block__title"><span class="chalk-underline">Miért érdemes <span class="keep-together">franchise-partnernek</span> lenni?</span></h2>
         <ul class="block__list chalk-list chalk-list--ruled">
           {benefits.map((item) => <li><span>{item}</span></li>)}
         </ul>
       </article>
-      <article class="block">
+      <article class="block panel-motion">
         <h2 class="h-section"><span class="chalk-underline">Mit kapsz?</span></h2>
         <ul class="block__list block__list--compact chalk-list chalk-list--ruled">
           {packageItems.map((item) => <li><span>{item}</span></li>)}
@@ -71,8 +71,8 @@ const steps = [
       <ol class="steps stagger">
         {
           steps.map((s) => (
-            <li class="step">
-              <span class="step__n">{s.n}</span>
+            <li class="step panel-motion">
+              <span class="step__n panel-motion__badge">{s.n}</span>
               <div class="step__copy">
                 <h3 class="h-section">{s.t}</h3>
                 <p class="body-text">{s.d}</p>
@@ -139,23 +139,6 @@ const steps = [
     border-radius: 8px;
     background: var(--panel-bg);
     box-shadow: var(--panel-shadow);
-    transition: border-color 260ms var(--ease), box-shadow 260ms var(--ease), background 260ms var(--ease), transform 260ms var(--ease);
-  }
-  .steps.is-visible .step {
-    animation: step-pop 560ms var(--ease) both;
-  }
-  .steps.is-visible .step:nth-child(1) { animation-delay: 40ms; }
-  .steps.is-visible .step:nth-child(2) { animation-delay: 120ms; }
-  .steps.is-visible .step:nth-child(3) { animation-delay: 200ms; }
-  .steps.is-visible .step:nth-child(4) { animation-delay: 280ms; }
-  .step:hover {
-    border-color: rgba(240, 138, 28, 0.45);
-    background: var(--panel-hover);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.22);
-    transform: translateY(-6px);
-  }
-  .steps.stagger.is-visible > .step:hover {
-    transform: translateY(-6px);
   }
   .step__n {
     display: inline-grid;
@@ -182,14 +165,5 @@ const steps = [
   }
   @media (max-width: 520px) {
     .keep-together { white-space: normal; }
-  }
-  @keyframes step-pop {
-    from { opacity: 0; transform: translateY(18px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .steps.is-visible .step {
-      animation: none;
-    }
   }
 </style>
