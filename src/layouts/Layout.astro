@@ -28,6 +28,7 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.png" />
+    <link rel="preload" href="/fonts/handelson-five.otf" as="font" type="font/otf" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
@@ -72,28 +73,43 @@ const {
     );
     document.querySelectorAll(".reveal, .stagger").forEach((el) => revealIO.observe(el));
 
-    // typewriter
+    // typewriter — egyetlen szövegnode (iOS-en a char-by-char node-ok törhetik az Ö-t Handelsonnal)
+    const skipTypewriter =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     document.querySelectorAll<HTMLElement>("[data-typewriter]").forEach((el) => {
       if (el.dataset.twDone) return;
       el.dataset.twDone = "1";
-      const text = el.textContent ?? "";
+      const text = (el.textContent ?? "").replace(/\s+/g, " ").trim();
+      if (skipTypewriter) return;
       el.textContent = "";
+      const typed = document.createTextNode("");
       const cursor = document.createElement("span");
       cursor.className = "tw-cursor";
-      el.appendChild(cursor);
+      el.append(typed, cursor);
       let i = 0;
       const twIO = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) return;
         twIO.disconnect();
-        const runType = () => {
+        const runType = async () => {
+          if (document.fonts?.load) {
+            await Promise.all([
+              document.fonts.ready,
+              document.fonts.load('400 1em "Handelson Five"').catch(() => undefined),
+            ]);
+          }
           function type() {
-            if (i < text.length) { cursor.before(text[i++]); setTimeout(type, 26 + Math.random() * 18); }
-            else cursor.classList.add("tw-done");
+            if (i < text.length) {
+              typed.textContent = text.slice(0, ++i);
+              setTimeout(type, 26 + Math.random() * 18);
+            } else {
+              cursor.classList.add("tw-done");
+            }
           }
           type();
         };
-        if (document.fonts?.ready) document.fonts.ready.then(runType);
-        else runType();
+        void runType();
       }, { threshold: 0.6 });
       twIO.observe(el);
     });
