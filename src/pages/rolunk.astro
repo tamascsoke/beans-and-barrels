@@ -75,12 +75,12 @@ const founders: Founder[] = [
       </div>
       <div class="founders__grid stagger">
         {founders.map((founder) => (
-          <article class="founder-card" style={founder.photoPosition ? `--founder-photo-position: ${founder.photoPosition};` : undefined}>
+          <article class="founder-card panel-motion" style={founder.photoPosition ? `--founder-photo-position: ${founder.photoPosition};` : undefined}>
             <div class:list={["founder-card__media", founder.photo && "founder-card__media--photo"]}>
               {founder.photo ? (
                 <Image src={founder.photo} alt={founder.photoAlt ?? founder.name} widths={[320, 520, 720]} sizes="(min-width: 900px) 28vw, 100vw" loading="lazy" />
               ) : (
-                <span class="founder-card__initials" aria-hidden="true">{founder.initials}</span>
+                <span class="founder-card__initials panel-motion__badge" aria-hidden="true">{founder.initials}</span>
               )}
             </div>
             <h3 class="h-section founder-card__name">{founder.name}</h3>
