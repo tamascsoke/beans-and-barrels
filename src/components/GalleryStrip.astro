@@ -331,7 +331,13 @@ const enriched = await Promise.all(items.map(async (p) => {
 <script>
   import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
 
+  let galleryAbort: AbortController | null = null;
+
   function initGallery() {
+    galleryAbort?.abort();
+    galleryAbort = new AbortController();
+    const { signal } = galleryAbort;
+
     const wrap  = document.getElementById("galleryWrap")  as HTMLElement | null;
     const inner = document.getElementById("galleryInner") as HTMLElement | null;
     if (!wrap || !inner) return;
@@ -355,11 +361,13 @@ const enriched = await Promise.all(items.map(async (p) => {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const SPEED = reduceMotion ? 0 : 0.55;
+    const DRAG_THRESHOLD = 8;
     let pos        = 0;
     let isDragging = false;
+    let activePointer: number | null = null;
     let dragStartX = 0;
     let dragStartPos = 0;
-    let didDrag = false;
+    let suppressClick = false;
     let halfW      = 0;
     let rafId: number | null = null;
 
@@ -393,32 +401,44 @@ const enriched = await Promise.all(items.map(async (p) => {
       });
     }
 
+    function endPointer(e: PointerEvent) {
+      if (activePointer !== e.pointerId) return;
+      if (isDragging) {
+        wrap.releasePointerCapture(e.pointerId);
+        wrap.style.cursor = "";
+      }
+      isDragging = false;
+      activePointer = null;
+    }
+
     wrap.addEventListener("pointerdown", (e) => {
       if ((e.target as HTMLElement).closest(".gallery-nav")) return;
-      isDragging   = true;
-      didDrag      = false;
-      dragStartX   = e.clientX;
+      activePointer = e.pointerId;
+      isDragging = false;
+      suppressClick = false;
+      dragStartX = e.clientX;
       dragStartPos = pos;
-      wrap.setPointerCapture(e.pointerId);
-      wrap.style.cursor = "grabbing";
-    });
+    }, { signal });
 
     wrap.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
+      if (activePointer !== e.pointerId) return;
       const dx = dragStartX - e.clientX;
-      if (Math.abs(dx) > 6) didDrag = true;
+      if (!isDragging) {
+        if (Math.abs(dx) <= DRAG_THRESHOLD) return;
+        isDragging = true;
+        suppressClick = true;
+        wrap.setPointerCapture(e.pointerId);
+        wrap.style.cursor = "grabbing";
+      }
       pos = dragStartPos + dx;
       if (halfW > 0) {
         if (pos < 0)       pos += halfW;
         if (pos >= halfW)  pos -= halfW;
       }
-    });
+    }, { signal });
 
-    wrap.addEventListener("pointerup", () => {
-      if (!isDragging) return;
-      isDragging = false;
-      wrap.style.cursor = "";
-    });
+    wrap.addEventListener("pointerup", endPointer, { signal });
+    wrap.addEventListener("pointercancel", endPointer, { signal });
 
     function shift(dir: 1 | -1) {
       pos += dir * wrap!.clientWidth * 0.72;
@@ -466,35 +486,48 @@ const enriched = await Promise.all(items.map(async (p) => {
       lbLastFocus = null;
     }
 
-    prev?.addEventListener("click", (e) => { e.stopPropagation(); shift(-1); });
-    next?.addEventListener("click", (e) => { e.stopPropagation(); shift(1); });
+    function openFrame(frame: HTMLElement) {
+      const idx = lbFrames.findIndex((f) => f.dataset.src === frame.dataset.src);
+      if (idx >= 0) show(idx);
+    }
 
-    wrap.addEventListener("click", (e) => {
-      if (didDrag) {
-        e.preventDefault();
-        didDrag = false;
-        return;
-      }
-      const frame = (e.target as HTMLElement).closest<HTMLElement>(".gallery-frame[data-src]");
-      if (!frame || frame.hasAttribute("disabled")) return;
-      const idx = lbFrames.indexOf(frame);
-      show(idx >= 0 ? idx : lbFrames.findIndex((f) => f.dataset.src === frame.dataset.src));
+    prev?.addEventListener("click", (e) => { e.stopPropagation(); shift(-1); }, { signal });
+    next?.addEventListener("click", (e) => { e.stopPropagation(); shift(1); }, { signal });
+
+    inner.querySelectorAll<HTMLElement>(".gallery-frame[data-src]:not([disabled])").forEach((frame) => {
+      frame.addEventListener("click", (e) => {
+        if (suppressClick) {
+          suppressClick = false;
+          e.preventDefault();
+          return;
+        }
+        e.stopPropagation();
+        openFrame(frame);
+      }, { signal });
+      frame.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openFrame(frame);
+        }
+      }, { signal });
     });
-    lbClose?.addEventListener("click", hide);
-    lbPrev?.addEventListener("click", () => show(lbCurrent - 1));
-    lbNext?.addEventListener("click", () => show(lbCurrent + 1));
-    lightbox?.addEventListener("click", (e) => { if (e.target === lightbox) hide(); });
+
+    lbClose?.addEventListener("click", hide, { signal });
+    lbPrev?.addEventListener("click", () => show(lbCurrent - 1), { signal });
+    lbNext?.addEventListener("click", () => show(lbCurrent + 1), { signal });
+    lightbox?.addEventListener("click", (e) => { if (e.target === lightbox) hide(); }, { signal });
     document.addEventListener("keydown", (e) => {
       if (lightbox?.getAttribute("aria-hidden") !== "false") return;
       if (e.key === "Escape") hide();
       if (e.key === "ArrowLeft") show(lbCurrent - 1);
       if (e.key === "ArrowRight") show(lbCurrent + 1);
-    });
+    }, { signal });
 
     document.addEventListener("astro:before-swap", () => {
       if (rafId) cancelAnimationFrame(rafId);
       hide();
-    }, { once: true });
+      galleryAbort?.abort();
+    }, { once: true, signal });
   }
 
   initGallery();
