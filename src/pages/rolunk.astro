@@ -35,7 +35,7 @@ const founders: Founder[] = [
     note: "Azért nagyobb a képem, mint a többieknek, hogy végre én lehessek a magasabb.",
     photo: wartaBenedekImg,
     photoAlt: "Warta Benedek sört csapol a Bean & Barrel tuktuknál",
-    photoPosition: "52% 70%",
+    photoPosition: "50% 84%",
     heroMedia: true,
   },
   {
@@ -189,12 +189,19 @@ const founders: Founder[] = [
     object-position: var(--founder-photo-position, center);
   }
   .founder-card__media--hero {
-    width: 108%;
-    margin-left: -4%;
-    margin-top: clamp(18px, 3.2vw, 30px);
-    aspect-ratio: 4 / 2.35;
+    width: 116%;
+    margin-left: -8%;
+    aspect-ratio: 4 / 3.45;
+    margin-top: clamp(10px, 2.2vw, 20px);
     z-index: 1;
     box-shadow: var(--photo-shadow);
+  }
+  @media (min-width: 900px) {
+    .founder-card__media--hero {
+      width: 124%;
+      margin-left: -12%;
+      aspect-ratio: 4 / 3.65;
+    }
   }
   .founder-card__initials {
     font-family: var(--f-logo);
