@@ -15,8 +15,7 @@ type Founder = {
   photo?: ImageMetadata;
   photoAlt?: string;
   photoPosition?: string;
-  photoZoom?: string;
-  photoShift?: string;
+  heroMedia?: boolean;
 };
 
 const founders: Founder[] = [
@@ -36,9 +35,8 @@ const founders: Founder[] = [
     note: "Azért nagyobb a képem, mint a többieknek, hogy végre én lehessek a magasabb.",
     photo: wartaBenedekImg,
     photoAlt: "Warta Benedek sört csapol a Bean & Barrel tuktuknál",
-    photoPosition: "58% 68%",
-    photoZoom: "1.18",
-    photoShift: "-30%",
+    photoPosition: "54% 74%",
+    heroMedia: true,
   },
   {
     initials: "VD",
@@ -79,21 +77,19 @@ const founders: Founder[] = [
       </div>
       <div class="founders__grid stagger">
         {founders.map((founder) => {
-          const mediaStyle = [
-            founder.photoPosition && `--founder-photo-position: ${founder.photoPosition}`,
-            founder.photoZoom && `--founder-photo-zoom: ${founder.photoZoom}`,
-            founder.photoShift && `--founder-photo-shift: ${founder.photoShift}`,
-          ].filter(Boolean).join("; ");
+          const mediaStyle = founder.photoPosition
+            ? `--founder-photo-position: ${founder.photoPosition}`
+            : undefined;
 
           return (
-          <article class="founder-card panel-motion">
+          <article class:list={["founder-card", "panel-motion", founder.heroMedia && "founder-card--hero"]}>
             <div
               class:list={[
                 "founder-card__media",
                 founder.photo && "founder-card__media--photo",
-                founder.photoZoom && "founder-card__media--photo-zoom",
+                founder.heroMedia && "founder-card__media--hero",
               ]}
-              style={mediaStyle || undefined}
+              style={mediaStyle}
             >
               {founder.photo ? (
                 <Image src={founder.photo} alt={founder.photoAlt ?? founder.name} widths={[320, 520, 720]} sizes="(min-width: 900px) 28vw, 100vw" loading="lazy" />
@@ -145,6 +141,9 @@ const founders: Founder[] = [
     background: var(--panel-bg);
     box-shadow: var(--panel-shadow);
   }
+  .founder-card--hero {
+    overflow: visible;
+  }
   @media (min-width: 900px) {
     .founder-card {
       grid-template-rows: subgrid;
@@ -188,14 +187,16 @@ const founders: Founder[] = [
     object-fit: cover;
     object-position: var(--founder-photo-position, center);
   }
-  .founder-card__media--photo-zoom :global(img) {
-    width: calc(100% * var(--founder-photo-zoom, 1.1));
-    height: calc(100% * var(--founder-photo-zoom, 1.1));
-    inset: auto;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, var(--founder-photo-shift, -50%));
-    object-position: var(--founder-photo-position, center);
+  .founder-card__media--hero {
+    transform: scale(1.1);
+    transform-origin: center bottom;
+    z-index: 1;
+    box-shadow: var(--photo-shadow);
+  }
+  @media (min-width: 900px) {
+    .founder-card__media--hero {
+      transform: scale(1.16);
+    }
   }
   .founder-card__initials {
     font-family: var(--f-logo);
