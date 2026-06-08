@@ -1,14 +1,14 @@
 {
   "order": 3,
   "key": "snack",
-  "label": "Snackek",
+  "label": "SNACKEK",
   "image": "/uploads/cookie.webp",
   "imageAlt": "Cookie és snackek a tuktuk pultjáról",
   "items": [
-    "Fahéjas-Áfonyás Bagel",
-    "Brownie",
-    "B&B Barnasörös-Marshmallow Cookie",
-    "Csörögefánk házi lekvárral",
-    "Bagelszendvicsek"
+    "FAHÉJAS-ÁFONYÁS BAGEL",
+    "BROWNIE",
+    "B&B BARNASÖRÖS-MARSHMALLOW COOKIE",
+    "CSÖRÖGEFÁNK HÁZI LEKVÁRRAL",
+    "BAGELSZENDVICSEK"
   ]
 }

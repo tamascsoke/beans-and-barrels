@@ -1,8 +1,8 @@
 {
   "order": 1,
   "key": "kave",
-  "label": "Specialty kávék",
+  "label": "SPECIALTY KÁVÉK",
   "image": "/uploads/kave.webp",
   "imageAlt": "Specialty kávé közelről",
-  "items": ["Presszó", "Americano", "Cortado", "Cappuccino", "Latte", "Flat White"]
+  "items": ["PRESSZÓ", "AMERICANO", "CORTADO", "CAPPUCCINO", "LATTE", "FLAT WHITE"]
 }

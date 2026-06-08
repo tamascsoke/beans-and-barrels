@@ -78,7 +78,10 @@ const categories = getCategories();
   }
   .cat__art { aspect-ratio: 4 / 3; width: 100%; }
   .cat__copy { display: grid; gap: 14px; align-content: center; align-self: center; }
-  .cat__copy h2 { font-size: clamp(2rem, 4vw, 3.4rem); }
+  .cat__copy h2 {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    text-transform: none;
+  }
   .cat__list {
     margin-top: 4px;
   }

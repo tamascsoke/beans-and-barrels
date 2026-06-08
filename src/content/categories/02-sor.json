@@ -1,15 +1,15 @@
 {
   "order": 2,
   "key": "sor",
-  "label": "Csapolt sör és koktélok",
+  "label": "CSAPOLT SÖR ÉS KOKTÉLOK",
   "image": "/uploads/beni-sor.webp",
   "imageAlt": "Csapolt kézműves sör",
   "items": [
-    "Cecei Lager",
-    "Cecei Ipa",
-    "Cecei Búza",
-    "Cecei Meggy",
-    "Standard és Premium Koktélok",
-    "(teljes kínálatunkért keress minket)"
+    "CECEI LAGER",
+    "CECEI IPA",
+    "CECEI BÚZA",
+    "CECEI MEGGY",
+    "STANDARD ÉS PREMIUM KOKTÉLOK",
+    "(TELJES KÍNÁLATUNKÉRT KERESS MINKET)"
   ]
 }

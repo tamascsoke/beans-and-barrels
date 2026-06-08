@@ -21,7 +21,7 @@ const slides = getCarouselSlides();
           <div class="carousel__copy stagger">
             <span class="h-sub">{s.eyebrow}</span>
             <h2 class="h-display"><span class="chalk-underline">{s.title}</span></h2>
-            <p class="lead carousel__lead">{s.body}</p>
+            <p class="lead">{s.body}</p>
           </div>
           <div class="carousel__cta inline-action">
             <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
@@ -109,10 +109,6 @@ const slides = getCarouselSlides();
     display: grid;
     gap: 18px;
     align-content: start;
-  }
-
-  .carousel__lead {
-    text-transform: none;
   }
 
   .carousel__cta {
