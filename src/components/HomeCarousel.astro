@@ -22,9 +22,9 @@ const slides = getCarouselSlides();
             <span class="h-sub">{s.eyebrow}</span>
             <h2 class="h-display"><span class="chalk-underline">{s.title}</span></h2>
             <p class="lead">{s.body}</p>
-            <div class="inline-action">
-              <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
-            </div>
+          </div>
+          <div class="carousel__cta inline-action">
+            <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
           </div>
         </article>
       ))
@@ -64,7 +64,10 @@ const slides = getCarouselSlides();
     scroll-snap-align: start;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "art"
+      "copy"
+      "cta";
     gap: clamp(20px, 4vw, 40px);
     padding-inline: max(var(--gutter), calc((100vw - var(--max-w)) / 2 + var(--gutter)));
     padding-block: clamp(28px, 5vw, 64px);
@@ -76,12 +79,15 @@ const slides = getCarouselSlides();
   @media (min-width: 860px) {
     .carousel__slide {
       grid-template-columns: 1.1fr 1fr;
-      grid-template-rows: auto;
-      align-items: center;
+      grid-template-areas:
+        "art copy"
+        "art cta";
+      align-items: start;
     }
   }
 
   .carousel__art {
+    grid-area: art;
     width: 100%;
     max-width: 620px;
     justify-self: center;
@@ -99,37 +105,37 @@ const slides = getCarouselSlides();
   .carousel__art img { border-radius: var(--r-md); }
 
   .carousel__copy {
-    display: flex;
-    flex-direction: column;
+    grid-area: copy;
+    display: grid;
     gap: 18px;
-    height: 100%;
-    min-height: 0;
+    align-content: start;
   }
 
-  .carousel__copy .h-sub {
-    min-height: 1.4em;
-  }
-
-  .carousel__copy .h-display {
-    min-height: 3em;
-  }
-
-  .carousel__copy .lead {
-    min-height: calc(1.6em * 4);
-    flex: 1;
-  }
-
-  .carousel__copy .inline-action {
-    margin-top: auto;
+  .carousel__cta {
+    grid-area: cta;
+    margin-top: 0;
   }
 
   @media (min-width: 860px) {
-    .carousel__copy {
-      height: auto;
+    .carousel__art {
+      grid-row: 1 / -1;
+      align-self: center;
+    }
+
+    .carousel__copy .h-sub {
+      min-height: 1.4em;
+    }
+
+    .carousel__copy .h-display {
+      min-height: 3em;
     }
 
     .carousel__copy .lead {
-      flex: none;
+      min-height: calc(1.6em * 4);
+    }
+
+    .carousel__cta {
+      align-self: end;
     }
   }
 
