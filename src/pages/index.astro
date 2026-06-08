@@ -5,7 +5,33 @@ import HomeCarousel from "../components/HomeCarousel.astro";
 import GalleryStrip from "../components/GalleryStrip.astro";
 import kaveImg from '../assets/uploads/kave2-pillar.webp';
 import sorImg from '../assets/uploads/csapolt-sor-pillar.webp';
+import soosBalazsImg from '../assets/uploads/soos-balazs.webp';
+import wartaBenedekImg from '../assets/uploads/warta-benedek.webp';
 import donatImg from '../assets/uploads/donat.webp';
+
+const teamMembers = [
+  {
+    name: "Soós Balázs",
+    role: "Alapító - menedzsment",
+    photo: soosBalazsImg,
+    photoAlt: "Soós Balázs, a Bean & Barrel alapítója",
+    photoPosition: "50% 7%",
+  },
+  {
+    name: "Warta Benedek",
+    role: "Alapító - szakmai háttér",
+    photo: wartaBenedekImg,
+    photoAlt: "Warta Benedek sört csapol a Bean & Barrel tuktuknál",
+    photoPosition: "62% 28%",
+  },
+  {
+    name: "Váradi Donát",
+    role: "Alapító – működtetés",
+    photo: donatImg,
+    photoAlt: "Váradi Donát, a Bean & Barrel alapítója",
+    photoPosition: "50% 7%",
+  },
+];
 ---
 
 <Layout title="Bean & Barrel — Kávé és Sör">
@@ -71,9 +97,17 @@ import donatImg from '../assets/uploads/donat.webp';
         </div>
       </div>
       <div class="about-teaser__team stagger">
-        <div class="team-card"><div class="team-card__avatar" aria-hidden="true">SB</div><div class="team-card__info"><span class="team-card__name">Soós Balázs</span><span class="team-card__role">Alapító - menedzsment</span></div></div>
-        <div class="team-card"><div class="team-card__avatar" aria-hidden="true">WB</div><div class="team-card__info"><span class="team-card__name">Warta Benedek</span><span class="team-card__role">Alapító - szakmai háttér</span></div></div>
-        <div class="team-card"><div class="team-card__photo"><Image src={donatImg} alt="Váradi Donát, a Bean & Barrel alapítója" widths={[160, 240]} sizes="72px" loading="lazy" /></div><div class="team-card__info"><span class="team-card__name">Váradi Donát</span><span class="team-card__role">Alapító – működtetés</span></div></div>
+        {teamMembers.map((member) => (
+          <div class="team-card">
+            <div class="team-card__photo" style={`--team-photo-position: ${member.photoPosition}`}>
+              <Image src={member.photo} alt={member.photoAlt} widths={[160, 240]} sizes="72px" loading="lazy" />
+            </div>
+            <div class="team-card__info">
+              <span class="team-card__name">{member.name}</span>
+              <span class="team-card__role">{member.role}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -126,30 +160,21 @@ import donatImg from '../assets/uploads/donat.webp';
   .about-teaser__team { display: grid; gap: 16px; }
   .team-card { display: flex; align-items: center; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card:first-child { border-top: 1px solid rgba(240, 138, 28, 0.44); }
-  .team-card__photo,
-  .team-card__avatar {
+  .team-card__photo {
     width: 72px;
     height: 72px;
     flex-shrink: 0;
     border-radius: 8px;
     transform: none;
     overflow: hidden;
+    border: 1px solid var(--panel-border);
+    background: var(--bg);
   }
   .team-card__photo :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 50% 7%;
-  }
-  .team-card__avatar {
-    display: grid;
-    place-items: center;
-    border: 1px dashed rgba(240, 138, 28, 0.48);
-    background: var(--panel-bg);
-    color: var(--accent);
-    font-family: var(--f-logo);
-    font-size: 2rem;
-    letter-spacing: 0.04em;
+    object-position: var(--team-photo-position, center top);
   }
   .team-card__info { display: flex; flex-direction: column; gap: 4px; }
   .team-card__name { font-family: var(--f-logo); font-size: clamp(1rem, 1.8vw, 1.3rem); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
