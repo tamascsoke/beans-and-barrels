@@ -38,10 +38,10 @@ const teamMembers = [
   <section class="hero">
     <div class="container hero__inner">
       <div class="hero__copy">
-        <span class="h-sub">Kávé, sör és egyebek egy tuktukból</span>
+        <span class="h-sub hero__eyebrow">KÁVÉ, <span class="hu-accent">SÖR</span> ÉS EGYEBEK EGY TUKTUKBÓL</span>
         <h1 class="h-display hero__title"><span class="chalk-underline">Bean &amp; Barrel</span></h1>
         <p class="lead hero__lead" data-typewriter>
-          Egy mozgó tuktuk specialty kávéval, csapolt sörrel és olyan vendéglátással, ami feldobja a hangulatot.
+          EGY MOZGÓ TUKTUK SPECIALTY KÁVÉVAL, CSAPOLT SÖRREL ÉS OLYAN VENDÉGLÁTÁSSAL, AMI FELDOBJA A HANGULATOT.
         </p>
         <div class="hero__cta">
           <a class="btn" href="/kontakt?topic=Rendezv%C3%A9ny#urlap">Rendezvényt kérek</a>
@@ -77,7 +77,7 @@ const teamMembers = [
         </article>
         <article class="pillar">
           <div class="photo-frame pillar__photo pillar__photo--beer"><Image src={sorImg} alt="Csapolt sörök felülnézetből" widths={[420, 720, 960]} sizes="(min-width: 760px) 28vw, 82vw" loading="lazy" /></div>
-          <h3 class="h-section">Csapolt sörök</h3>
+          <h3 class="h-section">Csapolt SÖRÖK</h3>
         </article>
       </div>
       <div class="inline-action inline-action--center pillars__cta">
@@ -146,10 +146,29 @@ const teamMembers = [
   .hero__title { font-size: clamp(3.25rem, min(8vw, 11svh), 6.25rem); }
   .hero__lead { max-width: 52ch; font-size: clamp(0.98rem, min(1.25vw, 2.35svh), 1.12rem); }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(2px, 1svh, 8px); }
+  .hero__eyebrow,
+  .hero__lead {
+    text-transform: none;
+  }
+  @media (max-width: 819px) {
+    .hero {
+      min-height: auto;
+      align-items: start;
+      padding-block: clamp(16px, 2.5svh, 24px) clamp(12px, 2svh, 20px);
+    }
+    .hero__inner { gap: 14px; }
+    .hero__copy { gap: 10px; }
+    .hero__title { font-size: clamp(2.65rem, 11.5vw, 3.35rem); }
+    .hero__cta { margin-top: 4px; }
+  }
   .pillars { display: grid; gap: clamp(28px, 5vw, 56px); }
   .pillars__head { display: grid; gap: 14px; text-align: center; justify-items: center; }
   .pillars__grid { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 5vw, 64px); }
   .pillar { display: grid; gap: 16px; justify-items: center; align-content: start; text-align: center; }
+  @media (max-width: 819px) {
+    .pillar__photo { order: 2; }
+    .pillar h3 { order: 1; }
+  }
   .pillar__photo { width: min(360px, 82vw); border-radius: 8px; aspect-ratio: 4 / 5; overflow: hidden; }
   .pillar__photo :global(img) { object-position: center center; }
   .pillar__photo--coffee :global(img) { object-position: 50% 48%; }

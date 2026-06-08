@@ -1,1 +1,14 @@
-{ "order": 3, "key": "snack", "label": "Snackek", "image": "/uploads/cookie.webp", "imageAlt": "Cookie és snackek a tuktuk pultjáról", "items": ["Croissant", "Pirított dió", "Sajttál", "Olajbogyó", "Mini fánk"] }
+{
+  "order": 3,
+  "key": "snack",
+  "label": "Snackek",
+  "image": "/uploads/cookie.webp",
+  "imageAlt": "Cookie és snackek a tuktuk pultjáról",
+  "items": [
+    "Fahéjas-Áfonyás Bagel",
+    "Brownie",
+    "B&B Barnasörös-Marshmallow Cookie",
+    "Csörögefánk házi lekvárral",
+    "Bagelszendvicsek"
+  ]
+}

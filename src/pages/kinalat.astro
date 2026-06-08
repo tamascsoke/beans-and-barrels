@@ -12,7 +12,7 @@ const categories = getCategories();
     <div class="container hero-grid">
       <div class="hero-copy">
         <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
-        <p class="lead">Specialty kávé, csapolt sör, snackek és szezonális italok egy mozgó pultból.</p>
+        <p class="lead">Specialty kávé, csapolt SÖR, snackek és szezonális italok egy mozgó pultból.</p>
         <div class="inline-action hero-action">
           <a class="btn" href="/rendezvenyek">Kérd rendezvényre</a>
         </div>
@@ -47,17 +47,13 @@ const categories = getCategories();
 <style>
   .kinalat-hero {
     display: grid;
-    align-items: center;
-    min-height: min(720px, max(520px, calc(88svh - var(--nav-h))));
-    padding-block: clamp(36px, 6vw, 76px);
-  }
-  @supports (height: 100dvh) {
-    .kinalat-hero { min-height: min(720px, max(520px, calc(88dvh - var(--nav-h)))); }
+    align-items: start;
+    padding-block: clamp(20px, 3vw, 36px);
   }
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(24px, 4vw, 40px);
+    gap: clamp(20px, 3.5vw, 32px);
     align-items: center;
   }
   @media (min-width: 820px) {

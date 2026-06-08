@@ -1,1 +1,15 @@
-{ "order": 2, "key": "sor", "label": "Csapolt sör és Koktélok", "image": "/uploads/beni-sor.webp", "imageAlt": "Csapolt kézműves sör", "items": ["Lager", "IPA", "Pils", "Aperol Spritz", "Espresso Martini"] }
+{
+  "order": 2,
+  "key": "sor",
+  "label": "Csapolt sör és koktélok",
+  "image": "/uploads/beni-sor.webp",
+  "imageAlt": "Csapolt kézműves sör",
+  "items": [
+    "Cecei Lager",
+    "Cecei Ipa",
+    "Cecei Búza",
+    "Cecei Meggy",
+    "Standard és Premium Koktélok",
+    "(teljes kínálatunkért keress minket)"
+  ]
+}

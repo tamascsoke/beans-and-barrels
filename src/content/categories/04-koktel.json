@@ -1,1 +1,14 @@
-{ "order": 4, "key": "szezonalis", "label": "Szezonális különlegességek", "image": "/uploads/kave3.webp", "imageAlt": "Szezonális Bean & Barrel ital", "items": ["Cold brew tonic", "Forró csoki", "Szezonális limonádé", "Téli fűszeres latte", "Alkalomhoz igazított italok"] }
+{
+  "order": 4,
+  "key": "szezonalis",
+  "label": "Szezonális különlegességek",
+  "image": "/uploads/kave3.webp",
+  "imageAlt": "Szezonális Bean & Barrel ital",
+  "items": [
+    "Presszó Tonic",
+    "Kávés Limó",
+    "Aerocano",
+    "Kókuszfelhős matcha",
+    "Matcha koktélok"
+  ]
+}

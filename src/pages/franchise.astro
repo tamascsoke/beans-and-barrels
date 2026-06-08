@@ -31,11 +31,11 @@ const steps = [
     <div class="container intro">
       <div class="intro__copy">
         <span class="h-sub">Franchise</span>
-        <h1 class="h-display"><span class="chalk-underline">Kávézz, sörözz velünk!</span></h1>
+        <h1 class="h-display"><span class="chalk-underline">Kávézz, SÖRÖZZ velünk!</span></h1>
         <p class="lead">
           Az országban rengeteg helyen van szükség a Bean&amp;Barrel-re. Irodák, sétálóutcák, rendezvények,
           lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
-          kávézó-söröző hálózatához!
+          kávézó-SÖRÖZŐ hálózatához!
         </p>
         <div class="inline-action">
           <a class="btn" href="/kontakt?topic=Franchise#urlap">Érdekel a franchise</a>
@@ -106,11 +106,28 @@ const steps = [
   }
   .block h2 { font-size: clamp(1.35rem, 2.3vw, 1.9rem); }
   .block__title {
-    max-width: min(100%, 18ch);
-    text-wrap: balance;
+    text-wrap: pretty;
+  }
+  @media (max-width: 819px) {
+    .block h2 {
+      line-height: 1.22;
+    }
+    .block__title .chalk-underline {
+      display: inline;
+      padding-bottom: 0.08em;
+    }
+  }
+  @media (min-width: 820px) {
+    .block__title {
+      max-width: min(100%, 18ch);
+      text-wrap: balance;
+    }
   }
   .block__list span { text-wrap: pretty; }
-  .keep-together { white-space: nowrap; }
+  .keep-together { white-space: normal; }
+  @media (min-width: 820px) {
+    .keep-together { white-space: nowrap; }
+  }
   .block__list--compact { gap: 0; }
 
   .process-head { display: grid; gap: var(--stack-tight); }
@@ -162,8 +179,5 @@ const steps = [
   .step .body-text { font-size: clamp(1rem, 1.16vw, 1.08rem); line-height: 1.68; letter-spacing: 0.035em; text-wrap: pretty; }
   .steps__action {
     margin-top: clamp(20px, 3vw, 32px);
-  }
-  @media (max-width: 520px) {
-    .keep-together { white-space: normal; }
   }
 </style>

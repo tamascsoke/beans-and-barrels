@@ -21,7 +21,7 @@ const slides = getCarouselSlides();
           <div class="carousel__copy stagger">
             <span class="h-sub">{s.eyebrow}</span>
             <h2 class="h-display"><span class="chalk-underline">{s.title}</span></h2>
-            <p class="lead">{s.body}</p>
+            <p class="lead carousel__lead">{s.body}</p>
           </div>
           <div class="carousel__cta inline-action">
             <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
@@ -70,7 +70,7 @@ const slides = getCarouselSlides();
       "cta";
     gap: clamp(20px, 4vw, 40px);
     padding-inline: max(var(--gutter), calc((100vw - var(--max-w)) / 2 + var(--gutter)));
-    padding-block: clamp(28px, 5vw, 64px);
+    padding-block: clamp(24px, 3.5vw, 44px);
     width: 100%;
     max-width: none;
     align-items: start;
@@ -111,6 +111,10 @@ const slides = getCarouselSlides();
     align-content: start;
   }
 
+  .carousel__lead {
+    text-transform: none;
+  }
+
   .carousel__cta {
     grid-area: cta;
     margin-top: 0;
@@ -119,23 +123,19 @@ const slides = getCarouselSlides();
   @media (min-width: 860px) {
     .carousel__art {
       grid-row: 1 / -1;
-      align-self: center;
-    }
-
-    .carousel__copy .h-sub {
-      min-height: 1.4em;
+      align-self: start;
     }
 
     .carousel__copy .h-display {
-      min-height: 3em;
+      min-height: 2.5em;
     }
 
     .carousel__copy .lead {
-      min-height: calc(1.6em * 4);
+      min-height: calc(1.55em * 3);
     }
 
     .carousel__cta {
-      align-self: end;
+      align-self: start;
     }
   }
 
