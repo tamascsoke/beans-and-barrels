@@ -34,7 +34,7 @@ const enriched = await Promise.all(items.map(async (p) => {
   <div class="gallery-wrap" id="galleryWrap" aria-label="Fotógaléria" data-sets={sets}>
     <div class="gallery-inner" id="galleryInner">
       {Array.from({ length: sets }, () => enriched).flat().map((p) => (
-        <button class={`gallery-frame${!hasPhotos ? " gallery-frame--ph" : ""}`} type="button" data-src={p.fullSrc} data-alt={p.alt} disabled={!hasPhotos}>
+        <button class={`gallery-frame${!hasPhotos ? " gallery-frame--ph" : ""}`} type="button" data-src={p.fullSrc} data-alt={p.alt} aria-label={p.alt} disabled={!hasPhotos}>
           {hasPhotos && p.asset
             ? <Image src={p.asset} alt={p.alt} width={400} loading="eager" draggable="false" />
             : hasPhotos
@@ -50,7 +50,12 @@ const enriched = await Promise.all(items.map(async (p) => {
 
   <div class="gallery-lightbox" id="stripLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Képnéző" inert>
     <button class="gallery-lightbox__close" id="stripLbClose" type="button" aria-label="Bezárás">✕</button>
-    <img id="stripLbImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" />
+    <button class="gallery-lightbox__prev" id="stripLbPrev" type="button" aria-label="Előző">‹</button>
+    <button class="gallery-lightbox__next" id="stripLbNext" type="button" aria-label="Következő">›</button>
+    <figure class="gallery-lightbox__fig">
+      <img id="stripLbImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" />
+      <figcaption id="stripLbCaption" class="gallery-lightbox__caption"></figcaption>
+    </figure>
   </div>
 
   <div class="container gallery-cta">
@@ -144,6 +149,7 @@ const enriched = await Promise.all(items.map(async (p) => {
     box-shadow: var(--panel-shadow);
     color: inherit;
     padding: 0;
+    cursor: pointer;
   }
   .gallery-frame:disabled { cursor: default; }
 
@@ -244,32 +250,77 @@ const enriched = await Promise.all(items.map(async (p) => {
     display: grid;
     place-items: center;
     padding: var(--gutter);
-    background: rgba(0,0,0,0.92);
+    background: rgba(0, 0, 0, 0.93);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 220ms var(--ease);
+    transition: opacity 260ms var(--ease);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
   .gallery-lightbox[aria-hidden="false"] {
     opacity: 1;
     pointer-events: auto;
   }
-  .gallery-lightbox img {
+  .gallery-lightbox__fig {
+    display: grid;
+    gap: 12px;
     max-width: min(92vw, 1280px);
-    max-height: 86vh;
+    max-height: 92vh;
+    place-items: center;
+  }
+  .gallery-lightbox__fig img {
+    max-width: 100%;
+    max-height: 84vh;
+    width: auto;
+    height: auto;
     object-fit: contain;
     border-radius: var(--r-md);
+    display: block;
     box-shadow: 0 24px 80px rgba(0,0,0,0.7);
   }
-  .gallery-lightbox__close {
+  .gallery-lightbox__caption {
+    font-family: var(--f-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .gallery-lightbox__close,
+  .gallery-lightbox__prev,
+  .gallery-lightbox__next {
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    transition: background 180ms var(--ease), transform 180ms var(--ease);
+  }
+  .gallery-lightbox__close:hover,
+  .gallery-lightbox__prev:hover,
+  .gallery-lightbox__next:hover {
+    background: rgba(255,255,255,0.16);
+    transform: scale(1.08);
+  }
+  .gallery-lightbox__close {
     top: 20px;
     right: 20px;
     width: 44px;
     height: 44px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.08);
     font-size: 1.1rem;
   }
+  .gallery-lightbox__prev,
+  .gallery-lightbox__next {
+    top: 50%;
+    translate: 0 -50%;
+    width: 52px;
+    height: 52px;
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+  .gallery-lightbox__prev { left: 16px; }
+  .gallery-lightbox__next { right: 16px; }
   .gallery-cta {
     display: flex;
     justify-content: center;
@@ -288,7 +339,19 @@ const enriched = await Promise.all(items.map(async (p) => {
     const next = wrap.querySelector<HTMLButtonElement>(".gallery-nav--next");
     const lightbox = document.getElementById("stripLightbox");
     const lbImg = document.getElementById("stripLbImg") as HTMLImageElement | null;
+    const lbCaption = document.getElementById("stripLbCaption");
     const lbClose = document.getElementById("stripLbClose");
+    const lbPrev = document.getElementById("stripLbPrev");
+    const lbNext = document.getElementById("stripLbNext");
+
+    const seenSrc = new Set<string>();
+    const lbFrames = Array.from(inner.querySelectorAll<HTMLElement>(".gallery-frame[data-src]:not([disabled])"))
+      .filter((f) => {
+        const src = f.dataset.src ?? "";
+        if (!src || seenSrc.has(src)) return false;
+        seenSrc.add(src);
+        return true;
+      });
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const SPEED = reduceMotion ? 0 : 0.55;
@@ -367,16 +430,26 @@ const enriched = await Promise.all(items.map(async (p) => {
 
     let releaseLbTrap: (() => void) | null = null;
     let lbLastFocus: HTMLElement | null = null;
+    let lbCurrent = 0;
 
-    function show(src: string, alt: string) {
-      if (!lightbox || !lbImg || !src) return;
-      lbLastFocus = document.activeElement as HTMLElement | null;
+    function show(idx: number) {
+      if (!lightbox || !lbImg || lbFrames.length === 0) return;
+      lbCurrent = ((idx % lbFrames.length) + lbFrames.length) % lbFrames.length;
+      const frame = lbFrames[lbCurrent];
+      const src = frame.dataset.src ?? "";
+      const alt = frame.dataset.alt ?? "";
+      if (!src) return;
+      if (lightbox.getAttribute("aria-hidden") === "true") {
+        lbLastFocus = document.activeElement as HTMLElement | null;
+      }
       lbImg.src = src;
       lbImg.alt = alt;
+      if (lbCaption) lbCaption.textContent = alt;
       lightbox.setAttribute("aria-hidden", "false");
       setInert(lightbox, false);
       document.body.classList.add("has-lightbox-open");
       document.body.style.overflow = "hidden";
+      releaseLbTrap?.();
       releaseLbTrap = trapFocus(lightbox);
       getFocusable(lightbox)[0]?.focus();
     }
@@ -404,12 +477,18 @@ const enriched = await Promise.all(items.map(async (p) => {
       }
       const frame = (e.target as HTMLElement).closest<HTMLElement>(".gallery-frame[data-src]");
       if (!frame || frame.hasAttribute("disabled")) return;
-      show(frame.dataset.src ?? "", frame.dataset.alt ?? "");
+      const idx = lbFrames.indexOf(frame);
+      show(idx >= 0 ? idx : lbFrames.findIndex((f) => f.dataset.src === frame.dataset.src));
     });
     lbClose?.addEventListener("click", hide);
+    lbPrev?.addEventListener("click", () => show(lbCurrent - 1));
+    lbNext?.addEventListener("click", () => show(lbCurrent + 1));
     lightbox?.addEventListener("click", (e) => { if (e.target === lightbox) hide(); });
     document.addEventListener("keydown", (e) => {
-      if (lightbox?.getAttribute("aria-hidden") === "false" && e.key === "Escape") hide();
+      if (lightbox?.getAttribute("aria-hidden") !== "false") return;
+      if (e.key === "Escape") hide();
+      if (e.key === "ArrowLeft") show(lbCurrent - 1);
+      if (e.key === "ArrowRight") show(lbCurrent + 1);
     });
 
     document.addEventListener("astro:before-swap", () => {
