@@ -34,7 +34,15 @@ const categories = getCategories();
             <div class="cat__copy">
               <h2 class="h-section"><span class="chalk-underline">{c.label}</span></h2>
               <ul class="cat__list chalk-list chalk-list--ruled">
-                {c.items.map((it) => <li><span>{it}</span></li>)}
+                {c.items.map((it) => (
+                  <li>
+                    <span>
+                      {it === "CSÖRÖGEFÁNK HÁZI LEKVÁRRAL" ? (
+                        <>CS<span class="accent-isolate">Ö</span>RÖGEFÁNK HÁZI LEKVÁRRAL</>
+                      ) : it}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </article>
@@ -88,6 +96,9 @@ const categories = getCategories();
   }
   .cat__list {
     margin-top: 4px;
+  }
+  .accent-isolate {
+    display: inline-block;
   }
   .kinalat-cta {
     margin-top: clamp(36px, 6vw, 64px);
