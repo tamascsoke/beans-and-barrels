@@ -7,32 +7,6 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-  /* Ékezetes betűk → hu-accent.woff2 (Handelson Ö/Ő gyakran O-ként jelenik meg) */
-  unicode-range:
-    U+0000-00D5,
-    U+00D7-00F5,
-    U+00F7-00FB,
-    U+00FD-014F,
-    U+0152-016F,
-    U+0172-024F;
-}
-
-@font-face {
-  font-family: "League Gothic";
-  src: url("/fonts/hu-display-accent.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+00C0-00FF, U+0100-017F;
-}
-
-@font-face {
-  font-family: "Handelson Five";
-  src: url("/fonts/hu-accent.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+00C0-00FF, U+0100-017F;
 }
 
 :root {
@@ -53,7 +27,7 @@
 
   --f-logo: "League Gothic", "Arial Narrow", sans-serif;
   --f-sub:  "League Spartan", "Arial Black", sans-serif;
-  --f-body: "Handelson Five", "League Spartan", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --f-body: "Handelson Five", "Share Tech Mono", monospace;
 
   --max-w: 1240px;
   --gutter: clamp(20px, 4vw, 56px);

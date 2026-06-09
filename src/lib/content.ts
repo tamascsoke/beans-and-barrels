@@ -9,7 +9,7 @@ function sortByOrder<T extends WithOrder>(entries: T[]): T[] {
   return [...entries].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 }
 
-/** Precomposed NFC — decomposed O+◌̈ vs Ö picks different font slices. */
+/** Precomposed NFC — decomposed O+◌̈ vs Ö can render differently in custom fonts. */
 function nfc(value: string): string {
   return value.normalize("NFC");
 }
