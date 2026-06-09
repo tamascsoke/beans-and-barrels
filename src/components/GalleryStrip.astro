@@ -84,7 +84,7 @@ const enriched = await Promise.all(items.map(async (p) => {
     overflow: hidden;
     cursor: grab;
     user-select: none;
-    touch-action: pan-y;
+    touch-action: pan-x pan-y;
     mask-image: linear-gradient(
       to right,
       transparent 0%,
@@ -364,25 +364,44 @@ const enriched = await Promise.all(items.map(async (p) => {
     let isVisible = false;
     let isReady = false;
 
+    function wrapPos(value: number) {
+      if (halfW <= 0) return value;
+      let next = value;
+      while (next < 0) next += halfW;
+      while (next >= halfW) next -= halfW;
+      return next;
+    }
+
+    function applyTransform() {
+      inner!.style.transform = `translate3d(${-pos}px, 0, 0)`;
+    }
+
+    function remeasure() {
+      const sets = parseInt(wrap!.dataset.sets ?? "2", 10);
+      const nextHalf = inner!.scrollWidth / sets;
+      if (!Number.isFinite(nextHalf) || nextHalf <= 0) return false;
+      halfW = nextHalf;
+      pos = wrapPos(pos);
+      isReady = true;
+      applyTransform();
+      return true;
+    }
+
     function tick() {
-      if (!isVisible) {
+      if (!isVisible && !isDragging) {
         rafId = null;
         return;
       }
-      if (!isDragging) {
-        pos += SPEED;
-        if (halfW > 0 && pos >= halfW) pos -= halfW;
+      if (!isDragging && SPEED > 0) {
+        pos = wrapPos(pos + SPEED);
       }
-      inner!.style.transform = `translateX(${-pos}px)`;
+      applyTransform();
       rafId = requestAnimationFrame(tick);
     }
 
-    function start() {
-      const sets = parseInt(wrap!.dataset.sets ?? "2", 10);
-      halfW = inner!.scrollWidth / sets;
-      isReady = true;
-      if (reduceMotion) return;
-      if (isVisible && rafId === null) rafId = requestAnimationFrame(tick);
+    function startLoop() {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(tick);
     }
 
     function stopAnimation() {
@@ -390,28 +409,38 @@ const enriched = await Promise.all(items.map(async (p) => {
       rafId = null;
     }
 
+    function tryStart() {
+      if (!remeasure()) return;
+      if (isVisible || isDragging) startLoop();
+    }
+
     const visibilityIO = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
-      if (reduceMotion) return;
-      if (isVisible && isReady && rafId === null) rafId = requestAnimationFrame(tick);
-      if (!isVisible) stopAnimation();
+      if (isVisible && isReady) startLoop();
+      if (!isVisible && !isDragging) stopAnimation();
     }, { threshold: 0.08 });
     visibilityIO.observe(wrap);
 
-    const imgs   = Array.from(inner.querySelectorAll("img")) as HTMLImageElement[];
-    let pending  = imgs.filter((img) => !img.complete).length;
+    const resizeIO = new ResizeObserver(() => {
+      remeasure();
+      if (isVisible || isDragging) startLoop();
+    });
+    resizeIO.observe(inner);
+    signal.addEventListener("abort", () => resizeIO.disconnect(), { once: true });
 
-    if (pending === 0) {
-      start();
-    } else {
-      imgs.forEach((img) => {
-        if (!img.complete) {
-          const done = () => { if (--pending === 0) start(); };
-          img.addEventListener("load",  done, { once: true });
-          img.addEventListener("error", done, { once: true });
-        }
-      });
+    const imgs = Array.from(inner.querySelectorAll("img")) as HTMLImageElement[];
+    const onImgReady = () => tryStart();
+    imgs.forEach((img) => {
+      if (img.complete) return;
+      img.addEventListener("load", onImgReady, { once: true, signal });
+      img.addEventListener("error", onImgReady, { once: true, signal });
+    });
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => tryStart()).catch(() => undefined);
     }
+    tryStart();
+    window.requestAnimationFrame(() => tryStart());
 
     function endPointer(e: PointerEvent) {
       if (activePointer !== e.pointerId) return;
@@ -442,22 +471,18 @@ const enriched = await Promise.all(items.map(async (p) => {
         wrap.setPointerCapture(e.pointerId);
         wrap.style.cursor = "grabbing";
       }
-      pos = dragStartPos + dx;
-      if (halfW > 0) {
-        if (pos < 0)       pos += halfW;
-        if (pos >= halfW)  pos -= halfW;
-      }
+      pos = wrapPos(dragStartPos + dx);
+      applyTransform();
+      if (rafId === null) startLoop();
     }, { signal });
 
     wrap.addEventListener("pointerup", endPointer, { signal });
     wrap.addEventListener("pointercancel", endPointer, { signal });
 
     function shift(dir: 1 | -1) {
-      pos += dir * wrap!.clientWidth * 0.72;
-      if (halfW > 0) {
-        if (pos < 0) pos += halfW;
-        if (pos >= halfW) pos -= halfW;
-      }
+      pos = wrapPos(pos + dir * wrap!.clientWidth * 0.72);
+      applyTransform();
+      if (rafId === null) startLoop();
     }
 
     let releaseLbTrap: (() => void) | null = null;
@@ -538,6 +563,7 @@ const enriched = await Promise.all(items.map(async (p) => {
     document.addEventListener("astro:before-swap", () => {
       stopAnimation();
       visibilityIO.disconnect();
+      resizeIO.disconnect();
       hide();
       galleryAbort?.abort();
     }, { once: true, signal });
