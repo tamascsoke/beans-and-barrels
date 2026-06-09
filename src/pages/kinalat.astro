@@ -92,4 +92,21 @@ const categories = getCategories();
   .kinalat-cta {
     margin-top: clamp(36px, 6vw, 64px);
   }
+
+  @media (max-width: 819px) {
+    .cat {
+      border-top: none;
+      padding-block: clamp(18px, 4vw, 28px);
+    }
+    .cat:last-child {
+      border-bottom: none;
+    }
+    .cat__list {
+      border-top: none;
+    }
+    .cat__list :global(li) {
+      border-bottom: none;
+      padding-block: 9px;
+    }
+  }
 </style>
