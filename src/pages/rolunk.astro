@@ -128,8 +128,9 @@ const founders: Founder[] = [
   }
   .story__photo { aspect-ratio: 4 / 3; width: 100%; }
   .story__aside { display: contents; }
-  .story__copy { display: grid; gap: 18px; order: 3; }
-  .story__cta { order: 2; }
+  .story__photo { order: 1; }
+  .story__copy { display: grid; gap: 18px; order: 2; }
+  .story__cta { order: 3; }
   @media (min-width: 820px) {
     .story { grid-template-columns: 1fr 1fr; }
     .story__aside {
@@ -137,6 +138,7 @@ const founders: Founder[] = [
       gap: 18px;
       align-content: center;
     }
+    .story__photo,
     .story__copy,
     .story__cta { order: unset; }
   }
