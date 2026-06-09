@@ -9,6 +9,11 @@ function sortByOrder<T extends WithOrder>(entries: T[]): T[] {
   return [...entries].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 }
 
+/** Precomposed NFC — decomposed O+◌̈ vs Ö picks different font slices. */
+function nfc(value: string): string {
+  return value.normalize("NFC");
+}
+
 const _imgs = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/uploads/**/*.webp',
   { eager: true },
@@ -81,7 +86,13 @@ export function getCategories(): Category[] {
     "../content/categories/*.json",
     { eager: true },
   );
-  return sortByOrder(values(mods));
+  return sortByOrder(values(mods)).map((category) => ({
+    ...category,
+    label: nfc(category.label),
+    sub: category.sub ? nfc(category.sub) : category.sub,
+    imageAlt: category.imageAlt ? nfc(category.imageAlt) : category.imageAlt,
+    items: category.items.map(nfc),
+  }));
 }
 
 export function getReasons(): Reason[] {
