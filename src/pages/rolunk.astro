@@ -37,7 +37,7 @@ const founders: Founder[] = [
     note: "Azért nagyobb a képem, mint a többieknek, hogy végre én lehessek a magasabb.",
     photo: wartaBenedekImg,
     photoAlt: "Warta Benedek sört csapol a Bean & Barrel tuktuknál",
-    photoPosition: "50% 72%",
+    photoPosition: "68% 50%",
     heroMedia: true,
   },
   {
@@ -65,9 +65,6 @@ const founders: Founder[] = [
         <p class="lead">
           Egy fáradt - nekünk még, másnak már korántsem - reggel, a kanapéról lefordulva a hűtőben csak SÖRt, a pulton csak kávét találtunk. A sztorinknak pedig itt indult az a bizonyos első fejezete...
         </p>
-        <div class="inline-action">
-          <a class="btn" href="/kinalat">Nézd meg kínálatunkat!</a>
-        </div>
       </div>
     </div>
   </section>
@@ -109,6 +106,9 @@ const founders: Founder[] = [
           );
         })}
       </div>
+      <div class="founders__cta inline-action inline-action--center">
+        <a class="btn" href="/kinalat">Nézd meg kínálatunkat!</a>
+      </div>
     </div>
   </section>
 </Layout>
@@ -129,7 +129,6 @@ const founders: Founder[] = [
   .founders { display: grid; gap: clamp(26px, 5vw, 54px); }
   .founders__head { display: grid; gap: 14px; }
   .founders__grid {
-    --founder-photo-h: clamp(148px, 14vw, 182px);
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
@@ -155,11 +154,9 @@ const founders: Founder[] = [
     box-shadow: var(--panel-shadow);
   }
   .founder-card--compact {
-    --founder-media-h: var(--founder-photo-h);
     gap: 12px;
   }
   .founder-card--hero {
-    --founder-media-h: calc(var(--founder-photo-h) * 1.28);
     gap: 12px;
   }
   @media (min-width: 900px) {
@@ -175,7 +172,7 @@ const founders: Founder[] = [
   .founder-card__media {
     position: relative;
     width: 100%;
-    height: var(--founder-media-h);
+    aspect-ratio: 4 / 5;
     border-radius: 8px;
     overflow: hidden;
     flex: 0 0 auto;
@@ -209,7 +206,7 @@ const founders: Founder[] = [
     object-position: var(--founder-photo-position, center);
   }
   .founder-card__media--hero {
-    height: calc(var(--founder-media-h) * 1.08);
+    aspect-ratio: 3 / 4;
   }
   .founder-card__initials {
     font-family: var(--f-logo);
@@ -236,5 +233,9 @@ const founders: Founder[] = [
   }
   .founder-card--compact .founder-card__role {
     letter-spacing: 0.2em;
+  }
+  .founders__cta {
+    justify-self: center;
+    margin-top: clamp(8px, 2vw, 18px);
   }
 </style>
