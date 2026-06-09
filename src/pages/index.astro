@@ -88,10 +88,15 @@ const teamMembers = [
 
   <section class="section section--alt">
     <div class="container about-teaser">
-      <div class="about-teaser__intro">
-        <span class="h-sub">Rólunk</span>
-        <h2 class="h-display"><span class="chalk-underline">Három srác, egy tuktuk</span></h2>
-        <p class="lead">Ismerd meg a Bean &amp; Barrel alapítóit és sztoriját!</p>
+      <div class="about-teaser__left">
+        <div class="about-teaser__intro">
+          <span class="h-sub">Rólunk</span>
+          <h2 class="h-display"><span class="chalk-underline">Három srác, egy tuktuk</span></h2>
+          <p class="lead">Ismerd meg a Bean &amp; Barrel alapítóit és sztoriját!</p>
+        </div>
+        <div class="about-teaser__cta inline-action">
+          <a class="btn" href="/rolunk">Elolvasom</a>
+        </div>
       </div>
       <div class="about-teaser__team stagger">
         {teamMembers.map((member) => (
@@ -105,9 +110,6 @@ const teamMembers = [
             </div>
           </div>
         ))}
-      </div>
-      <div class="about-teaser__cta inline-action">
-        <a class="btn" href="/rolunk">Elolvasom</a>
       </div>
     </div>
   </section>
@@ -196,8 +198,10 @@ const teamMembers = [
   }
   .pillar h3 { font-size: clamp(1.8rem, 4vw, 3rem); }
   .about-teaser { display: grid; gap: clamp(32px, 5vw, 64px); align-items: start; }
-  .about-teaser__intro { display: grid; gap: 18px; }
-  .about-teaser__team { display: grid; gap: 16px; width: 100%; }
+  .about-teaser__left { display: contents; }
+  .about-teaser__intro { display: grid; gap: 18px; order: 1; }
+  .about-teaser__cta { order: 3; }
+  .about-teaser__team { display: grid; gap: 16px; width: 100%; order: 2; }
   .team-card { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 28px); padding: clamp(16px, 2vw, 24px) 0; border-bottom: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card:first-child { border-top: 1px solid rgba(240, 138, 28, 0.44); }
   .team-card__photo {
@@ -318,9 +322,15 @@ const teamMembers = [
       align-items: center;
       gap: clamp(36px, 5vw, 72px);
     }
-    .about-teaser__intro { grid-column: 1; grid-row: 1; }
-    .about-teaser__cta { grid-column: 1; grid-row: 2; }
-    .about-teaser__team { grid-column: 2; grid-row: 1 / -1; }
+    .about-teaser__left {
+      display: grid;
+      gap: 18px;
+      align-content: center;
+      order: unset;
+    }
+    .about-teaser__intro,
+    .about-teaser__cta,
+    .about-teaser__team { order: unset; }
     .about-teaser__team { gap: clamp(14px, 1.6vw, 20px); }
     .team-card__photo {
       width: clamp(108px, 10.5vw, 132px);
