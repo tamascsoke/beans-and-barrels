@@ -686,7 +686,7 @@ html.js .stagger > *:not(.panel-motion) {
   transform: translateY(18px) scale(0.98);
   transition: opacity 600ms var(--ease), transform 600ms var(--ease);
 }
-.stagger.is-visible > *:not(.panel-motion) {
+html.js .stagger.is-visible > *:not(.panel-motion) {
   opacity: 1;
   transform: none;
 }
