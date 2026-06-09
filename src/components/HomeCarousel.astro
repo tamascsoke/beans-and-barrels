@@ -284,9 +284,11 @@ const slides = getCarouselSlides();
     const status = document.querySelector<HTMLElement>(".carousel__status");
     if (!track || !dots.length) return;
 
+    const section = track.closest(".carousel") as HTMLElement | null;
     const slides = Array.from(track.children) as HTMLElement[];
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let timer: ReturnType<typeof setInterval> | null = null;
+    let isInView = false;
 
     const getActive = () => {
       const mid = track.scrollLeft + track.clientWidth / 2;
@@ -315,7 +317,7 @@ const slides = getCarouselSlides();
     const prevSlide = () => goTo((getActive() - 1 + slides.length) % slides.length);
 
     const startAuto = () => {
-      if (reduceMotion) return;
+      if (reduceMotion || !isInView) return;
       stopAuto();
       timer = setInterval(next, 6500);
     };
@@ -334,8 +336,17 @@ const slides = getCarouselSlides();
       carouselAbort?.abort();
     }, { once: true, signal });
 
+    if (section) {
+      const visibilityIO = new IntersectionObserver(([entry]) => {
+        isInView = entry.isIntersecting;
+        if (isInView) startAuto();
+        else stopAuto();
+      }, { threshold: 0.2 });
+      visibilityIO.observe(section);
+      signal.addEventListener("abort", () => visibilityIO.disconnect());
+    }
+
     setActive();
-    startAuto();
   }
 
   initCarousel();
