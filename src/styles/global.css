@@ -271,6 +271,7 @@ html:not(.js) [data-typewriter] {
 .chalk-list span {
   min-width: 0;
   text-wrap: pretty;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 
 .chalk-list--roomy li {
