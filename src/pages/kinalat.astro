@@ -36,9 +36,9 @@ const categories = getCategories();
               <ul class="cat__list chalk-list chalk-list--ruled">
                 {c.items.map((it) => (
                   <li>
-                    <span>
+                    <span aria-label={it}>
                       {it === "CSÖRÖGEFÁNK HÁZI LEKVÁRRAL" ? (
-                        <>Csörögefánk házi lekvárral</>
+                        <>CS<span class="umlaut-o" aria-hidden="true">O</span>RÖGEFÁNK HÁZI LEKVÁRRAL</>
                       ) : it}
                     </span>
                   </li>
@@ -96,6 +96,26 @@ const categories = getCategories();
   }
   .cat__list {
     margin-top: 4px;
+  }
+  .umlaut-o {
+    position: relative;
+    display: inline-block;
+  }
+  .umlaut-o::before,
+  .umlaut-o::after {
+    content: "";
+    position: absolute;
+    top: 0.08em;
+    width: 0.08em;
+    height: 0.08em;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .umlaut-o::before {
+    left: 0.26em;
+  }
+  .umlaut-o::after {
+    right: 0.26em;
   }
   .kinalat-cta {
     margin-top: clamp(36px, 6vw, 64px);
