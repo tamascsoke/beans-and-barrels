@@ -10,10 +10,12 @@ const categories = getCategories();
 <Layout title="Kínálat — Bean & Barrel" description="Fedezd fel a Bean & Barrel kínálatát: specialty kávék, csapolt sörök, snackek és szezonális italok egy mozgó pultból.">
   <section class="section kinalat-hero">
     <div class="container hero-grid">
-      <div class="hero-copy">
-        <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
-        <p class="lead kinalat-hero__lead">SPECIALTY KÁVÉ, CSAPOLT SÖR, SNACKEK ÉS SZEZONÁLIS ITALOK EGY MOZGÓ PULTBÓL.</p>
-        <div class="inline-action hero-action">
+      <div class="hero-aside">
+        <div class="hero-copy">
+          <h1 class="h-display"><span class="chalk-underline">Egy tuktuk, négy világ</span></h1>
+          <p class="lead kinalat-hero__lead">SPECIALTY KÁVÉ, CSAPOLT SÖR, SNACKEK ÉS SZEZONÁLIS ITALOK EGY MOZGÓ PULTBÓL.</p>
+        </div>
+        <div class="hero-action inline-action">
           <a class="btn" href="/kontakt?topic=Rendezv%C3%A9ny#urlap">Ajánlatot kérek</a>
         </div>
       </div>
@@ -59,10 +61,21 @@ const categories = getCategories();
     gap: clamp(20px, 3.5vw, 32px);
     align-items: center;
   }
+  .hero-aside { display: contents; }
+  .hero-copy { display: grid; gap: 18px; order: 1; }
+  .hero-img { order: 2; }
+  .hero-action { order: 3; }
   @media (min-width: 820px) {
     .hero-grid { grid-template-columns: 1fr 1fr; }
+    .hero-aside {
+      display: grid;
+      gap: 18px;
+      align-content: center;
+    }
+    .hero-copy,
+    .hero-img,
+    .hero-action { order: unset; }
   }
-  .hero-copy { display: grid; gap: 18px; }
   .kinalat-hero__lead { text-transform: none; }
   .hero-img { aspect-ratio: 4 / 3; }
 
