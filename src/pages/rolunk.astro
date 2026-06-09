@@ -59,12 +59,17 @@ const founders: Founder[] = [
       <div class="photo-frame story__photo">
         <Image src={tuktukCsapatImg} alt="Bean & Barrel alapítók a tuktuk előtt" widths={[420, 760]} sizes="(min-width: 820px) 48vw, 100vw" loading="eager" fetchpriority="high" />
       </div>
-      <div class="story__copy">
-        <span class="h-sub">Rólunk</span>
-        <h1 class="h-display"><span class="chalk-underline">Történetünk</span></h1>
-        <p class="lead">
-          Egy fáradt - nekünk még, másnak már korántsem - reggel, a kanapéról lefordulva a hűtőben csak SÖRt, a pulton csak kávét találtunk. A sztorinknak pedig itt indult az a bizonyos első fejezete...
-        </p>
+      <div class="story__aside">
+        <div class="story__copy">
+          <span class="h-sub">Rólunk</span>
+          <h1 class="h-display"><span class="chalk-underline">Történetünk</span></h1>
+          <p class="lead">
+            Egy fáradt - nekünk még, másnak már korántsem - reggel, a kanapéról lefordulva a hűtőben csak SÖRt, a pulton csak kávét találtunk. A sztorinknak pedig itt indult az a bizonyos első fejezete...
+          </p>
+        </div>
+        <div class="story__cta inline-action">
+          <a class="btn" href="/kontakt?topic=Rendezv%C3%A9ny#urlap">Kérd a rendezvényedre</a>
+        </div>
       </div>
     </div>
   </section>
@@ -121,11 +126,20 @@ const founders: Founder[] = [
     gap: clamp(26px, 5vw, 58px);
     align-items: center;
   }
+  .story__photo { aspect-ratio: 4 / 3; width: 100%; }
+  .story__aside { display: contents; }
+  .story__copy { display: grid; gap: 18px; order: 3; }
+  .story__cta { order: 2; }
   @media (min-width: 820px) {
     .story { grid-template-columns: 1fr 1fr; }
+    .story__aside {
+      display: grid;
+      gap: 18px;
+      align-content: center;
+    }
+    .story__copy,
+    .story__cta { order: unset; }
   }
-  .story__photo { aspect-ratio: 4 / 3; width: 100%; }
-  .story__copy { display: grid; gap: 18px; }
   .founders { display: grid; gap: clamp(26px, 5vw, 54px); }
   .founders__head { display: grid; gap: 14px; }
   .founders__grid {
