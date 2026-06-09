@@ -1,0 +1,19 @@
+{
+  "name": "Bean & Barrel",
+  "short_name": "Bean & Barrel",
+  "description": "Tuktuk kávézó és söröző rendezvényekre.",
+  "lang": "hu",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#363535",
+  "theme_color": "#363535",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

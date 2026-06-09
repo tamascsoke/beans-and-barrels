@@ -2,6 +2,7 @@
 import ChalkSelect from "./ChalkSelect.astro";
 import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT } from "../lib/contact";
 const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
+const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
 ---
 
 <div class="sidetab-overlay" id="sidetabOverlay"></div>
@@ -61,7 +62,8 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       <input type="hidden" name="_subject" value={FORM_SUBJECT} />
       <input type="hidden" name="_template" value="table" />
       <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_next" value={`${Astro.url.origin}/koszonjuk`} />
+      <input type="hidden" name="_next" value={THANK_YOU_URL} />
+      <input type="text" name="_honey" class="st-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
       <label class="st-field">
         <span class="st-field__lbl">Neved</span>
@@ -86,7 +88,11 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
           és hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása céljából kezeljétek.
         </span>
       </label>
-      <button type="submit" class="btn btn--compact sidetab__btn">Küldés</button>
+      <button type="submit" class="btn btn--compact sidetab__btn" id="sidetabSubmit">
+        <span class="sidetab__btn-label">Küldés</span>
+        <span class="sidetab__btn-loading" aria-hidden="true">Küldés...</span>
+      </button>
+      <div class="sidetab__feedback" id="sidetabFeedback" aria-live="polite"></div>
     </form>
   </div>
 </aside>
@@ -374,6 +380,14 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
     caret-color: #f4f4f4;
     transition: background-color 5000s ease-in-out 0s !important;
   }
+  .st-honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
 
   .st-field--consent {
     display: grid;
@@ -407,6 +421,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
   .sidetab__btn {
     justify-self: stretch;
     justify-content: center;
+    position: relative;
     width: 100%;
     min-height: 46px;
     padding: 13px 18px;
@@ -418,6 +433,34 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
       0 0 0 1px rgba(240,138,28,0.22),
       0 10px 24px rgba(240,138,28,0.12);
   }
+  .sidetab__btn-loading { display: none; }
+  .sidetab__btn[data-state="loading"] .sidetab__btn-label { opacity: 0; }
+  .sidetab__btn[data-state="loading"] .sidetab__btn-loading {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.75;
+  }
+  .sidetab__btn[data-state="done"] {
+    background: #3a8c5a;
+    pointer-events: none;
+  }
+  .sidetab__feedback {
+    display: none;
+    font-family: var(--f-body);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .sidetab__feedback--ok,
+  .sidetab__feedback--err {
+    display: block;
+  }
+  .sidetab__feedback--ok { color: #7ecfa0; }
+  .sidetab__feedback--err { color: #e07070; }
   .sidetab__btn:hover {
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.24),
@@ -450,13 +493,21 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 <script>
   import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
 
+  let sideTabAbort: AbortController | null = null;
+
   function initSideTab() {
+    sideTabAbort?.abort();
+    sideTabAbort = new AbortController();
+    const { signal } = sideTabAbort;
     const tab      = document.getElementById("sidetab")      as HTMLElement | null;
     const panel    = document.getElementById("sidetab-panel") as HTMLElement | null;
     const pull     = document.getElementById("sidetabPull")  as HTMLButtonElement | null;
     const fab      = document.getElementById("sidetabFab")   as HTMLButtonElement | null;
     const closeBtn = document.getElementById("sidetabClose") as HTMLButtonElement | null;
     const overlay  = document.getElementById("sidetabOverlay") as HTMLElement | null;
+    const form     = panel?.querySelector<HTMLFormElement>(".sidetab__form");
+    const submit   = document.getElementById("sidetabSubmit") as HTMLButtonElement | null;
+    const feedback = document.getElementById("sidetabFeedback") as HTMLElement | null;
     if (!tab || !pull || !panel) return;
     const sideTab = tab;
     const pullButton = pull;
@@ -491,19 +542,46 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 
     pullButton.addEventListener("click", () =>
       sideTab.classList.contains("is-open") ? closeTab() : openTab()
-    );
+    , { signal });
     fab?.addEventListener("click", () =>
       sideTab.classList.contains("is-open") ? closeTab() : openTab()
-    );
-    closeBtn?.addEventListener("click", closeTab);
-    overlay?.addEventListener("click", closeTab);
+    , { signal });
+    closeBtn?.addEventListener("click", closeTab, { signal });
+    overlay?.addEventListener("click", closeTab, { signal });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && sideTab.classList.contains("is-open")) closeTab();
-    });
+    }, { signal });
 
     sideTab.querySelectorAll("a[href^='tel:'], a[href^='mailto:']").forEach((a) =>
-      a.addEventListener("click", closeTab)
+      a.addEventListener("click", closeTab, { signal })
     );
+
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!submit || !feedback) return;
+      submit.dataset.state = "loading";
+      submit.disabled = true;
+      feedback.textContent = "";
+      feedback.className = "sidetab__feedback";
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) throw new Error("submit");
+        submit.dataset.state = "done";
+        form.reset();
+        feedback.textContent = "Megkaptuk az üzeneted — hamarosan visszaírunk!";
+        feedback.classList.add("sidetab__feedback--ok");
+      } catch {
+        submit.dataset.state = "";
+        submit.disabled = false;
+        feedback.textContent = "Valami hiba történt. Próbáld újra, vagy írj e-mailben.";
+        feedback.classList.add("sidetab__feedback--err");
+      }
+    }, { signal });
   }
 
   initSideTab();

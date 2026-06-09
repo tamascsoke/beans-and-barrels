@@ -8,7 +8,7 @@ const slides = getCarouselSlides();
   <div class="carousel__track" id="carouselTrack">
     {
       slides.map((s, i) => (
-        <article class="carousel__slide" aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
+        <article class="carousel__slide" id={`carousel-slide-${i}`} aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
           {s.image && resolveImage(s.image)
             ? <div class="photo-frame carousel__art">
                 <Image src={resolveImage(s.image)!} alt={s.imageAlt ?? s.eyebrow}
@@ -40,9 +40,10 @@ const slides = getCarouselSlides();
 
   <div class="carousel__dots" role="tablist">
     {slides.map((_, i) => (
-      <button class="carousel__dot" data-i={i} aria-label={`${i + 1}. dia`}></button>
+      <button class="carousel__dot" role="tab" data-i={i} aria-selected={i === 0 ? "true" : "false"} aria-controls={`carousel-slide-${i}`} aria-label={`${i + 1}. dia`}></button>
     ))}
   </div>
+  <p class="carousel__status sr-only" aria-live="polite"></p>
 </section>
 
 <style>
@@ -260,14 +261,22 @@ const slides = getCarouselSlides();
 </style>
 
 <script>
+  let carouselAbort: AbortController | null = null;
+
   function initCarousel() {
+    carouselAbort?.abort();
+    carouselAbort = new AbortController();
+    const { signal } = carouselAbort;
+
     const track = document.getElementById("carouselTrack") as HTMLElement | null;
     const dots  = Array.from(document.querySelectorAll(".carousel__dot")) as HTMLButtonElement[];
     const prev  = document.querySelector<HTMLButtonElement>(".carousel__nav--prev");
     const nextBtn = document.querySelector<HTMLButtonElement>(".carousel__nav--next");
+    const status = document.querySelector<HTMLElement>(".carousel__status");
     if (!track || !dots.length) return;
 
     const slides = Array.from(track.children) as HTMLElement[];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let timer: ReturnType<typeof setInterval> | null = null;
 
     const getActive = () => {
@@ -282,31 +291,47 @@ const slides = getCarouselSlides();
 
     const setActive = () => {
       const i = getActive();
-      dots.forEach((d, idx) => d.classList.toggle("is-active", idx === i));
+      dots.forEach((d, idx) => {
+        const active = idx === i;
+        d.classList.toggle("is-active", active);
+        d.setAttribute("aria-selected", String(active));
+      });
+      if (status) status.textContent = `${i + 1}. dia / ${slides.length}`;
     };
 
     const goTo = (i: number) =>
-      track.scrollTo({ left: slides[i].offsetLeft, behavior: "smooth" });
+      track.scrollTo({ left: slides[i].offsetLeft, behavior: reduceMotion ? "auto" : "smooth" });
 
     const next = () => goTo((getActive() + 1) % slides.length);
     const prevSlide = () => goTo((getActive() - 1 + slides.length) % slides.length);
 
-    const startAuto = () => { stopAuto(); timer = setInterval(next, 6500); };
+    const startAuto = () => {
+      if (reduceMotion) return;
+      stopAuto();
+      timer = setInterval(next, 6500);
+    };
     const stopAuto  = () => { if (timer) { clearInterval(timer); timer = null; } };
 
-    track.addEventListener("scroll", () => requestAnimationFrame(setActive), { passive: true });
-    dots.forEach((d, i) => d.addEventListener("click", () => { goTo(i); startAuto(); }));
-    prev?.addEventListener("click", () => { prevSlide(); startAuto(); });
-    nextBtn?.addEventListener("click", () => { next(); startAuto(); });
-    track.addEventListener("mouseenter", stopAuto);
-    track.addEventListener("mouseleave", startAuto);
-    track.addEventListener("touchstart", stopAuto,  { passive: true });
-    track.addEventListener("touchend",   startAuto, { passive: true });
+    track.addEventListener("scroll", () => requestAnimationFrame(setActive), { passive: true, signal });
+    dots.forEach((d, i) => d.addEventListener("click", () => { goTo(i); startAuto(); }, { signal }));
+    prev?.addEventListener("click", () => { prevSlide(); startAuto(); }, { signal });
+    nextBtn?.addEventListener("click", () => { next(); startAuto(); }, { signal });
+    track.addEventListener("mouseenter", stopAuto, { signal });
+    track.addEventListener("mouseleave", startAuto, { signal });
+    track.addEventListener("touchstart", stopAuto,  { passive: true, signal });
+    track.addEventListener("touchend",   startAuto, { passive: true, signal });
+    document.addEventListener("astro:before-swap", () => {
+      stopAuto();
+      carouselAbort?.abort();
+    }, { once: true, signal });
 
     setActive();
     startAuto();
   }
 
   initCarousel();
-  document.addEventListener("astro:after-swap", initCarousel);
+  if (!document.body.dataset.carouselAfterSwap) {
+    document.body.dataset.carouselAfterSwap = "1";
+    document.addEventListener("astro:after-swap", initCarousel);
+  }
 </script>

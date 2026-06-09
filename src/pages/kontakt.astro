@@ -6,9 +6,10 @@ import tuktukPultImg from '../assets/uploads/tuktuk-pult.webp';
 import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT } from "../lib/contact";
 const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
+const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
 ---
 
-<Layout title="Kontakt — Bean & Barrel">
+<Layout title="Kontakt — Bean & Barrel" description="Vedd fel a kapcsolatot a Bean & Barrel csapatával rendezvény, franchise, sajtómegkeresés vagy egyedi kérdés kapcsán.">
   <section class="section">
     <div class="container contact">
       <div class="contact__copy">
@@ -38,7 +39,8 @@ const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
         <input type="hidden" name="_subject" value={FORM_SUBJECT} />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" value={`${Astro.url.origin}/koszonjuk`} />
+        <input type="hidden" name="_next" value={THANK_YOU_URL} />
+        <input type="text" name="_honey" class="form__honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
         <label class="form-field">
           <span class="h-sub">Név</span>
@@ -82,6 +84,8 @@ const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
     const btn      = document.getElementById("formSubmit")  as HTMLButtonElement | null;
     const feedback = document.getElementById("formFeedback") as HTMLElement | null;
     if (!form || !btn || !feedback) return;
+    if (form.dataset.formInit) return;
+    form.dataset.formInit = "1";
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -139,6 +143,14 @@ const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
     gap: 20px;
     margin-top: 32px;
     max-width: 720px;
+  }
+  .form__honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
   }
   @media (min-width: 640px) { .form { grid-template-columns: 1fr 1fr; } }
   .form__full { grid-column: 1 / -1; }

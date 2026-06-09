@@ -281,7 +281,12 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 <script>
   import { getFocusable, setInert, trapFocus } from "../lib/overlay-a11y";
 
+  let navAbort: AbortController | null = null;
+
   function initNav() {
+    navAbort?.abort();
+    navAbort = new AbortController();
+    const { signal } = navAbort;
     const btn      = document.getElementById("navToggle")  as HTMLButtonElement | null;
     const drawer   = document.getElementById("nav-drawer") as HTMLElement | null;
     const overlay  = document.getElementById("navOverlay") as HTMLElement | null;
@@ -316,16 +321,16 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 
     navButton.addEventListener("click", () =>
       navButton.getAttribute("aria-expanded") === "true" ? close() : open()
-    );
-    closeBtn?.addEventListener("click", close);
-    overlay?.addEventListener("click", close);
-    navDrawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+    , { signal });
+    closeBtn?.addEventListener("click", close, { signal });
+    overlay?.addEventListener("click", close, { signal });
+    navDrawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close, { signal }));
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && navButton.getAttribute("aria-expanded") === "true") {
         e.preventDefault();
         close();
       }
-    });
+    }, { signal });
   }
 
   initNav();

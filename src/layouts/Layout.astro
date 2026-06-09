@@ -14,33 +14,73 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
 const {
   title = "Bean & Barrel — Kávé és Sör",
   description = "Bean & Barrel — tuktuk kávézó és söröző. Rendezvények, franchise, közösség.",
+  image = "/logo.png",
+  noindex = false,
 } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, "https://www.beanbarrel.coffee").toString();
+const socialImage = new URL(image, "https://www.beanbarrel.coffee").toString();
+const showSideTab = !Astro.url.pathname.startsWith("/kontakt");
+const businessSchema = Astro.url.pathname === "/" ? {
+  "@context": "https://schema.org",
+  "@type": "FoodEstablishment",
+  name: "Bean & Barrel",
+  url: "https://www.beanbarrel.coffee",
+  email: "info@beanbarrel.coffee",
+  telephone: "+36 20 246 9775",
+  description,
+  servesCuisine: ["Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás"],
+  image: socialImage,
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "HU",
+  },
+} : null;
 ---
 
 <!doctype html>
 <html lang="hu">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preload" href="/fonts/handelson-five.otf" as="font" type="font/otf" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#363535" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="hu_HU" />
+    <meta property="og:site_name" content="Bean & Barrel" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    {businessSchema && <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />}
     <meta name="generator" content={Astro.generator} />
     <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#main">Ugrás a tartalomra</a>
     <ChalkBackground />
     <Nav />
     <main id="main">
       <slot />
     </main>
-    <SideTab />
+    {showSideTab && <SideTab />}
     <ScrollExtras />
     <EasterEggs />
     <Footer />
@@ -89,9 +129,12 @@ const {
       cursor.className = "tw-cursor";
       el.append(typed, cursor);
       let i = 0;
+      let started = false;
       const twIO = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) return;
         twIO.disconnect();
+        started = true;
+        window.clearTimeout(fallback);
         const runType = async () => {
           if (document.fonts?.load) {
             await Promise.all([
@@ -112,6 +155,12 @@ const {
         void runType();
       }, { threshold: 0.6 });
       twIO.observe(el);
+      const fallback = window.setTimeout(() => {
+        if (started) return;
+        twIO.disconnect();
+        typed.textContent = text;
+        cursor.classList.add("tw-done");
+      }, 2400);
     });
 
     // section chalk-dust reveal

@@ -161,6 +161,21 @@ const selected = value && options.includes(value) ? value : options[0];
       const list    = cs.querySelector<HTMLElement>(".chalk-select__list")!;
       const items   = [...cs.querySelectorAll<HTMLElement>('li[role="option"]')];
 
+      function setValue(value: string) {
+        const item = items.find((i) => i.dataset.val === value);
+        if (!item) return;
+        items.forEach((i) => { i.classList.remove("is-selected"); i.setAttribute("aria-selected", "false"); });
+        item.classList.add("is-selected");
+        item.setAttribute("aria-selected", "true");
+        valSpan.textContent = value;
+        native.value = value;
+      }
+
+      const topic = native.name === "topic"
+        ? new URLSearchParams(window.location.search).get("topic")
+        : null;
+      if (topic) setValue(topic);
+
       const isOpen = () => cs.dataset.open !== undefined;
       const open   = () => {
         cs.dataset.open = "";
@@ -176,11 +191,7 @@ const selected = value && options.includes(value) ? value : options[0];
       };
 
       function choose(item: HTMLElement) {
-        items.forEach((i) => { i.classList.remove("is-selected"); i.setAttribute("aria-selected", "false"); });
-        item.classList.add("is-selected");
-        item.setAttribute("aria-selected", "true");
-        valSpan.textContent = item.dataset.val ?? "";
-        native.value = item.dataset.val ?? "";
+        setValue(item.dataset.val ?? "");
         close();
         trigger.focus();
       }

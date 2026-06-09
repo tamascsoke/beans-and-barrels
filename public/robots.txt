@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /koszonjuk/
+
+Sitemap: https://www.beanbarrel.coffee/sitemap-index.xml

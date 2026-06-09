@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
+import UpcomingEvents from "../components/UpcomingEvents.astro";
 import { getReasons } from "../lib/content";
 import eventTypes from "../content/event-types.json";
 import halloweenImg from '../assets/uploads/halloween.webp';
@@ -9,7 +10,7 @@ const reasons = getReasons();
 const events = eventTypes.items;
 ---
 
-<Layout title="Rendezvények — Bean & Barrel">
+<Layout title="Rendezvények — Bean & Barrel" description="Kérd a Bean & Barrel tuktukot esküvőre, céges napra, fesztiválra vagy privát eseményre specialty kávéval és csapolt sörrel.">
   <section class="section" id="miert">
     <div class="container intro stagger">
       <span class="h-sub">Rendezvények</span>
@@ -25,6 +26,14 @@ const events = eventTypes.items;
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="aktualis">
+    <div class="container upcoming-section">
+      <span class="h-sub">Aktuális kitelepülések</span>
+      <h2 class="h-display"><span class="chalk-underline">Hol találkozhatunk?</span></h2>
+      <UpcomingEvents emptyMessage="Hamarosan új időpontok — addig is kérj minket egyedi rendezvényre." />
     </div>
   </section>
 
@@ -56,6 +65,7 @@ const events = eventTypes.items;
 
 <style>
   .intro { display: grid; gap: 18px; }
+  .upcoming-section { display: grid; gap: 14px; }
 
   .reasons {
     display: grid;

@@ -13,7 +13,7 @@ backend:
 # during local dev. For now we configure GitHub backend only.
 
 publish_mode: simple
-media_folder: public/uploads
+media_folder: src/assets/uploads
 public_folder: /uploads
 site_url: https://www.beanbarrel.coffee
 display_url: https://www.beanbarrel.coffee
@@ -78,6 +78,8 @@ collections:
       - { name: body, label: "Leírás", widget: text }
       - { name: ctaHref, label: "Gomb URL", widget: string, default: "/kontakt" }
       - { name: ctaLabel, label: "Gomb felirat", widget: string }
+      - { name: image, label: "Kép", widget: image, required: false, media_folder: src/assets/uploads, public_folder: /uploads }
+      - { name: imageAlt, label: "Kép alt szöveg", widget: string, required: false }
 
   - name: categories
     label: "Kínálat kategóriák"
@@ -92,6 +94,8 @@ collections:
       - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
       - { name: key, label: "Kulcs (egyedi azonosító)", widget: string, hint: "pl. kave, sor — angol betűk és kötőjel" }
       - { name: label, label: "Megnevezés", widget: string }
+      - { name: image, label: "Kép", widget: image, required: false, media_folder: src/assets/uploads, public_folder: /uploads }
+      - { name: imageAlt, label: "Kép alt szöveg", widget: string, required: false }
       - name: items
         label: "Tételek"
         widget: list
@@ -127,7 +131,7 @@ collections:
       - name: image
         label: "Fotó"
         widget: image
-        media_folder: public/uploads/gallery
+        media_folder: src/assets/uploads/gallery
         public_folder: /uploads/gallery
         hint: "JPG vagy WebP ajánlott. Max. 2 MB, javasolt arány: 4:3."
       - { name: alt, label: "Leírás (alt szöveg)", widget: string, hint: "pl. Bean & Barrel tuktuk egy esküvőn Balatonfüreden" }
