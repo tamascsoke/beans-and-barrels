@@ -13,8 +13,8 @@ const slides = getCarouselSlides();
             ? <a class="photo-frame carousel__art" href={s.ctaHref} aria-label={`${s.ctaLabel} — ${s.title}`}>
                 <Image src={resolveImage(s.image)!} alt={s.imageAlt ?? s.eyebrow}
                        widths={[400, 700]} sizes="(min-width: 860px) 50vw, 100vw"
-                       loading={i === 0 ? "eager" : "lazy"}
-                       fetchpriority={i === 0 ? "high" : "auto"} />
+                       loading="lazy"
+                       fetchpriority="auto" />
               </a>
             : <a class="carousel__art placeholder-img" href={s.ctaHref} aria-label={`${s.ctaLabel} — ${s.title}`}>{`Kép — ${s.eyebrow.toUpperCase()}`}</a>
           }

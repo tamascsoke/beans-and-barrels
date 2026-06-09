@@ -1,7 +1,9 @@
 /* ── Handelson Five — kereskedelmi font ── */
 @font-face {
   font-family: "Handelson Five";
-  src: url("/fonts/handelson-five.otf") format("opentype");
+  src:
+    url("/fonts/handelson-five.woff2") format("woff2"),
+    url("/fonts/handelson-five.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -55,7 +57,13 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
-html { scroll-behavior: auto; }
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 #main { position: relative; z-index: 10; }
 
@@ -124,9 +132,32 @@ button { font: inherit; background: none; border: none; color: inherit; cursor: 
   text-wrap: pretty;
 }
 
-/* Hero typewriter + előre nagybetűzött magyar szöveg — iOS-en az uppercase törné az Ö-t */
+/* Hero lead + előre nagybetűzött magyar szöveg — iOS-en az uppercase törné az Ö-t */
 [data-typewriter] {
   text-transform: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 900ms var(--ease),
+    transform 900ms var(--ease);
+}
+
+[data-typewriter].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-typewriter] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+html:not(.js) [data-typewriter] {
+  opacity: 1;
+  transform: none;
 }
 
 .body-text {

@@ -26,14 +26,21 @@
 </style>
 
 <script>
+  let scrollSidebarAbort: AbortController | null = null;
+
   function initScrollSidebar() {
+    scrollSidebarAbort?.abort();
+    scrollSidebarAbort = new AbortController();
+    const { signal } = scrollSidebarAbort;
+
     const fill = document.getElementById("scrollFill");
     function update() {
       if (!fill) return;
       const total = document.body.scrollHeight - window.innerHeight;
       fill.style.height = (total > 0 ? Math.min(window.scrollY / total, 1) : 0) * 100 + "%";
     }
-    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("scroll", update, { passive: true, signal });
+    document.addEventListener("astro:before-swap", () => scrollSidebarAbort?.abort(), { once: true, signal });
     update();
   }
 

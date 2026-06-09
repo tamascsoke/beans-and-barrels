@@ -17,7 +17,7 @@ media_folder: src/assets/uploads
 public_folder: /uploads
 site_url: https://www.beanbarrel.coffee
 display_url: https://www.beanbarrel.coffee
-logo_url: /favicon.png
+logo_url: /icon-192.png
 
 locale: hu
 
