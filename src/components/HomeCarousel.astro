@@ -10,13 +10,13 @@ const slides = getCarouselSlides();
       slides.map((s, i) => (
         <article class="carousel__slide" id={`carousel-slide-${i}`} aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
           {s.image && resolveImage(s.image)
-            ? <div class="photo-frame carousel__art">
+            ? <a class="photo-frame carousel__art" href={s.ctaHref} aria-label={`${s.ctaLabel} — ${s.title}`}>
                 <Image src={resolveImage(s.image)!} alt={s.imageAlt ?? s.eyebrow}
                        widths={[400, 700]} sizes="(min-width: 860px) 50vw, 100vw"
                        loading={i === 0 ? "eager" : "lazy"}
                        fetchpriority={i === 0 ? "high" : "auto"} />
-              </div>
-            : <div class="carousel__art placeholder-img">{`Kép — ${s.eyebrow.toUpperCase()}`}</div>
+              </a>
+            : <a class="carousel__art placeholder-img" href={s.ctaHref} aria-label={`${s.ctaLabel} — ${s.title}`}>{`Kép — ${s.eyebrow.toUpperCase()}`}</a>
           }
           <div class="carousel__copy stagger">
             <span class="h-sub">{s.eyebrow}</span>
@@ -100,10 +100,19 @@ const slides = getCarouselSlides();
     overflow: hidden;
     border-radius: var(--r-md);
     background: var(--bg-2);
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
   }
   .carousel__art::before,
   .carousel__art::after { content: none; }
-  .carousel__art img { border-radius: var(--r-md); }
+  .carousel__art img {
+    border-radius: var(--r-md);
+    transition: transform 500ms var(--ease);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .carousel__art:hover img { transform: scale(1.04); }
+  }
 
   .carousel__copy {
     grid-area: copy;
