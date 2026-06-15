@@ -147,8 +147,8 @@ collections:
     sortable_fields: [date, title, location]
     fields:
       - { name: title, label: "Esemény címe", widget: string }
-      - { name: date, label: "Kezdő dátum", widget: date, format: "YYYY-MM-DD" }
-      - { name: endDate, label: "Záró dátum (opcionális)", widget: date, format: "YYYY-MM-DD", required: false }
+      - { name: date, label: "Kezdő dátum", widget: datetime, type: date, format: "YYYY-MM-DD" }
+      - { name: endDate, label: "Záró dátum (opcionális)", widget: datetime, type: date, format: "YYYY-MM-DD", required: false }
       - { name: location, label: "Helyszín", widget: string, hint: "pl. Balatonfüred, Tagore sétány" }
       - { name: description, label: "Rövid leírás", widget: text, required: false }
       - { name: ctaUrl, label: "Részletek URL (opcionális)", widget: string, required: false, default: "" }
