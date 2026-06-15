@@ -5,8 +5,8 @@
 backend:
   name: github
   repo: tamascsoke/beans-and-barrels
-  branch: v2
-  base_url: https://sveltia-cms-auth.beanbarrel.workers.dev # placeholder; or use https://github.com OAuth via Sveltia's hosted proxy
+  branch: main
+  base_url: https://sveltia-cms-auth.beanbarrel.workers.dev
   auth_endpoint: api/auth
 
 # Sveltia also supports a local proxy for `npx @sveltia/cms-proxy-server`

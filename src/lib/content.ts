@@ -19,11 +19,6 @@ const _imgs = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-const _galleryImgs = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/uploads/gallery/*.webp',
-  { eager: true },
-);
-
 export function resolveImage(path: string | undefined): ImageMetadata | undefined {
   if (!path) return undefined;
   const normalized = path.replace(/^\/?uploads\//, "../assets/uploads/");
@@ -109,61 +104,12 @@ export type GalleryPhoto = {
   alt: string;
 };
 
-function galleryAlt(filename: string): string {
-  const match = filename.match(/^gallery-([a-z0-9-]+)-(\d+)\.webp$/);
-  const group = match?.[1] ?? "pillanat";
-  const number = match ? Number(match[2]) : undefined;
-  const labels: Record<string, string> = {
-    helyszin: "Bean & Barrel helyszín",
-    kave: "Bean & Barrel kávé",
-    sor: "Bean & Barrel sör",
-    cookie: "Bean & Barrel snack",
-    rendezvenyek: "Bean & Barrel rendezvény",
-  };
-  return `${labels[group] ?? "Bean & Barrel pillanat"}${number ? ` ${number}` : ""}`;
-}
-
-const galleryExclusions = new Set([
-  // These photos are already used as hero, pillar, carousel, or category images.
-  "gallery-helyszin-01.webp",
-  "gallery-helyszin-02.webp",
-  "gallery-kave-01.webp",
-  "gallery-kave-02.webp",
-  "gallery-rendezvenyek-01.webp",
-  "gallery-rendezvenyek-03.webp",
-  "gallery-rendezvenyek-07.webp",
-  "gallery-rendezvenyek-19.webp",
-  "gallery-sor-01.webp",
-  "gallery-sor-05.webp",
-  // Near-duplicate frames from the same event / crop variants
-  "gallery-rendezvenyek-04.webp",
-  "gallery-rendezvenyek-06.webp",
-  "gallery-rendezvenyek-11.webp",
-  "gallery-rendezvenyek-15.webp",
-  "gallery-rendezvenyek-18.webp",
-]);
-
 export function getGalleryPhotos(): GalleryPhoto[] {
   const mods = import.meta.glob<{ default: GalleryPhoto }>(
     "../content/gallery/*.json",
     { eager: true },
   );
-  // Legacy CMS gallery entries point at root uploads that duplicate the curated gallery folder.
-  const cmsPhotos = sortByOrder(values(mods)).filter((photo) => (
-    !photo.image.startsWith("/uploads/") || photo.image.startsWith("/uploads/gallery/")
-  ));
-  const uploadedPhotos = Object.keys(_galleryImgs)
-    .sort((a, b) => a.localeCompare(b, "hu"))
-    .filter((key) => !galleryExclusions.has(key.split("/").pop()!))
-    .map((key, index) => {
-      const filename = key.split("/").pop()!;
-      return {
-        order: 1000 + index,
-        image: `/uploads/gallery/${filename}`,
-        alt: galleryAlt(filename),
-      };
-    });
-  return [...cmsPhotos, ...uploadedPhotos];
+  return sortByOrder(values(mods));
 }
 
 export function getUpcomingEvents(opts?: { limit?: number }): UpcomingEvent[] {

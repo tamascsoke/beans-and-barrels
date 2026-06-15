@@ -1,0 +1,6 @@
+name = "sveltia-cms-auth"
+main = "src/index.js"
+compatibility_date = "2023-03-24"
+
+# After deploy, bind a custom workers.dev subdomain in Cloudflare if needed:
+# e.g. sveltia-cms-auth.beanbarrel.workers.dev

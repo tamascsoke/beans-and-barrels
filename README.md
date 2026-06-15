@@ -1,6 +1,6 @@
 # Bean & Barrel
 
-Astro static site for Bean & Barrel, deployed on Vercel from the `v2` branch.
+Astro static site for Bean & Barrel, deployed on Vercel from the `main` branch.
 
 ## Commands
 
@@ -9,6 +9,7 @@ npm install
 npm run dev
 npm run build
 npm run preview
+npm run cms:proxy   # local CMS auth proxy (optional)
 ```
 
 Node requirement: `>=22.12.0`.
@@ -19,10 +20,12 @@ Editable JSON content lives under `src/content/`.
 
 - `src/content/carousel/` - homepage carousel slides
 - `src/content/categories/` - kínálat categories and item lists
+- `src/content/gallery/` - gallery photos (homepage strip + /galeria)
 - `src/content/reasons/` - rendezvények reason cards
 - `src/content/event-types.json` - typical event list
 - `src/content/upcoming-events/` - upcoming public pop-ups
 - `src/content/contact.json` - phone, e-mail, form subject
+- `src/content/idle.json` - easter egg idle overlay text
 
 Images used by the site should live in `src/assets/uploads/` so Astro can optimize them at build time. Gallery images live in `src/assets/uploads/gallery/`.
 
@@ -30,17 +33,23 @@ Legacy/raw source folders such as `_archive_v1/` and `photoes/` are not used by 
 
 ## CMS
 
-Sveltia CMS is available at `/admin`. The config is in `public/admin/config.yml`.
+Sveltia CMS is available at **https://www.beanbarrel.coffee/admin**. Config: [`public/admin/config.yml`](public/admin/config.yml).
 
-Before giving editor access, verify:
+### Documentation
 
-- GitHub OAuth proxy at `https://sveltia-cms-auth.beanbarrel.workers.dev`
-- login to `/admin`
-- upload one image
-- edit one JSON entry
-- publish and confirm the Vercel preview updates
+| Audience | Document |
+|----------|----------|
+| **Client (Hungarian)** | [`docs/tartalomkezelo-utmutato.md`](docs/tartalomkezelo-utmutato.md) |
+| **Developer — OAuth setup** | [`docs/cms-oauth-setup.md`](docs/cms-oauth-setup.md) |
+| **Developer — GitHub access** | [`docs/cms-github-hozzaferes.md`](docs/cms-github-hozzaferes.md) |
 
-The CMS uploads to `src/assets/uploads` / `src/assets/uploads/gallery` to match the Astro image pipeline.
+### First-time setup checklist
+
+1. Deploy OAuth worker: [`infra/sveltia-cms-auth/`](infra/sveltia-cms-auth/) → see [`docs/cms-oauth-setup.md`](docs/cms-oauth-setup.md)
+2. Invite client GitHub user: `./scripts/invite-cms-editor.sh USERNAME`
+3. Smoke test: login at `/admin`, edit one field, publish, confirm Vercel rebuild
+
+The CMS commits to `main` and uploads images to `src/assets/uploads/` / `src/assets/uploads/gallery/`.
 
 ## Forms
 
@@ -55,7 +64,7 @@ Production checklist:
 
 ## Deploy
 
-`astro.config.mjs` sets the production site URL to `https://www.beanbarrel.coffee` and generates the sitemap. Vercel should build with:
+`astro.config.mjs` sets the production site URL to `https://www.beanbarrel.coffee` and generates the sitemap. Vercel builds with:
 
 ```sh
 npm run build
@@ -75,3 +84,4 @@ Check these before final signoff:
 - `/impresszum` and `/adatvedelem` final legal text
 - social links, phone link, e-mail link
 - `/sitemap-index.xml`, `/robots.txt`, and page social metadata
+- CMS login + publish cycle at `/admin`
