@@ -3,18 +3,29 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import UpcomingEvents from "../components/UpcomingEvents.astro";
 import { getReasons } from "../lib/content";
+import { eventServiceSchema } from "../lib/seo";
 import eventTypes from "../content/event-types.json";
 import halloweenImg from '../assets/uploads/halloween.webp';
 
 const reasons = getReasons();
 const events = eventTypes.items;
+
+const title = "Rendezvény vendéglátás Budapest | Bean & Barrel";
+const description = "Mobil tuktuk bár Budapesten: specialty kávé, csapolt sör, snackek esküvőre, céges napra, fesztiválra. Kérj ajánlatot rendezvényedre!";
+const pageUrl = "https://www.beanbarrel.coffee/rendezvenyek";
+const pageSchema = eventServiceSchema(pageUrl, description);
 ---
 
-<Layout title="Rendezvények — Bean & Barrel" description="Kérd a Bean & Barrel tuktukot esküvőre, céges napra, fesztiválra vagy privát eseményre specialty kávéval és csapolt sörrel.">
+<Layout {title} {description} schema={pageSchema}>
   <section class="section" id="miert">
     <div class="container intro stagger">
       <span class="h-sub">Rendezvények</span>
       <h1 class="h-display"><span class="chalk-underline">Miért minket válassz?</span></h1>
+      <p class="lead intro__lead">
+        Budapesten és környékén a Bean &amp; Barrel tuktuk mobil bárként érkezik hozzád:
+        specialty kávé, csapolt sör és vendéglátás, ami feldobja a hangulatot — esküvőtől
+        a céges bulin át a fesztiválig.
+      </p>
       <div class="reasons stagger">
         {
           reasons.map((r, i) => (
@@ -29,7 +40,21 @@ const events = eventTypes.items;
     </div>
   </section>
 
-  <section class="section section--alt" id="aktualis">
+  <section class="section section--alt" id="budapest">
+    <div class="container budapest-section">
+      <h2 class="h-display"><span class="chalk-underline">Budapesti rendezvényekre készülünk</span></h2>
+      <p class="body-text">
+        Esküvő, céges nap, fesztivál, születésnap vagy kerti party — a tuktuk könnyen beilleszthető
+        a helyszínre, és a vendégeknek egyből látszik, hol a kávé és a sör. Budapesten és Pest megyében
+        is szívesen kitelepülünk.
+      </p>
+      <div class="inline-action">
+        <a class="btn" href="/kontakt?topic=Rendezv%C3%A9ny#urlap">Ajánlatot kérek budapesti rendezvényre</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="aktualis">
     <div class="container upcoming-section">
       <span class="h-sub">Aktuális kitelepülések</span>
       <h2 class="h-display"><span class="chalk-underline">Hol találkozhatunk?</span></h2>
@@ -44,7 +69,7 @@ const events = eventTypes.items;
           <h2 class="h-display"><span class="chalk-underline">Tipikus rendezvények</span></h2>
         </div>
         <div class="photo-frame events__photo">
-          <Image src={halloweenImg} alt="Halloween rendezvény Bean & Barrel tuktukkal" widths={[420, 720, 960]} sizes="(min-width: 900px) 34vw, 100vw" loading="lazy" />
+          <Image src={halloweenImg} alt="Bean & Barrel tuktuk rendezvényen Budapesten" widths={[420, 720, 960]} sizes="(min-width: 900px) 34vw, 100vw" loading="lazy" />
         </div>
       </div>
       <div class="events__content">
@@ -65,6 +90,8 @@ const events = eventTypes.items;
 
 <style>
   .intro { display: grid; gap: 18px; }
+  .intro__lead { text-transform: none; max-width: 62ch; }
+  .budapest-section { display: grid; gap: 18px; max-width: 62ch; }
   .upcoming-section { display: grid; gap: 14px; }
 
   .reasons {

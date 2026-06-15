@@ -31,6 +31,19 @@ Images used by the site should live in `src/assets/uploads/` so Astro can optimi
 
 Legacy/raw source folders such as `_archive_v1/` and `photoes/` are not used by the build. Keep them only as source archive material; production content should be added through `src/assets/uploads/` or the CMS.
 
+## SEO
+
+On-page SEO targets Budapest events (`/rendezvenyek`) and Hungary-wide franchise (`/franchise`). Structured data lives in [`src/lib/seo.ts`](src/lib/seo.ts).
+
+| Document | Purpose |
+|----------|---------|
+| [`docs/seo-beallitas.md`](docs/seo-beallitas.md) | Google Search Console + GA4 setup |
+
+Optional Vercel env vars (see [`.env.example`](.env.example)):
+
+- `PUBLIC_GSC_VERIFICATION` — Search Console HTML tag
+- `PUBLIC_GA_MEASUREMENT_ID` — GA4 measurement ID
+
 ## CMS
 
 Sveltia CMS is available at **https://www.beanbarrel.coffee/admin**. Config: [`public/admin/config.yml`](public/admin/config.yml).

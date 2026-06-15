@@ -98,6 +98,17 @@ Ezek a weboldal kódjában vannak — változtatáshoz fejlesztői segítség ke
 | Kép nem jelenik meg | Ellenőrizd, hogy mentetted-e; várj az újraépítésre. |
 | Véletlenül rossz adatot mentettem | A CMS korábbi verziókat is tárol — írj a fejlesztőnek visszaállításhoz. |
 
+## SEO tippek szerkesztőknek
+
+A keresőben való jobb megjelenéshez érdemes:
+
+- **Galéria:** alt szövegben helyszín is legyen (pl. „Bean & Barrel tuktuk esküvőn, Budapest”)
+- **Kitelepülések:** helyszín mezőben város + pontos hely (pl. „Budapest, Városliget”)
+- **Carousel:** rendezvény slide szövegében Budapest, ha releváns
+- **Kínálat:** terméknevek maradjanak érthetőek, ne csak rövidítések
+
+Technikai SEO (Google Search Console, Analytics): [`seo-beallitas.md`](seo-beallitas.md)
+
 ## Segítség
 
 Technikai probléma vagy olyan módosítás, ami nincs a fenti listában:

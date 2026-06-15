@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { EMAIL } from "../lib/contact";
 
-const lastUpdated = "2026-05-29";
+const lastUpdated = "2026-06-15";
 ---
 
 <Layout title="Adatkezelési tájékoztató — Bean & Barrel" description="Bean & Barrel adatkezelési tájékoztató — kapcsolatfelvételi űrlap, GDPR.">
@@ -100,9 +100,22 @@ const lastUpdated = "2026-05-29";
           <dt>Bővebben</dt>      <dd><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></dd>
         </dl>
 
+        <h3 class="legal__sub">3.3 Google Analytics (webanalitika)</h3>
+        <p>
+          A weboldal látogatottságának mérésére a Google Analytics 4 (GA4) szolgáltatást használhatjuk.
+          A mérés csak akkor aktív, ha a szolgáltatás be van kapcsolva. A GA4 anonimizált IP-címet
+          és látogatási eseményeket (pl. oldalmegtekintés) rögzíthet.
+        </p>
+        <dl class="legal__list">
+          <dt>Szolgáltató</dt>   <dd>Google Ireland Limited / Google LLC</dd>
+          <dt>Tevékenység</dt>   <dd>Weboldal-használat statisztikai elemzése</dd>
+          <dt>Adatkezelés helye</dt><dd>Írország / Egyesült Államok</dd>
+          <dt>Bővebben</dt>      <dd><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></dd>
+        </dl>
+
         <h2 class="h-section">4. Adattovábbítás az Európai Unión kívülre</h2>
         <p>
-          A fent felsorolt adatfeldolgozók (FormSubmit, Vercel) az Egyesült Államokban
+          A fent felsorolt adatfeldolgozók (FormSubmit, Vercel, illetve bekapcsolt Google Analytics esetén a Google) az Egyesült Államokban
           működnek. Az adattovábbítás jogalapja az Európai Bizottság megfelelőségi határozata
           (EU&ndash;US Data Privacy Framework), illetve az általuk alkalmazott Általános
           Szerződési Feltételek (Standard Contractual Clauses).
@@ -110,8 +123,9 @@ const lastUpdated = "2026-05-29";
 
         <h2 class="h-section">5. Sütik (cookie-k)</h2>
         <p>
-          A weboldal <strong>nem használ</strong> követő sütiket, analitikai sütiket, illetve
-          marketing célú sütiket. Nem helyezünk el harmadik féltől származó cookie-kat sem.
+          A weboldal alapból <strong>nem használ</strong> marketing vagy profilalkotó sütiket.
+          Ha a Google Analytics be van kapcsolva, a méréshez analitikai sütik kerülhetnek beállításra
+          (pl. <code>_ga</code>). Ezek kizárólag látogatottsági statisztikát szolgálnak.
         </p>
 
         <h2 class="h-section">6. Jogaid</h2>

@@ -10,12 +10,14 @@ import "@fontsource/league-gothic/400.css";
 import "@fontsource/league-spartan/700.css";
 import "@fontsource/league-spartan/800.css";
 import "../styles/global.css";
+import { foodEstablishmentSchema, schemaScripts } from "../lib/seo";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   noindex?: boolean;
+  schema?: object | object[];
 }
 
 const {
@@ -23,25 +25,17 @@ const {
   description = "Bean & Barrel — tuktuk kávézó és söröző. Rendezvények, franchise, közösség.",
   image = "/og-image.webp",
   noindex = false,
+  schema,
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, "https://www.beanbarrel.coffee").toString();
 const socialImage = new URL(image, "https://www.beanbarrel.coffee").toString();
 const showSideTab = !Astro.url.pathname.startsWith("/kontakt");
-const businessSchema = Astro.url.pathname === "/" ? {
-  "@context": "https://schema.org",
-  "@type": "FoodEstablishment",
-  name: "Bean & Barrel",
-  url: "https://www.beanbarrel.coffee",
-  email: "info@beanbarrel.coffee",
-  telephone: "+36 20 246 9775",
-  description,
-  servesCuisine: ["Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás"],
-  image: socialImage,
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "HU",
-  },
-} : null;
+const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const defaultSchema = Astro.url.pathname === "/"
+  ? foodEstablishmentSchema(description, socialImage)
+  : null;
+const jsonLdSchemas = schemaScripts(schema ?? defaultSchema);
 ---
 
 <!doctype html>
@@ -70,7 +64,21 @@ const businessSchema = Astro.url.pathname === "/" ? {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
-    {businessSchema && <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />}
+    {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
+    {jsonLdSchemas.map((entry) => (
+      <script type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
+    {gaMeasurementId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+        <script is:inline define:vars={{ gaMeasurementId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag("js", new Date());
+          gtag("config", gaMeasurementId, { anonymize_ip: true });
+        </script>
+      </>
+    )}
     <meta name="generator" content={Astro.generator} />
     <ClientRouter />
   </head>

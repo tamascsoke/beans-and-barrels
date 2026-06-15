@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
+import { franchiseServiceSchema, faqPageSchema, type FaqItem } from "../lib/seo";
 import franchiseTuktukImg from '../assets/uploads/franchise-tuktuk.webp';
 
 const benefits = [
@@ -24,17 +25,44 @@ const steps = [
   { n: "04", t: "Üdv a csapatban", d: "Tuktuk beizzítva, sztori indul." },
 ];
 
+const faqItems: FaqItem[] = [
+  {
+    question: "Ki lehet Bean & Barrel franchise-partner?",
+    answer: "Olyan vállalkozó vagy csapat, aki szeretne egy bejáratott mozgó kávézó-söröző koncepciót képviselni Magyarországon, és nyitott a közös munkára velünk.",
+  },
+  {
+    question: "Mennyi a franchise befektetés?",
+    answer: "A pontos összeg a helyszíntől és a modelltől függ. Az első beszélgetés után átlátható számokkal mutatjuk meg a lehetőségeket.",
+  },
+  {
+    question: "Milyen támogatást kapok induláskor?",
+    answer: "Teljes márkacsomagot, know-how-t, barista és csapos betanítást, marketing irányt, beszállítói hozzáférést és folyamatos kapcsolattartást.",
+  },
+  {
+    question: "Hol működhet egy franchise egység?",
+    answer: "Irodaházak, sétálóutcák, rendezvények és egyéb forgalmas helyszínek mellett — Magyarországon, ahol van kereslet a mozgó specialty kávé és csapolt sör élményre.",
+  },
+  {
+    question: "Hogyan jelentkezek franchise-partnernek?",
+    answer: "Töltsd ki a kapcsolatfelvételi űrlapot a Franchise témával, és hamarosan felvesszük veled a kapcsolatot.",
+  },
+];
+
+const title = "Franchise Magyarország | Mozgó kávézó-söröző | Bean & Barrel";
+const description = "Bean & Barrel franchise Magyarországon: mozgó kávézó-söröző koncepció, know-how, betanítás és folyamatos támogatás. Jelentkezz partnernek!";
+const pageUrl = "https://www.beanbarrel.coffee/franchise";
+const pageSchema = [franchiseServiceSchema(pageUrl, description), faqPageSchema(faqItems)];
 ---
 
-<Layout title="Franchise — Bean & Barrel" description="Csatlakozz a Bean & Barrel mozgó kávézó-söröző hálózatához bejáratott arculattal, know-how-val és folyamatos támogatással.">
+<Layout {title} {description} schema={pageSchema}>
   <section class="section">
     <div class="container intro">
       <div class="intro__copy">
         <span class="h-sub">Franchise</span>
         <h1 class="h-display"><span class="chalk-underline">Kávézz, SÖRÖZZ velünk!</span></h1>
         <p class="lead">
-          Az országban rengeteg helyen van szükség a Bean&amp;Barrel-re. Irodák, sétálóutcák, rendezvények,
-          lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
+          Az országban rengeteg helyen van szükség a Bean&amp;Barrel franchise modellre. Irodák, sétálóutcák,
+          rendezvények, lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
           kávézó-SÖRÖZŐ hálózatához!
         </p>
         <div class="inline-action">
@@ -59,6 +87,23 @@ const steps = [
           {packageItems.map((item) => <li><span>{item}</span></li>)}
         </ul>
       </article>
+    </div>
+  </section>
+
+  <section class="section section--alt faq-section">
+    <div class="container">
+      <div class="faq-head">
+        <span class="h-sub">Gyakori kérdések</span>
+        <h2 class="h-display"><span class="chalk-underline">Franchise GYIK</span></h2>
+      </div>
+      <div class="faq-list">
+        {faqItems.map((item) => (
+          <details class="faq-item panel-motion">
+            <summary class="faq-item__q h-section">{item.question}</summary>
+            <p class="faq-item__a body-text">{item.answer}</p>
+          </details>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -180,4 +225,21 @@ const steps = [
   .steps__action {
     margin-top: clamp(20px, 3vw, 32px);
   }
+
+  .faq-head { display: grid; gap: 14px; margin-bottom: clamp(20px, 3vw, 32px); }
+  .faq-list { display: grid; gap: 14px; }
+  .faq-item {
+    padding: clamp(18px, 2.5vw, 24px);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    box-shadow: var(--panel-shadow);
+  }
+  .faq-item__q {
+    cursor: pointer;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    list-style: none;
+  }
+  .faq-item__q::-webkit-details-marker { display: none; }
+  .faq-item__a { margin-top: 12px; color: rgba(244, 244, 244, 0.82); }
 </style>
