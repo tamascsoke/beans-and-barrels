@@ -76,6 +76,49 @@ export function franchiseServiceSchema(url: string, description: string) {
   };
 }
 
+export type UpcomingEventForSchema = {
+  title: string;
+  date: string;
+  endDate?: string;
+  location: string;
+  description?: string;
+  ctaUrl?: string;
+};
+
+function resolveEventUrl(ctaUrl: string | undefined, fallbackUrl: string): string {
+  const trimmed = ctaUrl?.trim();
+  if (!trimmed) return fallbackUrl;
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
+  return new URL(trimmed, SITE_URL).toString();
+}
+
+export function upcomingEventSchema(
+  event: UpcomingEventForSchema,
+  fallbackUrl: string,
+) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    startDate: event.date,
+    location: {
+      "@type": "Place",
+      name: event.location,
+    },
+    organizer: provider,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    url: resolveEventUrl(event.ctaUrl, fallbackUrl),
+  };
+  if (event.endDate && event.endDate !== event.date) {
+    schema.endDate = event.endDate;
+  }
+  if (event.description?.trim()) {
+    schema.description = event.description.trim();
+  }
+  return schema;
+}
+
 export type FaqItem = { question: string; answer: string };
 
 export function faqPageSchema(items: FaqItem[]) {

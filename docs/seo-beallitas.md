@@ -32,13 +32,24 @@ A mérőkód csak akkor töltődik be, ha a `PUBLIC_GA_MEASUREMENT_ID` env be va
 
 ## Mit optimalizáltunk az oldalon
 
-| Oldal | Fókusz |
-|-------|--------|
-| `/rendezvenyek` | Rendezvény vendéglátás Budapest |
-| `/franchise` | Franchise Magyarország, GYIK + schema |
-| `/` | Belső linkek + bővített schema |
+| Oldal | Fókusz | Látható oldal |
+|-------|--------|----------------|
+| `/rendezvenyek` | Rendezvény vendéglátás Budapest (meta + schema) | Eredeti copy, változatlan |
+| `/franchise` | Franchise Magyarország (meta + GYIK schema) | Eredeti copy, látható GYIK nélkül |
+| `/` | Bővített meta + `FoodEstablishment` schema | Eredeti copy |
 
-Structured data: `Service`, `FAQPage`, `FoodEstablishment` — ellenőrzés: https://search.google.com/test/rich-results
+**Budapest** csak metaadatokban és strukturált adatban szerepel (title, description, JSON-LD) — a weboldal látható szövege nem tartalmaz külön budapesti szekciókat.
+
+Structured data:
+
+| Típus | Hol |
+|-------|-----|
+| `Service` | `/rendezvenyek`, `/franchise` |
+| `FAQPage` | `/rendezvenyek`, `/franchise` (csak JSON-LD, nem látható GYIK blokk) |
+| `Event` | `/rendezvenyek` — automatikusan minden publikált CMS kitelepülésből |
+| `FoodEstablishment` | `/` |
+
+Ellenőrzés: https://search.google.com/test/rich-results → `https://www.beanbarrel.coffee/rendezvenyek`
 
 ## Ajánlott követő lépések (nem kód)
 
