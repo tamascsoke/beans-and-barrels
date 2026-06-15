@@ -3,6 +3,15 @@ import { EMAIL, PHONE_HREF } from "./contact";
 export const SITE_URL = "https://www.beanbarrel.coffee";
 export const SITE_NAME = "Bean & Barrel";
 
+/** Keresői slang / alternatív elnevezések — csak meta és JSON-LD */
+export const TUKTUK_ALTERNATE_NAMES = [
+  "tuktuk",
+  "tuk tuk",
+  "tuktuk bár",
+  "tuk tuk bár",
+  "tuktuk rendezvény",
+];
+
 const provider = {
   "@type": "Organization" as const,
   name: SITE_NAME,
@@ -20,7 +29,8 @@ export function foodEstablishmentSchema(description: string, image: string) {
     email: EMAIL,
     telephone: PHONE_HREF,
     description,
-    servesCuisine: ["Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás"],
+    alternateName: TUKTUK_ALTERNATE_NAMES,
+    servesCuisine: ["Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás", "Tuktuk bár"],
     image,
     address: {
       "@type": "PostalAddress",
@@ -38,8 +48,9 @@ export function eventServiceSchema(url: string, description: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Rendezvény vendéglátás Budapest",
-    serviceType: "Rendezvény vendéglátás",
+    name: "Tuktuk rendezvény vendéglátás Budapest",
+    alternateName: ["tuk tuk rendezvény", "tuktuk bár Budapest", "tuk tuk bár"],
+    serviceType: "Tuktuk (tuk tuk) rendezvény vendéglátás",
     description,
     url,
     provider,
@@ -59,8 +70,9 @@ export function franchiseServiceSchema(url: string, description: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Bean & Barrel franchise Magyarország",
-    serviceType: "Franchise",
+    name: "Bean & Barrel tuktuk franchise Magyarország",
+    alternateName: ["tuk tuk franchise", "tuktuk kávézó franchise", "mozgó tuktuk franchise"],
+    serviceType: "Tuktuk franchise",
     description,
     url,
     provider,
