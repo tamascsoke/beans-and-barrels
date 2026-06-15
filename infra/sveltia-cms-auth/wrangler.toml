@@ -2,5 +2,6 @@ name = "sveltia-cms-auth"
 main = "src/index.js"
 compatibility_date = "2023-03-24"
 
-# After deploy, bind a custom workers.dev subdomain in Cloudflare if needed:
-# e.g. sveltia-cms-auth.beanbarrel.workers.dev
+[vars]
+ALLOWED_DOMAINS = "www.beanbarrel.coffee,beans-and-barrels.vercel.app"
+GITHUB_CLIENT_ID = "Ov23liXvaK0DUTDdRsge"

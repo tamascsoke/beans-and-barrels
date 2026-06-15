@@ -2,7 +2,7 @@
 
 A tartalomkezelő (`/admin`) GitHub-on keresztül menti a változtatásokat. A bejelentkezéshez egy ingyenes **Cloudflare Worker** OAuth proxy kell.
 
-Cél URL: `https://sveltia-cms-auth.beanbarrel.workers.dev`
+Cél URL: `https://sveltia-cms-auth.tamascsoke.workers.dev`
 
 ## 1. GitHub OAuth App
 
@@ -10,7 +10,7 @@ Cél URL: `https://sveltia-cms-auth.beanbarrel.workers.dev`
 2. Töltsd ki:
    - **Application name:** `Bean & Barrel CMS`
    - **Homepage URL:** `https://www.beanbarrel.coffee`
-   - **Authorization callback URL:** `https://sveltia-cms-auth.beanbarrel.workers.dev/callback`
+   - **Authorization callback URL:** `https://sveltia-cms-auth.tamascsoke.workers.dev/callback`
 3. Mentsd el, majd generálj **Client Secret**-et.
 4. Jegyezd fel a **Client ID** és **Client Secret** értékeket (a secret csak egyszer látszik).
 
