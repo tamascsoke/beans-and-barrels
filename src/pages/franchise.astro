@@ -61,8 +61,8 @@ const pageSchema = [franchiseServiceSchema(pageUrl, description), faqPageSchema(
         <span class="h-sub">Franchise</span>
         <h1 class="h-display"><span class="chalk-underline">Kávézz, SÖRÖZZ velünk!</span></h1>
         <p class="lead">
-          Az országban rengeteg helyen van szükség a Bean&amp;Barrel franchise modellre. Irodák, sétálóutcák,
-          rendezvények, lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
+          Az országban rengeteg helyen van szükség a Bean&amp;Barrel-re. Irodák, sétálóutcák, rendezvények,
+          lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó
           kávézó-SÖRÖZŐ hálózatához!
         </p>
         <div class="inline-action">
@@ -87,23 +87,6 @@ const pageSchema = [franchiseServiceSchema(pageUrl, description), faqPageSchema(
           {packageItems.map((item) => <li><span>{item}</span></li>)}
         </ul>
       </article>
-    </div>
-  </section>
-
-  <section class="section section--alt faq-section">
-    <div class="container">
-      <div class="faq-head">
-        <span class="h-sub">Gyakori kérdések</span>
-        <h2 class="h-display"><span class="chalk-underline">Franchise GYIK</span></h2>
-      </div>
-      <div class="faq-list">
-        {faqItems.map((item) => (
-          <details class="faq-item panel-motion">
-            <summary class="faq-item__q h-section">{item.question}</summary>
-            <p class="faq-item__a body-text">{item.answer}</p>
-          </details>
-        ))}
-      </div>
     </div>
   </section>
 
@@ -225,21 +208,4 @@ const pageSchema = [franchiseServiceSchema(pageUrl, description), faqPageSchema(
   .steps__action {
     margin-top: clamp(20px, 3vw, 32px);
   }
-
-  .faq-head { display: grid; gap: 14px; margin-bottom: clamp(20px, 3vw, 32px); }
-  .faq-list { display: grid; gap: 14px; }
-  .faq-item {
-    padding: clamp(18px, 2.5vw, 24px);
-    border: 1px solid var(--panel-border);
-    border-radius: 8px;
-    background: var(--panel-bg);
-    box-shadow: var(--panel-shadow);
-  }
-  .faq-item__q {
-    cursor: pointer;
-    font-size: clamp(1.15rem, 2vw, 1.45rem);
-    list-style: none;
-  }
-  .faq-item__q::-webkit-details-marker { display: none; }
-  .faq-item__a { margin-top: 12px; color: rgba(244, 244, 244, 0.82); }
 </style>

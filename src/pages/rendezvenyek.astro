@@ -21,11 +21,6 @@ const pageSchema = eventServiceSchema(pageUrl, description);
     <div class="container intro stagger">
       <span class="h-sub">Rendezvények</span>
       <h1 class="h-display"><span class="chalk-underline">Miért minket válassz?</span></h1>
-      <p class="lead intro__lead">
-        Budapesten és környékén a Bean &amp; Barrel tuktuk mobil bárként érkezik hozzád:
-        specialty kávé, csapolt sör és vendéglátás, ami feldobja a hangulatot — esküvőtől
-        a céges bulin át a fesztiválig.
-      </p>
       <div class="reasons stagger">
         {
           reasons.map((r, i) => (
@@ -40,21 +35,7 @@ const pageSchema = eventServiceSchema(pageUrl, description);
     </div>
   </section>
 
-  <section class="section section--alt" id="budapest">
-    <div class="container budapest-section">
-      <h2 class="h-display"><span class="chalk-underline">Budapesti rendezvényekre készülünk</span></h2>
-      <p class="body-text">
-        Esküvő, céges nap, fesztivál, születésnap vagy kerti party — a tuktuk könnyen beilleszthető
-        a helyszínre, és a vendégeknek egyből látszik, hol a kávé és a sör. Budapesten és Pest megyében
-        is szívesen kitelepülünk.
-      </p>
-      <div class="inline-action">
-        <a class="btn" href="/kontakt?topic=Rendezv%C3%A9ny#urlap">Ajánlatot kérek budapesti rendezvényre</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="aktualis">
+  <section class="section section--alt" id="aktualis">
     <div class="container upcoming-section">
       <span class="h-sub">Aktuális kitelepülések</span>
       <h2 class="h-display"><span class="chalk-underline">Hol találkozhatunk?</span></h2>
@@ -69,7 +50,7 @@ const pageSchema = eventServiceSchema(pageUrl, description);
           <h2 class="h-display"><span class="chalk-underline">Tipikus rendezvények</span></h2>
         </div>
         <div class="photo-frame events__photo">
-          <Image src={halloweenImg} alt="Bean & Barrel tuktuk rendezvényen Budapesten" widths={[420, 720, 960]} sizes="(min-width: 900px) 34vw, 100vw" loading="lazy" />
+          <Image src={halloweenImg} alt="Halloween rendezvény Bean & Barrel tuktukkal" widths={[420, 720, 960]} sizes="(min-width: 900px) 34vw, 100vw" loading="lazy" />
         </div>
       </div>
       <div class="events__content">
@@ -90,8 +71,6 @@ const pageSchema = eventServiceSchema(pageUrl, description);
 
 <style>
   .intro { display: grid; gap: 18px; }
-  .intro__lead { text-transform: none; max-width: 62ch; }
-  .budapest-section { display: grid; gap: 18px; max-width: 62ch; }
   .upcoming-section { display: grid; gap: 14px; }
 
   .reasons {
