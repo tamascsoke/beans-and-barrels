@@ -1,6 +1,6 @@
 ---
 import { LOCATION, hasValidLocation } from "../lib/contact";
-import { buildGoogleMapsUrl, buildStaticMapUrl } from "../lib/maps";
+import { buildGoogleMapsUrl, buildOsmEmbedUrl } from "../lib/maps";
 
 interface Props {
   variant?: "default" | "compact";
@@ -14,9 +14,9 @@ if (!hasValidLocation()) {
 
 const coords = { lat: LOCATION.lat, lng: LOCATION.lng };
 const mapsUrl = buildGoogleMapsUrl(coords, LOCATION.address);
-const mapSize = variant === "compact" ? { width: 560, height: 176 } : { width: 720, height: 300 };
-const staticMapUrl = buildStaticMapUrl(coords, mapSize);
+const embedUrl = buildOsmEmbedUrl(coords);
 const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.address}`;
+const embedTitle = `Térkép: ${LOCATION.address}`;
 ---
 
 {variant === "compact" ? (
@@ -28,22 +28,23 @@ const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.add
       </a>
       {LOCATION.note && <p class="minimap__note">{LOCATION.note}</p>}
     </div>
-    <a
-      class="minimap__preview minimap__preview--compact"
-      href={mapsUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={mapLabel}
-    >
-      <img
-        src={staticMapUrl}
-        alt=""
-        width={mapSize.width}
-        height={mapSize.height}
+    <div class="minimap__preview minimap__preview--compact">
+      <iframe
+        class="minimap__frame"
+        src={embedUrl}
+        title={embedTitle}
         loading="lazy"
-        decoding="async"
+        referrerpolicy="no-referrer-when-downgrade"
+        tabindex="-1"
       />
-    </a>
+      <a
+        class="minimap__overlay"
+        href={mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={mapLabel}
+      />
+    </div>
   </div>
 ) : (
   <div class="minimap minimap--default">
@@ -52,22 +53,23 @@ const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.add
       <h2 class="h-section"><span class="chalk-underline">{LOCATION.address}</span></h2>
       {LOCATION.note && <p class="body-text minimap__note">{LOCATION.note}</p>}
     </div>
-    <a
-      class="minimap__preview"
-      href={mapsUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={mapLabel}
-    >
-      <img
-        src={staticMapUrl}
-        alt=""
-        width={mapSize.width}
-        height={mapSize.height}
+    <div class="minimap__preview">
+      <iframe
+        class="minimap__frame"
+        src={embedUrl}
+        title={embedTitle}
         loading="lazy"
-        decoding="async"
+        referrerpolicy="no-referrer-when-downgrade"
+        tabindex="-1"
       />
-    </a>
+      <a
+        class="minimap__overlay"
+        href={mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={mapLabel}
+      />
+    </div>
     <div class="inline-action">
       <a class="btn btn--ghost" href={mapsUrl} target="_blank" rel="noopener noreferrer">
         Megnyitás térképen
@@ -95,7 +97,7 @@ const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.add
   }
 
   .minimap__preview {
-    display: block;
+    position: relative;
     overflow: hidden;
     border: 1px solid var(--panel-border);
     border-radius: 8px;
@@ -112,11 +114,19 @@ const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.add
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
   }
 
-  .minimap__preview img {
+  .minimap__frame {
+    display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    border: 0;
     filter: saturate(0.85) brightness(0.9);
+    pointer-events: none;
+  }
+
+  .minimap__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
 
   .minimap--compact {
