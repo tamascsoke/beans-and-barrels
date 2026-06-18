@@ -48,6 +48,22 @@ collections:
           - { name: phoneHref, label: "Telefon (tárcsázás)", widget: string, hint: "Csak számjegyek és +, pl. +36202469775" }
           - { name: email, label: "Email", widget: string }
           - { name: formSubject, label: "Kapcsolati űrlap tárgy", widget: string }
+          - name: locationEnabled
+            label: "Helyszín térkép megjelenítése"
+            widget: boolean
+            default: false
+            hint: "Bekapcsolva: mini térkép a Kontakt oldalon és a láblécben."
+          - { name: locationTitle, label: "Helyszín címsora", widget: string, default: "Hol találkozhatsz velünk", required: false }
+          - { name: locationAddress, label: "Megjelenített cím", widget: string, required: false, hint: "pl. 1051 Budapest, Példa utca 1." }
+          - name: locationGeo
+            label: "Helyszín a térképen"
+            widget: map
+            type: Point
+            center: [19.0402, 47.4979]
+            decimals: 6
+            required: false
+            hint: "Kattints a térképre, keress címre, vagy nyomd meg a GPS gombot (mobilon is). Mentés után 1–3 perc és frissül az oldal."
+          - { name: locationNote, label: "Megjegyzés (opcionális)", widget: string, required: false, hint: "pl. nyitvatartás vagy „Ma itt vagyunk”" }
 
   - name: event_types
     label: "Tipikus rendezvények (lista)"

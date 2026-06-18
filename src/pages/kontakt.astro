@@ -2,8 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import ChalkSelect from "../components/ChalkSelect.astro";
+import MiniMap from "../components/MiniMap.astro";
 import tuktukPultImg from '../assets/uploads/tuktuk-pult.webp';
-import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT } from "../lib/contact";
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT, LOCATION, hasValidLocation } from "../lib/contact";
 const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
 const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
@@ -21,12 +22,26 @@ const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
         <ul class="contact__list">
           <li><span class="h-sub">Telefon</span><a href={`tel:${PHONE_HREF}`}>{PHONE_DISPLAY}</a></li>
           <li><span class="h-sub">E-mail</span><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+          {hasValidLocation() && (
+            <li>
+              <span class="h-sub">Cím</span>
+              <a href="/kontakt#helyszin">{LOCATION.address}</a>
+            </li>
+          )}
         </ul>
       </div>
 
       <div class="photo-frame contact__photo"><Image src={tuktukPultImg} alt="Bean & Barrel tuktuk pult" widths={[400, 700]} sizes="(min-width: 820px) 50vw, 100vw" loading="lazy" /></div>
     </div>
   </section>
+
+  {hasValidLocation() && (
+    <section class="section section--alt" id="helyszin">
+      <div class="container">
+        <MiniMap variant="default" />
+      </div>
+    </section>
+  )}
 
   <section class="section section--alt section--last" id="urlap">
     <div class="container">

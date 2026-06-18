@@ -1,5 +1,6 @@
 ---
-import { PHONE_DISPLAY, PHONE_HREF, EMAIL } from "../lib/contact";
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL, hasValidLocation } from "../lib/contact";
+import MiniMap from "./MiniMap.astro";
 const year = new Date().getFullYear();
 ---
 
@@ -26,6 +27,12 @@ const year = new Date().getFullYear();
       </ul>
     </div>
   </div>
+
+  {hasValidLocation() && (
+    <div class="container footer__location">
+      <MiniMap variant="compact" />
+    </div>
+  )}
 
   <div class="footer__bottom container">
     <span>© {year} Bean &amp; Barrel</span>

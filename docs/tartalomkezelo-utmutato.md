@@ -31,6 +31,7 @@ Ha nem tudsz belépni, ellenőrizd, hogy elfogadtad-e a meghívót, vagy írj a 
 | Rendezvények — tipikus alkalmak listája | **Tipikus rendezvények (lista)** |
 | Rendezvények — közelgő kitelepülések | **Aktuális kitelepülések** |
 | Kontakt oldal + lábléc elérhetőség | **Kontakt információk** |
+| Kontakt oldal — helyszín mini térkép | **Kontakt információk** → Helyszín mezők |
 | 20 mp tétlenség után megjelenő rejtett szöveg | **Easter egg történet (idle)** |
 
 ## Gyakori szerkesztési feladatok
@@ -40,6 +41,29 @@ Ha nem tudsz belépni, ellenőrizd, hogy elfogadtad-e a meghívót, vagy írj a 
 1. **Kontakt információk** → **Kontakt**
 2. Módosítsd a **Telefon (megjelenített)** és **Email** mezőket
 3. Mentés
+
+### Helyszín és mini térkép (Kontakt + lábléc)
+
+1. **Kontakt információk** → **Kontakt**
+2. Kapcsold be: **Helyszín térkép megjelenítése**
+3. Töltsd ki:
+   - **Megjelenített cím** — ahogy a látogatóknak látszódjon (pl. `1051 Budapest, Példa utca 1.`)
+   - **Helyszín a térképen** — kattints a térképre, keress címre, vagy használd a **GPS gombot**
+4. Opcionális: **Megjegyzés** (nyitvatartás, „Ma itt vagyunk”, stb.)
+5. Mentés → 1–3 perc múlva a térkép frissül a **Kontakt** oldalon és a **láblécben**
+
+### Helyszín mobilon, GPS-sel (tuktuknál)
+
+1. Nyisd meg telefonon: **https://www.beanbarrel.coffee/admin**
+2. **Kontakt információk** → **Kontakt**
+3. **Helyszín a térképen** mező:
+   - nyomd meg a **GPS / jelenlegi helyem** gombot
+   - engedélyezd a helymeghatározást a böngészőben
+   - finomítsd a pint, ha kell (kattintással)
+4. Írd be a **Megjelenített címet** (a térkép keresőjéből másolhatod, vagy kézzel)
+5. Mentés, majd várj 1–3 percet az éles oldal frissülésére
+
+**Tartalék módszer (GPS nélkül):** [Google Maps](https://maps.google.com) → hely megkeresése → pin a térképen → **Helyszín a térképen** mezőben keresővel ugyanazt a címet megadni.
 
 ### Új kitelepülés hozzáadása
 

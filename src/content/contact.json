@@ -2,5 +2,10 @@
   "phoneDisplay": "+36 20 246 9775",
   "phoneHref": "+36202469775",
   "email": "info@beanbarrel.coffee",
-  "formSubject": "Üzenet — Bean & Barrel"
+  "formSubject": "Üzenet — Bean & Barrel",
+  "locationEnabled": true,
+  "locationTitle": "Hol találkozhatsz velünk",
+  "locationAddress": "1051 Budapest, Deák Ferenc tér 3.",
+  "locationGeo": "{\"type\":\"Point\",\"coordinates\":[19.0552,47.4979]}",
+  "locationNote": "Állandó kitelepülés — pontos cím a CMS-ben szerkeszthető."
 }

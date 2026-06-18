@@ -1,0 +1,172 @@
+---
+import { LOCATION, hasValidLocation } from "../lib/contact";
+import { buildGoogleMapsUrl, buildStaticMapUrl } from "../lib/maps";
+
+interface Props {
+  variant?: "default" | "compact";
+}
+
+const { variant = "default" } = Astro.props;
+
+if (!hasValidLocation()) {
+  return null;
+}
+
+const coords = { lat: LOCATION.lat, lng: LOCATION.lng };
+const mapsUrl = buildGoogleMapsUrl(coords, LOCATION.address);
+const mapSize = variant === "compact" ? { width: 560, height: 176 } : { width: 720, height: 300 };
+const staticMapUrl = buildStaticMapUrl(coords, mapSize);
+const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.address}`;
+---
+
+{variant === "compact" ? (
+  <div class="minimap minimap--compact">
+    <div class="minimap__copy">
+      <span class="h-sub">{LOCATION.title}</span>
+      <a class="minimap__address body-text" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+        {LOCATION.address}
+      </a>
+      {LOCATION.note && <p class="minimap__note">{LOCATION.note}</p>}
+    </div>
+    <a
+      class="minimap__preview minimap__preview--compact"
+      href={mapsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={mapLabel}
+    >
+      <img
+        src={staticMapUrl}
+        alt=""
+        width={mapSize.width}
+        height={mapSize.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  </div>
+) : (
+  <div class="minimap minimap--default">
+    <div class="minimap__head">
+      <span class="h-sub">{LOCATION.title}</span>
+      <h2 class="h-section"><span class="chalk-underline">{LOCATION.address}</span></h2>
+      {LOCATION.note && <p class="body-text minimap__note">{LOCATION.note}</p>}
+    </div>
+    <a
+      class="minimap__preview"
+      href={mapsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={mapLabel}
+    >
+      <img
+        src={staticMapUrl}
+        alt=""
+        width={mapSize.width}
+        height={mapSize.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+    <div class="inline-action">
+      <a class="btn btn--ghost" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+        Megnyitás térképen
+      </a>
+    </div>
+  </div>
+)}
+
+<style>
+  .minimap--default {
+    display: grid;
+    gap: clamp(16px, 2.5vw, 22px);
+    max-width: 720px;
+  }
+
+  .minimap__head {
+    display: grid;
+    gap: 10px;
+  }
+
+  .minimap__note {
+    color: var(--ink-soft);
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    line-height: 1.6;
+  }
+
+  .minimap__preview {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    box-shadow: var(--panel-shadow);
+    aspect-ratio: 2.4 / 1;
+    min-height: 150px;
+    max-height: 220px;
+    transition: border-color 220ms var(--ease), box-shadow 220ms var(--ease);
+  }
+
+  .minimap__preview:hover {
+    border-color: rgba(240, 138, 28, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  }
+
+  .minimap__preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.85) brightness(0.9);
+  }
+
+  .minimap--compact {
+    display: grid;
+    gap: 14px;
+    align-items: center;
+    padding-block: clamp(18px, 3vw, 24px);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 720px) {
+    .minimap--compact {
+      grid-template-columns: 1fr minmax(200px, 280px);
+      gap: clamp(20px, 4vw, 32px);
+    }
+  }
+
+  .minimap--compact .minimap__copy {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .minimap__address {
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1.55;
+    transition: color 180ms var(--ease);
+  }
+
+  .minimap__address:hover {
+    color: var(--accent);
+  }
+
+  .minimap--compact .minimap__note {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .minimap__preview--compact {
+    min-height: 88px;
+    max-height: 120px;
+    aspect-ratio: 2.6 / 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .minimap__preview {
+      transition: none;
+    }
+  }
+</style>
