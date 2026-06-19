@@ -21,7 +21,8 @@ Becsült idő: **30–45 perc** (Business Profile igazolás külön, 1–3 nap).
 1. Nyisd meg: [search.google.com/search-console](https://search.google.com/search-console)
 2. **Add property** → **URL prefix**: `https://www.beanbarrel.coffee`
 3. Verifikáció: válaszd az **HTML tag** módszert
-4. Másold ki a `content="..."` értéket a meta tagből (csak a kód, idézőjel nélkül)
+4. Másold ki **csak** a `content="..."` értéket a meta tagből (idézőjel nélkül) — ne a teljes `<meta ...>` sort
+   - Példa: `BcLccCpfA49xhLtz_vPVya318IawBHL2arIt3dkVF14`
 5. Küldd el a fejlesztőnek — ő beállítja a Vercelben:
    - Változó neve: `PUBLIC_GSC_VERIFICATION`
    - Environment: **Production**

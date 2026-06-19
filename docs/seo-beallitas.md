@@ -9,7 +9,9 @@ Ez az útmutató a Bean & Barrel weboldal keresőoptimalizálásának technikai 
 3. Verifikáció — **HTML tag** módszer:
    - Másold ki a `content="..."` értéket a meta tagből
    - Vercel dashboard → Project → Settings → Environment Variables
-   - Új változó: `PUBLIC_GSC_VERIFICATION` = a content érték (csak a kód, idézőjel nélkül)
+   - Új változó: `PUBLIC_GSC_VERIFICATION` = **csak** a `content="..."` érték (idézőjel nélkül)
+   - Példa helyes érték: `BcLccCpfA49xhLtz_vPVya318IawBHL2arIt3dkVF14`
+   - **Ne** illeszd be a teljes `<meta name="google-site-verification" ...>` sort
    - Production environment, majd redeploy
 4. **Sitemaps** → Add new sitemap:
    ```

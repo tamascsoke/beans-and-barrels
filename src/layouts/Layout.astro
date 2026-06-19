@@ -30,7 +30,17 @@ const {
 const canonicalUrl = new URL(Astro.url.pathname, "https://www.beanbarrel.coffee").toString();
 const socialImage = new URL(image, "https://www.beanbarrel.coffee").toString();
 const showSideTab = !Astro.url.pathname.startsWith("/kontakt");
-const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
+
+/** GSC env sometimes gets the full <meta> tag pasted — extract content= only. */
+function normalizeGscVerification(raw: string | undefined): string | undefined {
+  if (!raw?.trim()) return undefined;
+  const trimmed = raw.trim();
+  const fromContent = trimmed.match(/content=["']([^"']+)["']/i);
+  if (fromContent) return fromContent[1];
+  return trimmed;
+}
+
+const gscVerification = normalizeGscVerification(import.meta.env.PUBLIC_GSC_VERIFICATION);
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const defaultSchema = Astro.url.pathname === "/"
   ? foodEstablishmentSchema(description, socialImage)
