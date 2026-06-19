@@ -10,7 +10,7 @@ const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
 const selectedTopic = Astro.url.searchParams.get("topic") ?? undefined;
 const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
 const title = "Kontakt — Bean & Barrel";
-const description = "Vedd fel a kapcsolatot a Bean & Barrel csapatával tuktuk (tuk tuk) rendezvényre, franchise-ra, sajtómegkeresésre vagy egyedi kérdésre.";
+const description = "Vedd fel a kapcsolatot a Bean & Barrel csapatával tuktuk rendezvényre, franchise-ra, sajtómegkeresésre vagy egyedi kérdésre.";
 const pageSchema = hasValidLocation() ? contactLocalBusinessSchema(description, "/og-image.webp") : undefined;
 ---
 

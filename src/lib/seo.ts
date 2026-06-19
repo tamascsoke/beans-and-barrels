@@ -17,6 +17,11 @@ export const TUKTUK_ALTERNATE_NAMES = [
   "tuktuk bár",
   "tuk tuk bár",
   "tuktuk rendezvény",
+  "mozgó tuktuk",
+  "kávés tuktuk",
+  "sörös tuktuk",
+  "kávé és sör",
+  "Kávé és Sör",
 ];
 
 const provider = {
@@ -106,7 +111,14 @@ export function eventServiceSchema(url: string, description: string) {
     "@context": "https://schema.org",
     "@type": "Service",
     name: "Tuktuk rendezvény vendéglátás Budapest",
-    alternateName: ["tuk tuk rendezvény", "tuktuk bár Budapest", "tuk tuk bár"],
+    alternateName: [
+      "tuk tuk rendezvény",
+      "tuktuk bár Budapest",
+      "tuk tuk bár",
+      "mozgó tuktuk rendezvény",
+      "mobil tuktuk rendezvény",
+      "tuktuk kitelepülés",
+    ],
     serviceType: "Tuktuk (tuk tuk) rendezvény vendéglátás",
     description,
     url,
@@ -128,7 +140,13 @@ export function franchiseServiceSchema(url: string, description: string) {
     "@context": "https://schema.org",
     "@type": "Service",
     name: "Bean & Barrel tuktuk franchise Magyarország",
-    alternateName: ["tuk tuk franchise", "tuktuk kávézó franchise", "mozgó tuktuk franchise"],
+    alternateName: [
+      "tuk tuk franchise",
+      "tuktuk kávézó franchise",
+      "mozgó tuktuk franchise",
+      "kávés tuktuk franchise",
+      "sörös tuktuk franchise",
+    ],
     serviceType: "Tuktuk franchise",
     description,
     url,
