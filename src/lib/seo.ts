@@ -12,6 +12,8 @@ export const SITE_NAME = "Bean & Barrel";
 
 /** Keresői slang / alternatív elnevezések — csak meta és JSON-LD */
 export const TUKTUK_ALTERNATE_NAMES = [
+  "tuktuk kávézó",
+  "tuk tuk kávézó",
   "tuktuk",
   "tuk tuk",
   "tuktuk bár",
@@ -72,7 +74,7 @@ export function foodEstablishmentSchema(description: string, image: string) {
     telephone: PHONE_HREF,
     description,
     alternateName: TUKTUK_ALTERNATE_NAMES,
-    servesCuisine: ["Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás", "Tuktuk bár"],
+    servesCuisine: ["Tuktuk kávézó", "Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás", "Tuktuk bár"],
     image,
     address: buildPostalAddress(),
     ...(geo ? { geo } : {}),
@@ -142,10 +144,9 @@ export function franchiseServiceSchema(url: string, description: string) {
     name: "Bean & Barrel tuktuk franchise Magyarország",
     alternateName: [
       "tuk tuk franchise",
-      "tuktuk kávézó franchise",
+      "tuktuk franchise Magyarország",
       "mozgó tuktuk franchise",
-      "kávés tuktuk franchise",
-      "sörös tuktuk franchise",
+      "Bean & Barrel franchise",
     ],
     serviceType: "Tuktuk franchise",
     description,
