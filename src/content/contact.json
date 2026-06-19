@@ -5,7 +5,7 @@
   "formSubject": "Üzenet — Bean & Barrel",
   "locationEnabled": true,
   "locationTitle": "Hol találkozhatsz velünk",
-  "locationAddress": "1051 Budapest, Deák Ferenc tér 3.",
-  "locationGeo": "{\"type\":\"Point\",\"coordinates\":[19.0552,47.4979]}",
+  "locationAddress": "1097 Budapest, Könyves Kálmán körút 34.",
+  "locationGeo": "{\"type\":\"Point\",\"coordinates\":[19.0958946,47.4737189]}",
   "locationNote": "Állandó kitelepülés — pontos cím a CMS-ben szerkeszthető."
 }
