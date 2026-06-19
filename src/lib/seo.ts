@@ -1,4 +1,11 @@
-import { EMAIL, PHONE_HREF } from "./contact";
+import {
+  EMAIL,
+  PHONE_HREF,
+  LOCATION,
+  hasValidLocation,
+  parsePostalAddress,
+} from "./contact";
+import { SAME_AS } from "./social";
 
 export const SITE_URL = "https://www.beanbarrel.coffee";
 export const SITE_NAME = "Bean & Barrel";
@@ -18,9 +25,39 @@ const provider = {
   url: SITE_URL,
   email: EMAIL,
   telephone: PHONE_HREF,
+  sameAs: SAME_AS,
 };
 
+function buildPostalAddress() {
+  if (!hasValidLocation()) {
+    return {
+      "@type": "PostalAddress" as const,
+      addressLocality: "Budapest",
+      addressCountry: "HU",
+    };
+  }
+
+  const parsed = parsePostalAddress(LOCATION.address);
+  return {
+    "@type": "PostalAddress" as const,
+    ...(parsed.streetAddress ? { streetAddress: parsed.streetAddress } : {}),
+    ...(parsed.postalCode ? { postalCode: parsed.postalCode } : {}),
+    addressLocality: parsed.addressLocality ?? "Budapest",
+    addressCountry: "HU",
+  };
+}
+
+function buildGeo() {
+  if (!hasValidLocation() || !LOCATION.lat || !LOCATION.lng) return undefined;
+  return {
+    "@type": "GeoCoordinates" as const,
+    latitude: LOCATION.lat,
+    longitude: LOCATION.lng,
+  };
+}
+
 export function foodEstablishmentSchema(description: string, image: string) {
+  const geo = buildGeo();
   return {
     "@context": "https://schema.org",
     "@type": "FoodEstablishment",
@@ -32,11 +69,31 @@ export function foodEstablishmentSchema(description: string, image: string) {
     alternateName: TUKTUK_ALTERNATE_NAMES,
     servesCuisine: ["Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás", "Tuktuk bár"],
     image,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Budapest",
-      addressCountry: "HU",
-    },
+    address: buildPostalAddress(),
+    ...(geo ? { geo } : {}),
+    sameAs: SAME_AS,
+    areaServed: [
+      { "@type": "City", name: "Budapest" },
+      { "@type": "AdministrativeArea", name: "Pest megye" },
+    ],
+  };
+}
+
+export function contactLocalBusinessSchema(description: string, image: string) {
+  const geo = buildGeo();
+  return {
+    "@context": "https://schema.org",
+    "@type": ["FoodEstablishment", "LocalBusiness"],
+    name: SITE_NAME,
+    url: `${SITE_URL}/kontakt`,
+    email: EMAIL,
+    telephone: PHONE_HREF,
+    description,
+    alternateName: TUKTUK_ALTERNATE_NAMES,
+    image,
+    address: buildPostalAddress(),
+    ...(geo ? { geo } : {}),
+    sameAs: SAME_AS,
     areaServed: [
       { "@type": "City", name: "Budapest" },
       { "@type": "AdministrativeArea", name: "Pest megye" },

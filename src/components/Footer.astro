@@ -1,5 +1,6 @@
 ---
 import { PHONE_DISPLAY, PHONE_HREF, EMAIL, hasValidLocation } from "../lib/contact";
+import { SOCIAL_LINKS } from "../lib/social";
 import MiniMap from "./MiniMap.astro";
 const year = new Date().getFullYear();
 ---
@@ -21,9 +22,9 @@ const year = new Date().getFullYear();
     <div class="footer__col">
       <h4 class="h-sub">Kövess minket</h4>
       <ul class="footer__list footer__social">
-        <li><a href="https://www.instagram.com/beanbarrel_bp?igsh=b2YzbWYzeXRnNDdr&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-        <li><a href="https://www.facebook.com/share/1SxeQupYdp/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-        <li><a href="https://www.tiktok.com/@beanbarrel_bp?_r=1&_t=ZN-96sdqSHL2R9" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+        <li><a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        <li><a href={SOCIAL_LINKS.tiktok} target="_blank" rel="noopener noreferrer">TikTok</a></li>
       </ul>
     </div>
   </div>

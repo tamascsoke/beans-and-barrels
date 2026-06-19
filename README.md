@@ -38,6 +38,7 @@ On-page SEO targets Budapest events (`/rendezvenyek`) and Hungary-wide franchise
 | Document | Purpose |
 |----------|---------|
 | [`docs/seo-beallitas.md`](docs/seo-beallitas.md) | Google Search Console + GA4 setup |
+| [`docs/seo-ugyfel-checklist.md`](docs/seo-ugyfel-checklist.md) | Ügyfél checklist (GSC, GA4, GBP) |
 
 Optional Vercel env vars (see [`.env.example`](.env.example)):
 

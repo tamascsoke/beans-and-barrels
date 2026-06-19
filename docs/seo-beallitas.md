@@ -45,9 +45,10 @@ Structured data:
 | Típus | Hol |
 |-------|-----|
 | `Service` | `/rendezvenyek`, `/franchise` |
-| `FAQPage` | `/rendezvenyek`, `/franchise` (csak JSON-LD, nem látható GYIK blokk) |
+| `FAQPage` | `/rendezvenyek`, `/franchise` (csak JSON-LD; látható GYIK később CMS-ből) |
 | `Event` | `/rendezvenyek` — automatikusan minden publikált CMS kitelepülésből |
 | `FoodEstablishment` | `/` |
+| `LocalBusiness` | `/kontakt` — cím, GPS, közösségi linkek |
 
 Ellenőrzés: https://search.google.com/test/rich-results → `https://www.beanbarrel.coffee/rendezvenyek`
 
@@ -57,6 +58,8 @@ Ellenőrzés: https://search.google.com/test/rich-results → `https://www.beanb
 2. Közösségi profilok NAP konzisztencia: név, web, telefon (`beanbarrel_bp`)
 3. 2–4 hét után GSC **Performance** → mely kulcsszavakra jelenik meg az oldal
 4. CMS-ben galéria alt szövegekben helyszín (pl. „Budapest, esküvő”)
+
+**Ügyfél checklist (Google-fiók):** [`seo-ugyfel-checklist.md`](seo-ugyfel-checklist.md)
 
 ## Kapcsolódó dokumentáció
 

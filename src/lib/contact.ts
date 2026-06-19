@@ -90,3 +90,23 @@ export function hasValidLocation(): boolean {
     coords !== null
   );
 }
+
+export type ParsedPostalAddress = {
+  postalCode?: string;
+  streetAddress?: string;
+  addressLocality?: string;
+};
+
+/** Parses "1097 Budapest, Könyves Kálmán körút 34." style CMS addresses. */
+export function parsePostalAddress(full: string): ParsedPostalAddress {
+  const trimmed = full.trim();
+  const match = trimmed.match(/^(\d{4})\s+([^,]+),\s*(.+?)\.?$/u);
+  if (match) {
+    return {
+      postalCode: match[1],
+      addressLocality: match[2].trim(),
+      streetAddress: match[3].trim(),
+    };
+  }
+  return { streetAddress: trimmed };
+}
