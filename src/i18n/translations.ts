@@ -288,7 +288,7 @@ const hu: Translations = {
     eyebrow: "Rólunk",
     title: "Történetünk",
     lead:
-      "A Bean & Barrel egy hűtőszekrényben kezdődött: három srác, egy ötlet, és a felismerés, hogy a legjobb bulik nem a legnagyobb helyen zajlanak, hanem ott, ahol jó a kávé, friss a sör, és van egy tuktuk, ami mindenkit mosolyra késztet.",
+      "Egy fáradt - nekünk még, másnak már korántsem - reggel, a kanapéról lefordulva a hűtőben csak SÖRt, a pulton csak kávét találtunk. A sztorinknak pedig itt indult az a bizonyos első fejezete...",
     ctaEvent: "Kérd a rendezvényedre",
     foundersEyebrow: "Alapítók",
     foundersTitle: "Akik mögötte állnak",
@@ -321,7 +321,7 @@ const hu: Translations = {
       "Bean & Barrel kínálat mozgó tuktukon: specialty kávék, csapolt sörök, snackek és szezonális italok — kávés és sörös tuktuk.",
     heroTitle: "Egy tuktuk, négy világ",
     heroLead:
-      "SPECIALTY KÁVÉ, CSAPOLT SÖR, SNACKEK ÉS SZEZONÁLIS ITALOK — MINDEN, AMI EGY JÓ BULIHOZ KELL, EGY MOZGÓ PULTRÓL.",
+      "SPECIALTY KÁVÉ, CSAPOLT SÖR, SNACKEK ÉS SZEZONÁLIS ITALOK EGY MOZGÓ PULTBÓL.",
     heroImageAlt: "Bean & Barrel tuktuk kínálat",
     imagePlaceholder: "Kép —",
   },
@@ -388,7 +388,7 @@ const hu: Translations = {
     eyebrow: "Franchise",
     title: "Kávézz, SÖRÖZZ velünk!",
     lead:
-      "Csatlakozz a Bean & Barrel csapatához, és indítsd el saját mozgó tuktukodat! Mi adjuk a márkát, a know-how-t és a támogatást — te hozod a helyszínt és a lelkesedést.",
+      "Az országban rengeteg helyen van szükség a Bean&Barrel-re. Irodák, sétálóutcák, rendezvények, lehetőségek tömkelege. Csatlakozz hozzánk, Magyarország jövendőbeli legnagyobb mozgó kávézó-SÖRÖZŐ hálózatához!",
     heroImageAlt: "Bean & Barrel tuktuk rendezvény közben",
     whyTitle: "Miért érdemes franchise-partnernek lenni?",
     packageTitle: "Mit kapsz?",
@@ -448,7 +448,7 @@ const hu: Translations = {
     eyebrow: "Kontakt",
     title: "Üzenj nekünk",
     lead:
-      "Rendezvényre, franchise-ra vagy bármilyen kérdésre — írj, és hamarosan jelentkezünk.",
+      "Rendezvény, franchise, sajtó vagy csak egy kérdés — itt megtalálsz minket.",
     formTitle: "Írj nekünk",
     imageAlt: "Bean & Barrel tuktuk pult",
     gdprBefore: "Elolvastam és elfogadom az ",
@@ -634,7 +634,7 @@ const en: Translations = {
     eyebrow: "About",
     title: "Our story",
     lead:
-      "Bean & Barrel started in a fridge: three friends, one idea, and the realisation that the best parties aren't always the biggest — they're where the coffee is good, the beer is fresh, and there's a tuktuk that makes everyone smile.",
+      "One tired morning — still tired for us, not so much for others — rolling off the couch, we found only beer in the fridge and only coffee on the counter. That's where the first chapter of our story began...",
     ctaEvent: "Book us for your event",
     foundersEyebrow: "Founders",
     foundersTitle: "The people behind it",
@@ -667,7 +667,7 @@ const en: Translations = {
       "Bean & Barrel menu on a mobile tuktuk: specialty coffees, draft beers, snacks and seasonal drinks.",
     heroTitle: "One tuktuk, four worlds",
     heroLead:
-      "SPECIALTY COFFEE, DRAFT BEER, SNACKS AND SEASONAL DRINKS — EVERYTHING A GOOD PARTY NEEDS FROM A MOBILE BAR.",
+      "SPECIALTY COFFEE, DRAFT BEER, SNACKS AND SEASONAL DRINKS FROM A MOBILE BAR.",
     heroImageAlt: "Bean & Barrel tuktuk menu",
     imagePlaceholder: "Image —",
   },
@@ -734,7 +734,7 @@ const en: Translations = {
     eyebrow: "Franchise",
     title: "Coffee, beer — with us!",
     lead:
-      "Join the Bean & Barrel team and launch your own mobile tuktuk! We provide the brand, know-how and support — you bring the location and the energy.",
+      "There's demand for Bean&Barrel all over the country. Offices, pedestrian streets, events — endless opportunities. Join us and become part of Hungary's future largest mobile coffee-and-beer network!",
     heroImageAlt: "Bean & Barrel tuktuk at an event",
     whyTitle: "Why become a franchise partner?",
     packageTitle: "What you get",
@@ -793,7 +793,7 @@ const en: Translations = {
       "Contact the Bean & Barrel team for tuktuk events, franchise, press enquiries or any question.",
     eyebrow: "Contact",
     title: "Message us",
-    lead: "Events, franchise or any question — write to us and we'll get back to you soon.",
+    lead: "Events, franchise, press or just a question — you'll find us here.",
     formTitle: "Write to us",
     imageAlt: "Bean & Barrel tuktuk bar",
     gdprBefore: "I have read and accept the ",
