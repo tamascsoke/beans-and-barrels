@@ -1,31 +1,36 @@
 ---
-import { LOCATION, hasValidLocation } from "../lib/contact";
+import { getLocation, hasValidLocation } from "../lib/contact";
 import { buildGoogleMapsUrl } from "../lib/maps";
+import { pageContext } from "../lib/page-context";
+import type { Locale } from "../i18n";
 
 interface Props {
   variant?: "default" | "compact";
+  locale: Locale;
 }
 
-const { variant = "default" } = Astro.props;
+const { variant = "default", locale } = Astro.props;
+const { t } = pageContext(Astro.url.pathname, locale);
 
-if (!hasValidLocation()) {
+if (!hasValidLocation(locale)) {
   return null;
 }
 
-const coords = { lat: LOCATION.lat, lng: LOCATION.lng };
-const mapsUrl = buildGoogleMapsUrl(coords, LOCATION.address);
-const mapLabel = `Bean & Barrel helyszín térképen megnyitása: ${LOCATION.address}`;
-const mapAriaLabel = `Térkép előnézet: ${LOCATION.address}`;
+const location = getLocation(locale);
+const coords = { lat: location.lat, lng: location.lng };
+const mapsUrl = buildGoogleMapsUrl(coords, location.address);
+const mapLabel = `${t.common.openOnMap}: ${location.address}`;
+const mapAriaLabel = `${location.address}`;
 ---
 
 {variant === "compact" ? (
   <div class="minimap minimap--compact">
     <div class="minimap__copy">
-      <span class="h-sub">{LOCATION.title}</span>
+      <span class="h-sub">{location.title}</span>
       <a class="minimap__address body-text" href={mapsUrl} target="_blank" rel="noopener noreferrer">
-        {LOCATION.address}
+        {location.address}
       </a>
-      {LOCATION.note && <p class="minimap__note">{LOCATION.note}</p>}
+      {location.note && <p class="minimap__note">{location.note}</p>}
     </div>
     <div class="minimap__preview minimap__preview--compact">
       <div
@@ -48,9 +53,9 @@ const mapAriaLabel = `Térkép előnézet: ${LOCATION.address}`;
 ) : (
   <div class="minimap minimap--default">
     <div class="minimap__head">
-      <span class="h-sub">{LOCATION.title}</span>
-      <h2 class="h-section"><span class="chalk-underline">{LOCATION.address}</span></h2>
-      {LOCATION.note && <p class="body-text minimap__note">{LOCATION.note}</p>}
+      <span class="h-sub">{location.title}</span>
+      <h2 class="h-section"><span class="chalk-underline">{location.address}</span></h2>
+      {location.note && <p class="body-text minimap__note">{location.note}</p>}
     </div>
     <div class="minimap__preview">
       <div
@@ -71,7 +76,7 @@ const mapAriaLabel = `Térkép előnézet: ${LOCATION.address}`;
     </div>
     <div class="inline-action">
       <a class="btn btn--ghost" href={mapsUrl} target="_blank" rel="noopener noreferrer">
-        Megnyitás térképen
+        {t.common.openOnMap}
       </a>
     </div>
   </div>

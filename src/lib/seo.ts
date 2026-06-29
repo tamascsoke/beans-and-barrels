@@ -1,11 +1,13 @@
 import {
   EMAIL,
   PHONE_HREF,
-  LOCATION,
+  getLocation,
   hasValidLocation,
   parsePostalAddress,
 } from "./contact";
 import { SAME_AS } from "./social";
+import type { Locale } from "../i18n";
+import { absoluteUrl } from "../i18n/locale";
 
 export const SITE_URL = "https://www.beanbarrel.coffee";
 export const SITE_NAME = "Bean & Barrel";
@@ -26,6 +28,21 @@ export const TUKTUK_ALTERNATE_NAMES = [
   "Kávé és Sör",
 ];
 
+export const TUKTUK_ALTERNATE_NAMES_EN = [
+  "tuktuk café",
+  "tuk tuk café",
+  "tuktuk",
+  "tuk tuk",
+  "tuktuk bar",
+  "tuk tuk bar",
+  "tuktuk event",
+  "mobile tuktuk",
+  "coffee tuktuk",
+  "beer tuktuk",
+  "coffee and beer",
+  "Coffee & Beer",
+];
+
 const provider = {
   "@type": "Organization" as const,
   name: SITE_NAME,
@@ -35,8 +52,9 @@ const provider = {
   sameAs: SAME_AS,
 };
 
-function buildPostalAddress() {
-  if (!hasValidLocation()) {
+function buildPostalAddress(locale: Locale) {
+  const location = getLocation(locale);
+  if (!hasValidLocation(locale)) {
     return {
       "@type": "PostalAddress" as const,
       addressLocality: "Budapest",
@@ -44,7 +62,7 @@ function buildPostalAddress() {
     };
   }
 
-  const parsed = parsePostalAddress(LOCATION.address);
+  const parsed = parsePostalAddress(location.address);
   return {
     "@type": "PostalAddress" as const,
     ...(parsed.streetAddress ? { streetAddress: parsed.streetAddress } : {}),
@@ -54,111 +72,162 @@ function buildPostalAddress() {
   };
 }
 
-function buildGeo() {
-  if (!hasValidLocation() || !LOCATION.lat || !LOCATION.lng) return undefined;
+function buildGeo(locale: Locale) {
+  const location = getLocation(locale);
+  if (!hasValidLocation(locale) || !location.lat || !location.lng) return undefined;
   return {
     "@type": "GeoCoordinates" as const,
-    latitude: LOCATION.lat,
-    longitude: LOCATION.lng,
+    latitude: location.lat,
+    longitude: location.lng,
   };
 }
 
-export function foodEstablishmentSchema(description: string, image: string) {
-  const geo = buildGeo();
+export function foodEstablishmentSchema(
+  description: string,
+  image: string,
+  locale: Locale = "hu",
+) {
+  const geo = buildGeo(locale);
+  const alternateName = locale === "en" ? TUKTUK_ALTERNATE_NAMES_EN : TUKTUK_ALTERNATE_NAMES;
+  const servesCuisine =
+    locale === "en"
+      ? ["Tuktuk café", "Specialty coffee", "Draft beer", "Event catering", "Tuktuk bar"]
+      : ["Tuktuk kávézó", "Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás", "Tuktuk bár"];
   return {
     "@context": "https://schema.org",
     "@type": "FoodEstablishment",
     name: SITE_NAME,
-    url: SITE_URL,
+    url: absoluteUrl(locale, "/"),
     email: EMAIL,
     telephone: PHONE_HREF,
     description,
-    alternateName: TUKTUK_ALTERNATE_NAMES,
-    servesCuisine: ["Tuktuk kávézó", "Specialty kávé", "Csapolt sör", "Rendezvény vendéglátás", "Tuktuk bár"],
+    alternateName,
+    servesCuisine,
     image,
-    address: buildPostalAddress(),
+    address: buildPostalAddress(locale),
     ...(geo ? { geo } : {}),
     sameAs: SAME_AS,
+    inLanguage: locale === "en" ? "en" : "hu",
     areaServed: [
       { "@type": "City", name: "Budapest" },
-      { "@type": "AdministrativeArea", name: "Pest megye" },
+      { "@type": "AdministrativeArea", name: locale === "en" ? "Pest county" : "Pest megye" },
     ],
   };
 }
 
-export function contactLocalBusinessSchema(description: string, image: string) {
-  const geo = buildGeo();
+export function contactLocalBusinessSchema(
+  description: string,
+  image: string,
+  locale: Locale = "hu",
+) {
+  const geo = buildGeo(locale);
+  const alternateName = locale === "en" ? TUKTUK_ALTERNATE_NAMES_EN : TUKTUK_ALTERNATE_NAMES;
   return {
     "@context": "https://schema.org",
     "@type": ["FoodEstablishment", "LocalBusiness"],
     name: SITE_NAME,
-    url: `${SITE_URL}/kontakt`,
+    url: absoluteUrl(locale, "/kontakt"),
     email: EMAIL,
     telephone: PHONE_HREF,
     description,
-    alternateName: TUKTUK_ALTERNATE_NAMES,
+    alternateName,
     image,
-    address: buildPostalAddress(),
+    address: buildPostalAddress(locale),
     ...(geo ? { geo } : {}),
     sameAs: SAME_AS,
+    inLanguage: locale === "en" ? "en" : "hu",
     areaServed: [
       { "@type": "City", name: "Budapest" },
-      { "@type": "AdministrativeArea", name: "Pest megye" },
+      { "@type": "AdministrativeArea", name: locale === "en" ? "Pest county" : "Pest megye" },
     ],
   };
 }
 
-export function eventServiceSchema(url: string, description: string) {
+export function eventServiceSchema(url: string, description: string, locale: Locale = "hu") {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Tuktuk rendezvény vendéglátás Budapest",
-    alternateName: [
-      "tuk tuk rendezvény",
-      "tuktuk bár Budapest",
-      "tuk tuk bár",
-      "mozgó tuktuk rendezvény",
-      "mobil tuktuk rendezvény",
-      "tuktuk kitelepülés",
-    ],
-    serviceType: "Tuktuk (tuk tuk) rendezvény vendéglátás",
+    name:
+      locale === "en"
+        ? "Tuktuk event catering Budapest"
+        : "Tuktuk rendezvény vendéglátás Budapest",
+    alternateName:
+      locale === "en"
+        ? [
+            "tuk tuk event",
+            "tuktuk bar Budapest",
+            "tuk tuk bar",
+            "mobile tuktuk event",
+            "tuktuk pop-up",
+          ]
+        : [
+            "tuk tuk rendezvény",
+            "tuktuk bár Budapest",
+            "tuk tuk bár",
+            "mozgó tuktuk rendezvény",
+            "mobil tuktuk rendezvény",
+            "tuktuk kitelepülés",
+          ],
+    serviceType:
+      locale === "en"
+        ? "Tuktuk (tuk tuk) event catering"
+        : "Tuktuk (tuk tuk) rendezvény vendéglátás",
     description,
     url,
     provider,
+    inLanguage: locale === "en" ? "en" : "hu",
     areaServed: [
       { "@type": "City", name: "Budapest" },
-      { "@type": "AdministrativeArea", name: "Pest megye" },
+      { "@type": "AdministrativeArea", name: locale === "en" ? "Pest county" : "Pest megye" },
     ],
     offers: {
       "@type": "Offer",
-      url: `${SITE_URL}/kontakt?topic=Rendezvény#urlap`,
+      url:
+        locale === "en"
+          ? `${SITE_URL}/en/kontakt?topic=Event#urlap`
+          : `${SITE_URL}/kontakt?topic=Rendezvény#urlap`,
       availability: "https://schema.org/InStock",
     },
   };
 }
 
-export function franchiseServiceSchema(url: string, description: string) {
+export function franchiseServiceSchema(url: string, description: string, locale: Locale = "hu") {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Bean & Barrel tuktuk franchise Magyarország",
-    alternateName: [
-      "tuk tuk franchise",
-      "tuktuk franchise Magyarország",
-      "mozgó tuktuk franchise",
-      "Bean & Barrel franchise",
-    ],
-    serviceType: "Tuktuk franchise",
+    name:
+      locale === "en"
+        ? "Bean & Barrel tuktuk franchise Hungary"
+        : "Bean & Barrel tuktuk franchise Magyarország",
+    alternateName:
+      locale === "en"
+        ? [
+            "tuk tuk franchise",
+            "tuktuk franchise Hungary",
+            "mobile tuktuk franchise",
+            "Bean & Barrel franchise",
+          ]
+        : [
+            "tuk tuk franchise",
+            "tuktuk franchise Magyarország",
+            "mozgó tuktuk franchise",
+            "Bean & Barrel franchise",
+          ],
+    serviceType: locale === "en" ? "Tuktuk franchise" : "Tuktuk franchise",
     description,
     url,
     provider,
+    inLanguage: locale === "en" ? "en" : "hu",
     areaServed: {
       "@type": "Country",
-      name: "Magyarország",
+      name: locale === "en" ? "Hungary" : "Magyarország",
     },
     offers: {
       "@type": "Offer",
-      url: `${SITE_URL}/kontakt?topic=Franchise#urlap`,
+      url:
+        locale === "en"
+          ? `${SITE_URL}/en/kontakt?topic=Franchise#urlap`
+          : `${SITE_URL}/kontakt?topic=Franchise#urlap`,
       availability: "https://schema.org/InStock",
     },
   };

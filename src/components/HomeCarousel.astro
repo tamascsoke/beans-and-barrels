@@ -1,7 +1,25 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
+import type { Locale } from "../i18n";
+import { useTranslations } from "../i18n";
+import { localePath } from "../i18n/locale";
 import { getCarouselSlides, resolveImage } from "../lib/content";
-const slides = getCarouselSlides();
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const slides = getCarouselSlides(locale);
+
+function localizeHref(href: string): string {
+  if (href.startsWith("http")) return href;
+  const [path, query] = href.split("?");
+  const normalized = path.startsWith("/en") ? path.slice(3) || "/" : path;
+  const localized = localePath(locale, normalized);
+  return query ? `${localized}?${query}` : localized;
+}
 ---
 
 <section class="carousel" aria-roledescription="carousel">
@@ -10,13 +28,13 @@ const slides = getCarouselSlides();
       slides.map((s, i) => (
         <article class="carousel__slide" id={`carousel-slide-${i}`} aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
           {s.image && resolveImage(s.image)
-            ? <a class="photo-frame carousel__art" href={s.ctaHref} aria-label={`${s.ctaLabel} — ${s.title}`}>
+            ? <a class="photo-frame carousel__art" href={localizeHref(s.ctaHref)} aria-label={`${s.ctaLabel} — ${s.title}`}>
                 <Image src={resolveImage(s.image)!} alt={s.imageAlt ?? s.eyebrow}
                        widths={[400, 700]} sizes="(min-width: 860px) 50vw, 100vw"
                        loading="lazy"
                        fetchpriority="auto" />
               </a>
-            : <a class="carousel__art placeholder-img" href={s.ctaHref} aria-label={`${s.ctaLabel} — ${s.title}`}>{`Kép — ${s.eyebrow.toUpperCase()}`}</a>
+            : <a class="carousel__art placeholder-img" href={localizeHref(s.ctaHref)} aria-label={`${s.ctaLabel} — ${s.title}`}>{`${t.carousel.imagePlaceholder} ${s.eyebrow.toUpperCase()}`}</a>
           }
           <div class="carousel__copy stagger">
             <span class="h-sub">{s.eyebrow}</span>
@@ -24,23 +42,23 @@ const slides = getCarouselSlides();
             <p class="lead">{s.body}</p>
           </div>
           <div class="carousel__cta inline-action">
-            <a class="btn" href={s.ctaHref}>{s.ctaLabel}</a>
+            <a class="btn" href={localizeHref(s.ctaHref)}>{s.ctaLabel}</a>
           </div>
         </article>
       ))
     }
   </div>
 
-  <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Előző dia">
+  <button class="carousel__nav carousel__nav--prev" type="button" aria-label={t.carousel.prev}>
     <span aria-hidden="true">‹</span>
   </button>
-  <button class="carousel__nav carousel__nav--next" type="button" aria-label="Következő dia">
+  <button class="carousel__nav carousel__nav--next" type="button" aria-label={t.carousel.next}>
     <span aria-hidden="true">›</span>
   </button>
 
   <div class="carousel__dots" role="tablist">
     {slides.map((_, i) => (
-      <button class="carousel__dot" role="tab" data-i={i} aria-selected={i === 0 ? "true" : "false"} aria-controls={`carousel-slide-${i}`} aria-label={`${i + 1}. dia`}></button>
+      <button class="carousel__dot" role="tab" data-i={i} aria-selected={i === 0 ? "true" : "false"} aria-controls={`carousel-slide-${i}`} aria-label={`${i + 1}. ${t.carousel.slideStatus}`}></button>
     ))}
   </div>
   <p class="carousel__status sr-only" aria-live="polite"></p>
@@ -194,7 +212,6 @@ const slides = getCarouselSlides();
   .carousel__nav--prev { left: 12px; }
   .carousel__nav--next { right: 12px; }
 
-  /* Mobilon a nyilak a képen legyenek, ne a szövegben (eyebrow / cím) */
   @media (max-width: 859px) {
     .carousel__nav {
       top: calc(

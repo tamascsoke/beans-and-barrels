@@ -1,0 +1,155 @@
+---
+interface Props {
+  email: string;
+  impresszumHref: string;
+}
+
+const { email, impresszumHref } = Astro.props;
+---
+
+<h2 class="h-section">1. Data controller</h2>
+<p>
+  The operator of this website and the controller of personal data submitted here:
+</p>
+<dl class="legal__list">
+  <dt>Company</dt>     <dd>Kávé Sláger Kft.</dd>
+  <dt>Registered office</dt>   <dd>7661 Kékesd, Fő utca 3., Hungary</dd>
+  <dt>Email</dt>     <dd><a href={`mailto:${email}`}>{email}</a></dd>
+</dl>
+<p>
+  Full operator details are available on the <a href={impresszumHref}>legal notice</a> page.
+</p>
+
+<h2 class="h-section">2. What data we process and why</h2>
+
+<h3 class="legal__sub">2.1 Contact form</h3>
+<p>
+  When you submit a <strong>contact form</strong> on this website (on the Contact page
+  or the floating “Contact us” panel), we store and process the data you provide solely
+  to communicate about your enquiry.
+</p>
+
+<table class="legal__table">
+  <thead>
+    <tr><th>Data</th><th>Purpose</th><th>Legal basis</th><th>Retention</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>Salutation, identifying your enquiry</td>
+      <td rowspan="4">GDPR Art. 6(1)(<strong>a</strong>) — data subject consent</td>
+      <td rowspan="4"><strong>1 year</strong> after your enquiry is handled, or the statutory period after contractual obligations if contact leads to a contract</td>
+    </tr>
+    <tr><td>Email address</td><td>Sending a reply</td></tr>
+    <tr><td>Topic</td><td>Classifying your enquiry</td></tr>
+    <tr><td>Message</td><td>Content of your enquiry</td></tr>
+  </tbody>
+</table>
+
+<h3 class="legal__sub">2.2 Server-level logging</h3>
+<p>
+  Our hosting provider (Vercel Inc.) — like any modern web server — automatically logs
+  technical data about incoming requests for security and operations. This happens even
+  if you do not submit a form.
+</p>
+
+<table class="legal__table">
+  <thead>
+    <tr><th>Data</th><th>Purpose</th><th>Legal basis</th><th>Retention</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>IP address</td>
+      <td rowspan="3">Secure operation: detecting abuse (e.g. DDoS, bots), debugging, performance monitoring</td>
+      <td rowspan="3">GDPR Art. 6(1)(<strong>f</strong>) — <strong>legitimate interest</strong> in secure, stable website operation</td>
+      <td rowspan="3">Vercel’s retention period (typically <strong>30 days</strong>); logs are not linked to other data or used for profiling</td>
+    </tr>
+    <tr><td>User-agent (browser/device)</td></tr>
+    <tr><td>Request time, URL, HTTP status</td></tr>
+  </tbody>
+</table>
+
+<h2 class="h-section">3. Who has access to your data? (Processors)</h2>
+<p>
+  We do not share your data with third parties except the technical providers below,
+  which are essential to operation:
+</p>
+
+<h3 class="legal__sub">3.1 FormSubmit (form relay)</h3>
+<dl class="legal__list">
+  <dt>Provider</dt>   <dd>FormSubmit — Formspark LLC</dd>
+  <dt>Activity</dt>   <dd>Relays contact form data to our email address above.</dd>
+  <dt>Location</dt><dd>United States</dd>
+  <dt>More</dt>      <dd><a href="https://formsubmit.co/privacy" target="_blank" rel="noopener">formsubmit.co/privacy</a></dd>
+</dl>
+
+<h3 class="legal__sub">3.2 Vercel Inc. (hosting)</h3>
+<dl class="legal__list">
+  <dt>Provider</dt>   <dd>Vercel Inc.</dd>
+  <dt>Activity</dt>   <dd>Serving the website and server-level logging described in 2.2.</dd>
+  <dt>Location</dt><dd>United States</dd>
+  <dt>More</dt>      <dd><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></dd>
+</dl>
+
+<h3 class="legal__sub">3.3 Google Analytics (web analytics)</h3>
+<p>
+  We may use Google Analytics 4 (GA4) to measure traffic. Analytics is only active when
+  enabled. GA4 may record anonymised IP and visit events (e.g. page views).
+</p>
+<dl class="legal__list">
+  <dt>Provider</dt>   <dd>Google Ireland Limited / Google LLC</dd>
+  <dt>Activity</dt>   <dd>Statistical analysis of website use</dd>
+  <dt>Location</dt><dd>Ireland / United States</dd>
+  <dt>More</dt>      <dd><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></dd>
+</dl>
+
+<h2 class="h-section">4. Transfers outside the EU</h2>
+<p>
+  The processors above (FormSubmit, Vercel, and Google if Analytics is enabled) operate in
+  the United States. Transfers rely on the European Commission adequacy decision
+  (EU–US Data Privacy Framework) and/or Standard Contractual Clauses.
+</p>
+
+<h2 class="h-section">5. Cookies</h2>
+<p>
+  By default this site does <strong>not</strong> use marketing or profiling cookies.
+  If Google Analytics is enabled, analytics cookies (e.g. <code>_ga</code>) may be set
+  for visit statistics only.
+</p>
+
+<h2 class="h-section">6. Your rights</h2>
+<p>You may exercise the following rights at any time via <a href={`mailto:${email}`}>{email}</a>:</p>
+<ul class="legal__bullets">
+  <li><strong>Right of access</strong> — what data we hold about you.</li>
+  <li><strong>Right to rectification</strong> — correcting inaccurate data.</li>
+  <li><strong>Right to erasure</strong> (“right to be forgotten”).</li>
+  <li><strong>Right to restriction of processing.</strong></li>
+  <li><strong>Withdrawal of consent</strong> — at any time via the email above.
+    Withdrawal does not affect the lawfulness of prior processing based on consent.</li>
+  <li><strong>Right to data portability.</strong></li>
+</ul>
+<p>We respond to requests within 30 days.</p>
+
+<h2 class="h-section">7. Automated decision-making, profiling</h2>
+<p>We do not make automated decisions or create profiles based on your data.</p>
+
+<h2 class="h-section">8. Complaints</h2>
+<p>
+  If you believe our processing violates your rights, you may lodge a complaint with the
+  supervisory authority:
+</p>
+<dl class="legal__list">
+  <dt>Authority</dt>  <dd>National Authority for Data Protection and Freedom of Information (NAIH)</dd>
+  <dt>Address</dt>      <dd>1055 Budapest, Falk Miksa utca 9–11., Hungary</dd>
+  <dt>Postal</dt> <dd>1363 Budapest, Pf. 9.</dd>
+  <dt>Phone</dt>  <dd>+36 (1) 391-1400</dd>
+  <dt>Email</dt>   <dd><a href="mailto:ugyfelszolgalat@naih.hu">ugyfelszolgalat@naih.hu</a></dd>
+  <dt>Web</dt>      <dd><a href="https://naih.hu" target="_blank" rel="noopener">naih.hu</a></dd>
+</dl>
+<p>You may also enforce your rights in court.</p>
+
+<h2 class="h-section">9. Changes to this notice</h2>
+<p>
+  We reserve the right to amend this notice unilaterally. The amended notice takes effect
+  when published on this website.
+</p>

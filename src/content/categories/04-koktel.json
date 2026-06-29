@@ -2,13 +2,22 @@
   "order": 4,
   "key": "szezonalis",
   "label": "SZEZONÁLIS KÜLÖNLEGESSÉGEK",
+  "labelEn": "SEASONAL SPECIALS",
   "image": "/uploads/kave3.webp",
   "imageAlt": "Szezonális Bean & Barrel ital",
+  "imageAltEn": "Seasonal Bean & Barrel drink",
   "items": [
     "PRESSZÓ TONIC",
     "KÁVÉS LIMÓ",
     "AEROCANO",
     "KÓKUSZFELHŐS MATCHA",
     "MATCHA KOKTÉLOK"
+  ],
+  "itemsEn": [
+    "ESPRESSO TONIC",
+    "COFFEE LEMONADE",
+    "AEROCANO",
+    "COCONUT CLOUD MATCHA",
+    "MATCHA COCKTAILS"
   ]
 }

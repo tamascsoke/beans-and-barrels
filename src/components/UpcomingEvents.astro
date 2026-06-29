@@ -1,18 +1,26 @@
 ---
+import type { Locale } from "../i18n";
+import { useTranslations } from "../i18n";
+import { pageContext } from "../lib/page-context";
 import { getUpcomingEvents } from "../lib/content";
 
 interface Props {
+  locale: Locale;
   limit?: number;
   emptyMessage?: string;
   showCta?: boolean;
 }
 
-const { limit, emptyMessage = "Hamarosan új időpontok — kövess minket vagy kérj egyedi alkalmat.", showCta = false } = Astro.props;
-const events = getUpcomingEvents({ limit });
+const { locale, limit, emptyMessage, showCta = false } = Astro.props;
+const t = useTranslations(locale);
+const { p } = pageContext(Astro.url.pathname, locale);
+const events = getUpcomingEvents(locale, { limit });
+const empty = emptyMessage ?? t.upcoming.empty;
 
+const dateLocale = locale === "en" ? "en-GB" : "hu-HU";
 const fmtDate = (iso: string) => {
   const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString("hu-HU", { month: "long", day: "numeric" });
+  return d.toLocaleDateString(dateLocale, { month: "long", day: "numeric" });
 };
 const fmtRange = (start: string, end?: string) => {
   if (!end || end === start) return fmtDate(start);
@@ -22,7 +30,7 @@ const fmtYear = (iso: string) => new Date(iso + "T00:00:00").getFullYear();
 ---
 
 {events.length === 0 ? (
-  <p class="upcoming__empty body-text">{emptyMessage}</p>
+  <p class="upcoming__empty body-text">{empty}</p>
 ) : (
   <div class="upcoming stagger">
     {events.map((e) => (
@@ -36,7 +44,7 @@ const fmtYear = (iso: string) => new Date(iso + "T00:00:00").getFullYear();
           <h3 class="h-section">{e.title}</h3>
           {e.description && <p class="body-text">{e.description}</p>}
           {e.ctaUrl && (
-            <a class="btn btn--ghost upcoming__cta" href={e.ctaUrl}>Részletek</a>
+            <a class="btn btn--ghost upcoming__cta" href={e.ctaUrl}>{t.upcoming.details}</a>
           )}
         </div>
       </article>
@@ -46,7 +54,7 @@ const fmtYear = (iso: string) => new Date(iso + "T00:00:00").getFullYear();
 
 {showCta && events.length > 0 && (
   <div class="upcoming__more">
-    <a class="btn btn--ghost" href="/rendezvenyek#kitelepulesek">Összes kitelepülés</a>
+    <a class="btn btn--ghost" href={`${p("/rendezvenyek")}#kitelepulesek`}>{t.upcoming.allEvents}</a>
   </div>
 )}
 

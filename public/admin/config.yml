@@ -48,12 +48,14 @@ collections:
           - { name: phoneHref, label: "Telefon (tárcsázás)", widget: string, hint: "Csak számjegyek és +, pl. +36202469775" }
           - { name: email, label: "Email", widget: string }
           - { name: formSubject, label: "Kapcsolati űrlap tárgy", widget: string }
+          - { name: formSubjectEn, label: "Kapcsolati űrlap tárgy (EN)", widget: string, required: false }
           - name: locationEnabled
             label: "Helyszín térkép megjelenítése"
             widget: boolean
             default: false
             hint: "Bekapcsolva: mini térkép a Kontakt oldalon és a láblécben."
           - { name: locationTitle, label: "Helyszín címsora", widget: string, default: "Hol találkozhatsz velünk", required: false }
+          - { name: locationTitleEn, label: "Helyszín címsora (EN)", widget: string, required: false }
           - { name: locationAddress, label: "Megjelenített cím", widget: string, required: false, hint: "pl. 1051 Budapest, Példa utca 1." }
           - name: locationGeo
             label: "Helyszín a térképen"
@@ -64,6 +66,7 @@ collections:
             required: false
             hint: "Kattints a térképre, keress címre, vagy nyomd meg a GPS gombot (mobilon is). Mentés után 1–3 perc és frissül az oldal."
           - { name: locationNote, label: "Megjegyzés (opcionális)", widget: string, required: false, hint: "pl. nyitvatartás vagy „Ma itt vagyunk”" }
+          - { name: locationNoteEn, label: "Megjegyzés (EN, opcionális)", widget: string, required: false }
 
   - name: event_types
     label: "Tipikus rendezvények (lista)"
@@ -77,6 +80,11 @@ collections:
             label: "Alkalmak"
             widget: list
             field: { name: name, label: "Megnevezés", widget: string }
+          - name: itemsEn
+            label: "Alkalmak (EN)"
+            widget: list
+            required: false
+            field: { name: name, label: "Megnevezés (EN)", widget: string }
 
   - name: carousel
     label: "Főoldal carousel"
@@ -90,12 +98,18 @@ collections:
     fields:
       - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
       - { name: eyebrow, label: "Kis cím (eyebrow)", widget: string }
+      - { name: eyebrowEn, label: "Kis cím (EN)", widget: string, required: false }
       - { name: title, label: "Cím", widget: string }
+      - { name: titleEn, label: "Cím (EN)", widget: string, required: false }
       - { name: body, label: "Leírás", widget: text }
+      - { name: bodyEn, label: "Leírás (EN)", widget: text, required: false }
       - { name: ctaHref, label: "Gomb URL", widget: string, default: "/kontakt" }
+      - { name: ctaHrefEn, label: "Gomb URL (EN)", widget: string, required: false }
       - { name: ctaLabel, label: "Gomb felirat", widget: string }
+      - { name: ctaLabelEn, label: "Gomb felirat (EN)", widget: string, required: false }
       - { name: image, label: "Kép", widget: image, required: false, media_folder: src/assets/uploads, public_folder: /uploads }
       - { name: imageAlt, label: "Kép alt szöveg", widget: string, required: false }
+      - { name: imageAltEn, label: "Kép alt szöveg (EN)", widget: string, required: false }
 
   - name: categories
     label: "Kínálat kategóriák"
@@ -110,12 +124,19 @@ collections:
       - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
       - { name: key, label: "Kulcs (egyedi azonosító)", widget: string, hint: "pl. kave, sor — angol betűk és kötőjel" }
       - { name: label, label: "Megnevezés", widget: string }
+      - { name: labelEn, label: "Megnevezés (EN)", widget: string, required: false }
       - { name: image, label: "Kép", widget: image, required: false, media_folder: src/assets/uploads, public_folder: /uploads }
       - { name: imageAlt, label: "Kép alt szöveg", widget: string, required: false }
+      - { name: imageAltEn, label: "Kép alt szöveg (EN)", widget: string, required: false }
       - name: items
         label: "Tételek"
         widget: list
         field: { name: name, label: "Tétel neve", widget: string }
+      - name: itemsEn
+        label: "Tételek (EN)"
+        widget: list
+        required: false
+        field: { name: name, label: "Tétel neve (EN)", widget: string }
 
   - name: reasons
     label: "Rendezvények — Miért minket"
@@ -129,7 +150,9 @@ collections:
     fields:
       - { name: order, label: "Sorrend", widget: number, value_type: int, default: 1 }
       - { name: title, label: "Cím", widget: string }
+      - { name: titleEn, label: "Cím (EN)", widget: string, required: false }
       - { name: body, label: "Leírás", widget: text }
+      - { name: bodyEn, label: "Leírás (EN)", widget: text, required: false }
 
   - name: gallery
     label: "Képgaléria"
@@ -151,6 +174,7 @@ collections:
         public_folder: /uploads/gallery
         hint: "JPG vagy WebP ajánlott. Max. 2 MB, javasolt arány: 4:3."
       - { name: alt, label: "Leírás (alt szöveg)", widget: string, hint: "pl. Bean & Barrel tuktuk egy esküvőn Balatonfüreden" }
+      - { name: altEn, label: "Leírás / alt (EN)", widget: string, required: false }
 
   - name: upcoming_events
     label: "Aktuális kitelepülések"
@@ -163,9 +187,12 @@ collections:
     sortable_fields: [date, title, location]
     fields:
       - { name: title, label: "Esemény címe", widget: string }
+      - { name: titleEn, label: "Esemény címe (EN)", widget: string, required: false }
       - { name: date, label: "Kezdő dátum", widget: datetime, type: date, format: "YYYY-MM-DD" }
       - { name: endDate, label: "Záró dátum (opcionális)", widget: datetime, type: date, format: "YYYY-MM-DD", required: false }
       - { name: location, label: "Helyszín", widget: string, hint: "pl. Balatonfüred, Tagore sétány" }
+      - { name: locationEn, label: "Helyszín (EN)", widget: string, required: false }
       - { name: description, label: "Rövid leírás", widget: text, required: false }
+      - { name: descriptionEn, label: "Rövid leírás (EN)", widget: text, required: false }
       - { name: ctaUrl, label: "Részletek URL (opcionális)", widget: string, required: false, default: "" }
       - { name: published, label: "Publikálva", widget: boolean, default: true, hint: "Vedd ki, ha még nem szabad megjelennie az oldalon." }

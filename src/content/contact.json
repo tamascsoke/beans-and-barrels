@@ -3,9 +3,12 @@
   "phoneHref": "+36202469775",
   "email": "info@beanbarrel.coffee",
   "formSubject": "Üzenet — Bean & Barrel",
+  "formSubjectEn": "Message — Bean & Barrel",
   "locationEnabled": true,
   "locationTitle": "Hol találkozhatsz velünk",
+  "locationTitleEn": "Where to find us",
   "locationAddress": "1097 Budapest, Könyves Kálmán körút 34.",
   "locationGeo": "{\"type\":\"Point\",\"coordinates\":[19.095895,47.473719]}",
-  "locationNote": "Állandó kitelepülés"
+  "locationNote": "Állandó kitelepülés",
+  "locationNoteEn": "Permanent pop-up location"
 }

@@ -1,10 +1,16 @@
 {
   "order": 2,
   "eyebrow": "Állandó helyszínek",
+  "eyebrowEn": "Permanent locations",
   "title": "Kézifék behúzva",
+  "titleEn": "Handbrake on",
   "body": "Tuktukjainkat kérheted állandó nyitásra is!",
+  "bodyEn": "You can book our tuktuks for permanent pop-ups too!",
   "ctaHref": "/kontakt?topic=Rendezv%C3%A9ny#urlap",
+  "ctaHrefEn": "/en/kontakt?topic=Event#urlap",
   "ctaLabel": "Részletek",
+  "ctaLabelEn": "Details",
   "image": "/uploads/helyszin2.webp",
-  "imageAlt": "Bean & Barrel tuktuk állandó helyszínen"
+  "imageAlt": "Bean & Barrel tuktuk állandó helyszínen",
+  "imageAltEn": "Bean & Barrel tuktuk at a permanent location"
 }

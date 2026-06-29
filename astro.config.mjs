@@ -6,10 +6,20 @@ const priorityByPath = {
   '/rendezvenyek/': { priority: 0.9, changefreq: 'weekly' },
   '/franchise/': { priority: 0.9, changefreq: 'monthly' },
   '/': { priority: 0.8, changefreq: 'weekly' },
+  '/en/rendezvenyek/': { priority: 0.9, changefreq: 'weekly' },
+  '/en/franchise/': { priority: 0.9, changefreq: 'monthly' },
+  '/en/': { priority: 0.8, changefreq: 'weekly' },
 };
 
 export default defineConfig({
   site: 'https://www.beanbarrel.coffee',
+  i18n: {
+    defaultLocale: 'hu',
+    locales: ['hu', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/koszonjuk'),

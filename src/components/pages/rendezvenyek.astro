@@ -1,0 +1,166 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Image } from 'astro:assets';
+import UpcomingEvents from "../UpcomingEvents.astro";
+import { pageContext } from "../../lib/page-context";
+import { getReasons, getUpcomingEvents, getEventTypes } from "../../lib/content";
+import { absoluteUrl } from "../../i18n/locale";
+import {
+  eventServiceSchema,
+  faqPageSchema,
+  upcomingEventSchema,
+} from "../../lib/seo";
+import halloweenImg from '../../assets/uploads/halloween.webp';
+
+const { locale, t, p } = pageContext(Astro.url.pathname);
+
+const reasons = getReasons(locale);
+const events = getEventTypes(locale);
+const upcoming = getUpcomingEvents(locale);
+const rendezvenyFaqItems = t.rendezvenyek.faq;
+
+const title = t.rendezvenyek.metaTitle;
+const description = t.rendezvenyek.metaDescription;
+const pageUrl = absoluteUrl(locale, "/rendezvenyek");
+const aktualisUrl = `${pageUrl}#aktualis`;
+const pageSchema = [
+  eventServiceSchema(pageUrl, description, locale),
+  faqPageSchema(rendezvenyFaqItems),
+  ...upcoming.map((event) => upcomingEventSchema(event, aktualisUrl)),
+];
+---
+
+<Layout locale={locale} {title} {description} schema={pageSchema}>
+  <section class="section" id="miert">
+    <div class="container intro stagger">
+      <span class="h-sub">{t.rendezvenyek.eyebrow}</span>
+      <h1 class="h-display"><span class="chalk-underline">{t.rendezvenyek.title}</span></h1>
+      <div class="reasons stagger">
+        {
+          reasons.map((r, i) => (
+            <article class="reason panel-motion">
+              <span class="reason__n panel-motion__badge">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="h-section">{r.title}</h3>
+              <p class="body-text">{r.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="aktualis">
+    <div class="container upcoming-section">
+      <span class="h-sub">{t.rendezvenyek.upcomingEyebrow}</span>
+      <h2 class="h-display"><span class="chalk-underline">{t.rendezvenyek.upcomingTitle}</span></h2>
+      <UpcomingEvents locale={locale} emptyMessage={t.rendezvenyek.upcomingEmpty} />
+    </div>
+  </section>
+
+  <section class="section section--last events-section" id="kitelepulesek">
+    <div class="container events">
+      <div class="events__aside">
+        <div class="events__head">
+          <h2 class="h-display"><span class="chalk-underline">{t.rendezvenyek.typesEyebrow}</span></h2>
+        </div>
+        <div class="photo-frame events__photo">
+          <Image src={halloweenImg} alt={t.rendezvenyek.halloweenAlt} widths={[420, 720, 960]} sizes="(min-width: 900px) 34vw, 100vw" loading="lazy" />
+        </div>
+      </div>
+      <div class="events__content">
+        <ul class="events__list chalk-list chalk-list--split chalk-list--roomy">
+          {events.map((event) => (
+            <li>
+              <span>{event}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="inline-action events__action">
+          <a class="btn" href={`${p("/kontakt")}?topic=${encodeURIComponent(t.common.topicValues.event)}#urlap`}>{t.common.ctaQuote}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro { display: grid; gap: 18px; }
+  .upcoming-section { display: grid; gap: 14px; }
+
+  .reasons {
+    display: grid;
+    gap: clamp(18px, 3vw, 32px);
+    grid-template-columns: 1fr;
+    margin-top: clamp(18px, 3vw, 34px);
+  }
+  @media (min-width: 760px) { .reasons { grid-template-columns: repeat(2, 1fr); } }
+
+  .reason {
+    display: grid;
+    gap: 12px;
+    padding: clamp(20px, 3vw, 30px);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    box-shadow: var(--panel-shadow);
+  }
+  .reason__n { font-family: var(--f-logo); color: var(--accent); font-size: 1.6rem; letter-spacing: var(--ls-body); }
+  .reason h3 { font-size: clamp(1.35rem, 2.4vw, 1.9rem); }
+  .reason .body-text { font-size: clamp(1.03rem, 1.3vw, 1.18rem); line-height: 1.75; letter-spacing: 0.035em; color: rgba(244,244,244,0.8); }
+
+  .events-section {
+    position: relative;
+    overflow: hidden;
+    border-block: 1px solid rgba(244,244,244,0.1);
+    background: linear-gradient(180deg, rgba(240,138,28,0.035), rgba(255,255,255,0.012));
+  }
+
+  .events {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 5vw, 62px);
+    align-items: center;
+  }
+  @media (min-width: 900px) { .events { grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr); } }
+
+  .events__aside {
+    display: grid;
+    gap: clamp(18px, 3vw, 30px);
+  }
+
+  .events__head {
+    display: grid;
+    gap: 14px;
+    max-width: 520px;
+  }
+
+  .events__photo {
+    width: 100%;
+    max-width: 430px;
+    aspect-ratio: 4 / 3;
+  }
+  .events__photo :global(img) {
+    object-position: 50% 48%;
+  }
+
+  .events__content {
+    display: grid;
+    gap: clamp(18px, 3vw, 28px);
+    align-content: center;
+    min-width: 0;
+  }
+
+  .events__list {
+    max-width: 760px;
+    font-size: clamp(1.22rem, 1.75vw, 1.62rem);
+  }
+
+  .events__list li {
+    min-height: 60px;
+  }
+
+  .events__action {
+    margin-top: 0;
+  }
+</style>

@@ -1,8 +1,21 @@
 ---
 import ChalkSelect from "./ChalkSelect.astro";
-import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, FORM_SUBJECT } from "../lib/contact";
-const topics = ["Rendezvény", "Franchise", "Sajtó", "Egyéb"];
-const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
+import type { Locale } from "../i18n";
+import type { TopicKey } from "../i18n/translations";
+import { pageContext } from "../lib/page-context";
+import { absoluteUrl } from "../i18n/locale";
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL, FORM_ACTION, getFormSubject } from "../lib/contact";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t, p } = pageContext(Astro.url.pathname, locale);
+const topicKeys: TopicKey[] = ["event", "franchise", "press", "other"];
+const topics = topicKeys.map((key) => t.common.topics[key]);
+const THANK_YOU_URL = absoluteUrl(locale, "/koszonjuk");
+const formSubject = getFormSubject(locale);
 ---
 
 <div class="sidetab-overlay" id="sidetabOverlay"></div>
@@ -13,13 +26,13 @@ const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
   id="sidetabFab"
   aria-controls="sidetab-panel"
   aria-expanded="false"
-  aria-label="Keress minket panel megnyitása"
+  aria-label={t.common.sideTabOpen}
 >
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <rect x="2" y="4" width="20" height="16" rx="2"/>
     <path d="M2 7l10 7 10-7"/>
   </svg>
-  <span class="sidetab-fab__label">Keress minket</span>
+  <span class="sidetab-fab__label">{t.common.sideTabLabel}</span>
 </button>
 
 <aside class="sidetab" id="sidetab">
@@ -28,24 +41,24 @@ const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
     id="sidetabPull"
     aria-controls="sidetab-panel"
     aria-expanded="false"
-    aria-label="Keress minket panel megnyitása"
-  >Keress minket</button>
+    aria-label={t.common.sideTabOpen}
+  >{t.common.sideTabLabel}</button>
 
-  <div class="sidetab__panel" id="sidetab-panel" role="dialog" aria-label="Keress minket" inert>
+  <div class="sidetab__panel" id="sidetab-panel" role="dialog" aria-label={t.common.sideTabLabel} inert>
     <!-- Header -->
     <div class="sidetab__head">
       <span class="sidetab__brand">BEAN &amp; BARREL</span>
-      <button class="sidetab__close" id="sidetabClose" aria-label="Bezárás">✕</button>
+      <button class="sidetab__close" id="sidetabClose" aria-label={t.common.sideTabClose}>✕</button>
     </div>
 
     <!-- Contact info -->
     <div class="sidetab__info">
       <a href={`tel:${PHONE_HREF}`} class="sidetab__contact-row">
-        <span class="sidetab__lbl">Telefon</span>
+        <span class="sidetab__lbl">{t.common.phone}</span>
         <span>{PHONE_DISPLAY}</span>
       </a>
       <a href={`mailto:${EMAIL}`} class="sidetab__contact-row">
-        <span class="sidetab__lbl">E-mail</span>
+        <span class="sidetab__lbl">{t.common.email}</span>
         <span>{EMAIL}</span>
       </a>
     </div>
@@ -53,44 +66,45 @@ const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
     <div class="sidetab__rule" aria-hidden="true"></div>
 
     <!-- Mini form -->
-    <p class="sidetab__form-head">Írj nekünk</p>
+    <p class="sidetab__form-head">{t.common.sideTabWrite}</p>
     <form
       class="sidetab__form"
       action={FORM_ACTION}
       method="POST"
+      data-success={t.common.formSuccess}
+      data-error={t.common.formError}
     >
-      <input type="hidden" name="_subject" value={FORM_SUBJECT} />
+      <input type="hidden" name="_subject" value={formSubject} />
       <input type="hidden" name="_template" value="table" />
       <input type="hidden" name="_captcha" value="false" />
       <input type="hidden" name="_next" value={THANK_YOU_URL} />
       <input type="text" name="_honey" class="st-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
       <label class="st-field">
-        <span class="st-field__lbl">Neved</span>
+        <span class="st-field__lbl">{t.common.name}</span>
         <input type="text" name="name" required class="st-input" />
       </label>
       <label class="st-field">
-        <span class="st-field__lbl">E-mail</span>
+        <span class="st-field__lbl">{t.common.email}</span>
         <input type="email" name="email" required class="st-input" />
       </label>
       <div class="st-field">
-        <span class="st-field__lbl">Téma</span>
-        <ChalkSelect name="topic" options={topics} label="Téma" />
+        <span class="st-field__lbl">{t.common.topic}</span>
+        <ChalkSelect name="topic" options={topics} label={t.common.topic} />
       </div>
       <label class="st-field">
-        <span class="st-field__lbl">Üzenet</span>
+        <span class="st-field__lbl">{t.common.message}</span>
         <textarea name="message" rows="2" required class="st-input st-input--area"></textarea>
       </label>
       <label class="st-field st-field--consent">
         <input type="checkbox" name="gdpr" required class="st-consent__input" />
         <span class="st-consent__text">
-          Elolvastam és elfogadom az <a href="/adatvedelem" target="_blank" rel="noopener">Adatkezelési tájékoztatót</a>,
-          és hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása céljából kezeljétek.
+          {t.kontakt.gdprBefore}<a href={p("/adatvedelem")} target="_blank" rel="noopener">{t.kontakt.gdprLink}</a>{t.kontakt.gdprAfter}
         </span>
       </label>
       <button type="submit" class="btn btn--compact sidetab__btn" id="sidetabSubmit">
-        <span class="sidetab__btn-label">Küldés</span>
-        <span class="sidetab__btn-loading" aria-hidden="true">Küldés...</span>
+        <span class="sidetab__btn-label">{t.common.send}</span>
+        <span class="sidetab__btn-loading" aria-hidden="true">{t.common.sending}</span>
       </button>
       <div class="sidetab__feedback" id="sidetabFeedback" aria-live="polite"></div>
     </form>
@@ -573,12 +587,12 @@ const THANK_YOU_URL = "https://www.beanbarrel.coffee/koszonjuk";
         if (!res.ok) throw new Error("submit");
         submit.dataset.state = "done";
         form.reset();
-        feedback.textContent = "Megkaptuk az üzeneted — hamarosan visszaírunk!";
+        feedback.textContent = form.dataset.success ?? "";
         feedback.classList.add("sidetab__feedback--ok");
       } catch {
         submit.dataset.state = "";
         submit.disabled = false;
-        feedback.textContent = "Valami hiba történt. Próbáld újra, vagy írj e-mailben.";
+        feedback.textContent = form.dataset.error ?? "";
         feedback.classList.add("sidetab__feedback--err");
       }
     }, { signal });

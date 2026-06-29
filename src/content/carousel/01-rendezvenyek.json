@@ -1,10 +1,16 @@
 {
   "order": 1,
   "eyebrow": "Rendezvények",
+  "eyebrowEn": "Events",
   "title": "Kérd a tuktukot a rendezvényedre!",
+  "titleEn": "Book the tuktuk for your event!",
   "body": "ESKÜVŐK, CÉGES NAPOK, FESZTIVÁLOK — A BEAN & BARREL A HELYSZÍNEN KÉSZÍTI A KÁVÉT ÉS CSAPOLJA A SÖRT.",
+  "bodyEn": "WEDDINGS, CORPORATE DAYS, FESTIVALS — BEAN & BARREL MAKES COFFEE AND POURS BEER ON SITE.",
   "ctaHref": "/kontakt?topic=Rendezv%C3%A9ny#urlap",
+  "ctaHrefEn": "/en/kontakt?topic=Event#urlap",
   "ctaLabel": "Ajánlatot kérek",
+  "ctaLabelEn": "Request a quote",
   "image": "/uploads/tuktuk.webp",
-  "imageAlt": "Bean & Barrel tuktuk rendezvényen"
+  "imageAlt": "Bean & Barrel tuktuk rendezvényen",
+  "imageAltEn": "Bean & Barrel tuktuk at an event"
 }

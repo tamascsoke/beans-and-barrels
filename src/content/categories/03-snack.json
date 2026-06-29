@@ -2,13 +2,22 @@
   "order": 3,
   "key": "snack",
   "label": "SNACKEK",
+  "labelEn": "SNACKS",
   "image": "/uploads/cookie.webp",
   "imageAlt": "Cookie és snackek a tuktuk pultjáról",
+  "imageAltEn": "Cookies and snacks from the tuktuk bar",
   "items": [
     "FAHÉJAS-ÁFONYÁS BAGEL",
     "BROWNIE",
     "B&B BARNASÖRÖS-MARSHMALLOW COOKIE",
     "csörögefánk házi lekvárral",
     "BAGELSZENDVICSEK"
+  ],
+  "itemsEn": [
+    "CINNAMON-CRANBERRY BAGEL",
+    "BROWNIE",
+    "B&B STOUT-MARSHMALLOW COOKIE",
+    "churros with homemade jam",
+    "BAGEL SANDWICHES"
   ]
 }

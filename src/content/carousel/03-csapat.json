@@ -1,10 +1,16 @@
 {
   "order": 3,
   "eyebrow": "Csapat",
+  "eyebrowEn": "Team",
   "title": "Három srác, egy tuktuk",
+  "titleEn": "Three guys, one tuktuk",
   "body": "Ismerd meg a Bean & Barrel alapítóit és sztoriját!",
+  "bodyEn": "Meet the Bean & Barrel founders and our story!",
   "ctaHref": "/rolunk",
+  "ctaHrefEn": "/en/rolunk",
   "ctaLabel": "Elolvasom",
+  "ctaLabelEn": "Read more",
   "image": "/uploads/tuktuk-csapat.webp",
-  "imageAlt": "Bean & Barrel csapat a tuktuk előtt"
+  "imageAlt": "Bean & Barrel csapat a tuktuk előtt",
+  "imageAltEn": "Bean & Barrel team in front of the tuktuk"
 }

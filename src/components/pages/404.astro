@@ -1,0 +1,39 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { pageContext } from "../../lib/page-context";
+
+const { locale, t, p } = pageContext(Astro.url.pathname);
+---
+
+<Layout locale={locale} title={t.notFound.metaTitle} description={t.notFound.metaDescription} noindex>
+  <section class="section section--last notfound">
+    <div class="container notfound__inner stagger">
+      <span class="h-sub">{t.notFound.code}</span>
+      <h1 class="h-display"><span class="chalk-underline">{t.notFound.title}</span></h1>
+      <p class="lead">{t.notFound.lead}</p>
+      <div class="notfound__cta">
+        <a class="btn" href={p("/")}>{t.common.ctaBackHome}</a>
+        <a class="btn btn--ghost" href={p("/kontakt")}>{t.common.ctaContact}</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .notfound {
+    min-height: min(620px, calc(100dvh - var(--nav-h) - var(--main-footer-gap)));
+    display: flex;
+    align-items: center;
+  }
+  .notfound__inner {
+    display: grid;
+    gap: 22px;
+    max-width: 640px;
+  }
+  .notfound__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+</style>

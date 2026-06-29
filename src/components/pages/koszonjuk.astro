@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { pageContext } from "../../lib/page-context";
+
+const { locale, t, p } = pageContext(Astro.url.pathname);
+---
+
+<Layout locale={locale} title={t.koszonjuk.metaTitle} description={t.koszonjuk.metaDescription} noindex>
+  <section class="section section--last">
+    <div class="container thanks">
+      <span class="h-sub">{t.koszonjuk.title}</span>
+      <h1 class="h-display"><span class="chalk-underline">{t.koszonjuk.lead}</span></h1>
+      <p class="lead">{t.koszonjuk.sub}</p>
+      <a class="btn" href={p("/")}>{t.common.ctaBackHome}</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .thanks { display: grid; gap: 18px; max-width: 720px; }
+  .thanks .btn { justify-self: start; margin-top: 8px; }
+</style>

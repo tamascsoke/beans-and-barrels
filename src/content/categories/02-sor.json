@@ -2,8 +2,10 @@
   "order": 2,
   "key": "sor",
   "label": "CSAPOLT SÖR ÉS KOKTÉLOK",
+  "labelEn": "DRAFT BEER & COCKTAILS",
   "image": "/uploads/beni-sor.webp",
   "imageAlt": "Csapolt kézműves sör",
+  "imageAltEn": "Craft beer on tap",
   "items": [
     "CECEI LAGER",
     "CECEI IPA",
@@ -11,5 +13,13 @@
     "CECEI MEGGY",
     "STANDARD ÉS PREMIUM KOKTÉLOK",
     "(TELJES KÍNÁLATUNKÉRT KERESS MINKET)"
+  ],
+  "itemsEn": [
+    "CECEI LAGER",
+    "CECEI IPA",
+    "CECEI WHEAT",
+    "CECEI SOUR CHERRY",
+    "STANDARD AND PREMIUM COCKTAILS",
+    "(CONTACT US FOR THE FULL MENU)"
   ]
 }

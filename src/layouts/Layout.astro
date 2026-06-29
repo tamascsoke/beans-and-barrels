@@ -11,6 +11,14 @@ import "@fontsource/league-spartan/700.css";
 import "@fontsource/league-spartan/800.css";
 import "../styles/global.css";
 import { foodEstablishmentSchema, schemaScripts } from "../lib/seo";
+import {
+  HTML_LANG,
+  OG_LOCALES,
+  getLocaleFromPath,
+  hreflangAlternates,
+  useTranslations,
+  type Locale,
+} from "../i18n";
 
 interface Props {
   title?: string;
@@ -18,18 +26,27 @@ interface Props {
   image?: string;
   noindex?: boolean;
   schema?: object | object[];
+  locale?: Locale;
 }
 
 const {
-  title = "Bean & Barrel — Tuktuk kávézó | Kávé és Sör",
-  description = "Bean & Barrel tuktuk kávézó (tuk tuk): specialty kávé és csapolt sör mozgó tuktukból. Rendezvények, franchise, közösség.",
+  title: titleProp,
+  description: descriptionProp,
   image = "/og-image.webp",
   noindex = false,
   schema,
+  locale: localeProp,
 } = Astro.props;
+
+const locale = localeProp ?? getLocaleFromPath(Astro.url.pathname);
+const t = useTranslations(locale);
+const title = titleProp ?? t.home.metaTitle;
+const description = descriptionProp ?? t.home.metaDescription;
+
 const canonicalUrl = new URL(Astro.url.pathname, "https://www.beanbarrel.coffee").toString();
 const socialImage = new URL(image, "https://www.beanbarrel.coffee").toString();
-const showSideTab = !Astro.url.pathname.startsWith("/kontakt");
+const contactPath = locale === "en" ? "/en/kontakt" : "/kontakt";
+const showSideTab = !Astro.url.pathname.startsWith(contactPath);
 
 /** GSC env sometimes gets the full <meta> tag pasted — extract content= only. */
 function normalizeGscVerification(raw: string | undefined): string | undefined {
@@ -42,14 +59,17 @@ function normalizeGscVerification(raw: string | undefined): string | undefined {
 
 const gscVerification = normalizeGscVerification(import.meta.env.PUBLIC_GSC_VERIFICATION);
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
-const defaultSchema = Astro.url.pathname === "/"
-  ? foodEstablishmentSchema(description, socialImage)
-  : null;
+const homePath = locale === "en" ? "/en/" : "/";
+const defaultSchema =
+  Astro.url.pathname === "/" || Astro.url.pathname === "/en" || Astro.url.pathname === "/en/"
+    ? foodEstablishmentSchema(description, socialImage, locale)
+    : null;
 const jsonLdSchemas = schemaScripts(schema ?? defaultSchema);
+const alternates = hreflangAlternates(Astro.url.pathname);
 ---
 
 <!doctype html>
-<html lang="hu">
+<html lang={HTML_LANG[locale]}>
   <head>
     <meta charset="utf-8" />
     <script is:inline>document.documentElement.classList.add("js");</script>
@@ -63,8 +83,16 @@ const jsonLdSchemas = schemaScripts(schema ?? defaultSchema);
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#363535" />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+    ))}
+    {alternates.length > 0 && (
+      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === "hu")?.href ?? canonicalUrl} />
+    )}
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="hu_HU" />
+    <meta property="og:locale" content={OG_LOCALES[locale]} />
+    {locale === "hu" && <meta property="og:locale:alternate" content={OG_LOCALES.en} />}
+    {locale === "en" && <meta property="og:locale:alternate" content={OG_LOCALES.hu} />}
     <meta property="og:site_name" content="Bean & Barrel" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -93,16 +121,16 @@ const jsonLdSchemas = schemaScripts(schema ?? defaultSchema);
     <ClientRouter />
   </head>
   <body>
-    <a class="skip-link" href="#main">Ugrás a tartalomra</a>
+    <a class="skip-link" href="#main">{t.common.skipLink}</a>
     <ChalkBackground />
-    <Nav />
+    <Nav locale={locale} />
     <main id="main">
       <slot />
     </main>
-    {showSideTab && <SideTab />}
+    {showSideTab && <SideTab locale={locale} />}
     <ScrollExtras />
     <EasterEggs />
-    <Footer />
+    <Footer locale={locale} />
   </body>
 </html>
 

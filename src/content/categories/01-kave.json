@@ -2,7 +2,10 @@
   "order": 1,
   "key": "kave",
   "label": "SPECIALTY KÁVÉK",
+  "labelEn": "SPECIALTY COFFEES",
   "image": "/uploads/kave.webp",
   "imageAlt": "Specialty kávé közelről",
-  "items": ["PRESSZÓ", "AMERICANO", "CORTADO", "CAPPUCCINO", "LATTE", "FLAT WHITE"]
+  "imageAltEn": "Specialty coffee close-up",
+  "items": ["PRESSZÓ", "AMERICANO", "CORTADO", "CAPPUCCINO", "LATTE", "FLAT WHITE"],
+  "itemsEn": ["ESPRESSO", "AMERICANO", "CORTADO", "CAPPUCCINO", "LATTE", "FLAT WHITE"]
 }
