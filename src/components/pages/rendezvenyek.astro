@@ -49,13 +49,15 @@ const pageSchema = [
     </div>
   </section>
 
-  <section class="section section--alt" id="aktualis">
-    <div class="container upcoming-section">
-      <span class="h-sub">{t.rendezvenyek.upcomingEyebrow}</span>
-      <h2 class="h-display"><span class="chalk-underline">{t.rendezvenyek.upcomingTitle}</span></h2>
-      <UpcomingEvents locale={locale} emptyMessage={t.rendezvenyek.upcomingEmpty} />
-    </div>
-  </section>
+  {upcoming.length > 0 && (
+    <section class="section section--alt" id="aktualis">
+      <div class="container upcoming-section">
+        <span class="h-sub">{t.rendezvenyek.upcomingEyebrow}</span>
+        <h2 class="h-display"><span class="chalk-underline">{t.rendezvenyek.upcomingTitle}</span></h2>
+        <UpcomingEvents locale={locale} />
+      </div>
+    </section>
+  )}
 
   <section class="section section--last events-section" id="kitelepulesek">
     <div class="container events">
