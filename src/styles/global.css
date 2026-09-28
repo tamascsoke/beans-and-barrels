@@ -2,8 +2,8 @@
 @font-face {
   font-family: "Handelson Five";
   src:
-    url("/fonts/handelson-five.woff2") format("woff2"),
-    url("/fonts/handelson-five.otf") format("opentype");
+    url("/fonts/handelson-five.woff2?v=2") format("woff2"),
+    url("/fonts/handelson-five.otf?v=2") format("opentype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
